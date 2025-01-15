@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Drive.Drive;
 import frc.robot.subsystems.Drive.SwerveIO;
 import frc.robot.subsystems.Drive.SwerveIOSpark;
@@ -27,6 +28,12 @@ public class RobotContainer {
         drivetrain = new Drive(new SwerveIO() {});
         break;
     }
+
+    drivetrain.setDefaultCommand(drivetrain.humanDriveCommand(
+      OIConstants.driverController::getLeftX,
+      OIConstants.driverController::getLeftY,
+      OIConstants.driverController::getRightX
+    ));
 
     configureBindings();
   }

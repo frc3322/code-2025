@@ -6,9 +6,12 @@ package frc.robot.subsystems.Drive;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
@@ -38,6 +41,10 @@ public class Drive extends SubsystemBase {
     }
     return instance;
   }
+
+  public static Drive getInstance() {
+    return instance;
+  }
   
   /** Creates a new Drive. */
   public Drive(SwerveIO swerveIO) {
@@ -64,6 +71,20 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     updateInputs();
+  }
+
+  public Command humanDriveCommand(DoubleSupplier xInput, DoubleSupplier yInput, DoubleSupplier thetaInput){
+    return new RunCommand(
+      () -> {
+        swerveIO.drive(
+          xInput.getAsDouble(), 
+          yInput.getAsDouble(), 
+          thetaInput.getAsDouble(), 
+          true, 
+          false
+        );
+      }
+      , getInstance());
   }
 
 }
