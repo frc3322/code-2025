@@ -1,0 +1,3 @@
+Edit configs in deploy/swerve.
+
+https://docs.yagsl.com/configuring-yagsl/configuration
