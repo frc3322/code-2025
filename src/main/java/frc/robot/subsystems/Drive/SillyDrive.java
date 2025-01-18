@@ -57,12 +57,14 @@ public class SillyDrive extends SubsystemBase {
   }
 
   public void drive(double translationX, double translationY, double rotation, boolean isFieldRelative, boolean isOpenLoop){
-        swerveDrive.drive(new Translation2d(translationX * swerveDrive.getMaximumModuleDriveVelocity(),
-            translationY * swerveDrive.getMaximumModuleDriveVelocity()),
-            rotation * swerveDrive.getMaximumModuleDriveVelocity(),
-            isFieldRelative,
-            isOpenLoop // Ususally false
-        );
+      swerveDrive.drive(new Translation2d(
+        translationX * swerveDrive.getMaximumChassisVelocity(),
+        translationY * swerveDrive.getMaximumChassisVelocity()),
+        rotation * swerveDrive.getMaximumChassisAngularVelocity(),
+        true,
+        false
+      );
+        
     }	
 
     public Command humanDriveCommand(DoubleSupplier xInput, DoubleSupplier yInput, DoubleSupplier thetaInput){
@@ -72,7 +74,7 @@ public class SillyDrive extends SubsystemBase {
             MathUtil.applyDeadband(xInput.getAsDouble(),0.05), 
             MathUtil.applyDeadband(yInput.getAsDouble(),0.05), 
             MathUtil.applyDeadband(thetaInput.getAsDouble() * thetaInput.getAsDouble(),0.05), 
-            false, 
+            true, 
             false
           );
         }
