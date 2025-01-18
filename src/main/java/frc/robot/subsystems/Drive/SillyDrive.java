@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -28,10 +29,10 @@ public class SillyDrive extends SubsystemBase {
     public SillyDrive() {
         /* 
         * !_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!
-        * TELEMETRY - SET THIS TO LOW FOR DEBUGGING, AND HIGH FOR FASTER CODE
+        * TELEMETRY - SET THIS TO HIGH FOR DEBUGGING, AND LOW FOR FASTER CODE
         * !_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!
         */
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     
         // Swerve init - https://docs.yagsl.com/configuring-yagsl/code-setup 
         try{
@@ -41,6 +42,7 @@ public class SillyDrive extends SubsystemBase {
             DriverStation.reportError("Swerve config not found: " + e.toString(), true);
         }
 
+        
         //https://github.com/BroncBotz3481/YAGSL-Example/blob/main/src/main/java/frc/robot/subsystems/swervedrive/SwerveSubsystem.java
         //Heading correction should only be used while controlling the robot via angle.
         swerveDrive.setHeadingCorrection(false);
