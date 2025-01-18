@@ -27,7 +27,7 @@ public class SwerveIOSpark implements SwerveIO{
         * TELEMETRY - SET THIS TO LOW FOR DEBUGGING, AND HIGH FOR FASTER CODE
         * !_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!_!
         */
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
     
         // Swerve init - https://docs.yagsl.com/configuring-yagsl/code-setup 
         try{

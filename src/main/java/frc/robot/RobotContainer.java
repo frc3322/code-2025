@@ -7,27 +7,31 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.Drive.Drive;
+//import frc.robot.subsystems.Drive.Drive;
+import frc.robot.subsystems.Drive.SillyDrive;
 import frc.robot.subsystems.Drive.SwerveIO;
 import frc.robot.subsystems.Drive.SwerveIOSpark;
 
 public class RobotContainer {
   
-  private Drive drivetrain;
+  private SillyDrive drivetrain;
   
   public RobotContainer() {
     
-    switch(Constants.currentMode){
-      case REAL:
-        drivetrain = Drive.initialize(new SwerveIOSpark());
-        break;
-      case SIM:
-        //drivetrain = new Drive();
-        break;
-      default:
-        drivetrain = new Drive(new SwerveIO() {});
-        break;
-    }
+    // switch(Constants.currentMode){
+    //   case REAL:
+    //     drivetrain = Drive.initialize(new SwerveIOSpark());
+    //     break;
+    //   case SIM:
+    //     //drivetrain = new Drive();
+    //     break;
+    //   default:
+    //     drivetrain = new Drive(new SwerveIO() {});
+    //     break;
+    // }
+
+    //drivetrain = Drive.initialize(new SwerveIOSpark());
+    drivetrain = new SillyDrive();
 
     drivetrain.setDefaultCommand(drivetrain.humanDriveCommand(
       OIConstants.driverController::getLeftX,
