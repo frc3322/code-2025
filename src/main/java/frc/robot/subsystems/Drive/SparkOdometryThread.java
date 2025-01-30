@@ -114,7 +114,7 @@ public class SparkOdometryThread {
       }
 
       // If valid, add values to queues
-      if (isValid) {
+      if (true) { // TODO: isValid, is true rn for odometry lock error work around
         for (int i = 0; i < sparkSignals.size(); i++) {
           sparkQueues.get(i).offer(sparkValues[i]);
         }
