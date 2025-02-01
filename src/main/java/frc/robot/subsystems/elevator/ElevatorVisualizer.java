@@ -1,5 +1,3 @@
 package frc.robot.subsystems.elevator;
 
-public class ElevatorVisualizer {
-    
-}
+public class ElevatorVisualizer {}

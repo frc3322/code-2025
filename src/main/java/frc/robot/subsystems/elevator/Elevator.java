@@ -7,22 +7,22 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
-  
+
   private final ElevatorIO elevatorIO;
-  
+
   private static Elevator instance;
-  
+
   public static Elevator initialize(ElevatorIO elevatorIO) {
-    if (instance == null){
+    if (instance == null) {
       instance = new Elevator(elevatorIO);
     }
     return instance;
   }
 
-  public static Elevator getInstance(){
+  public static Elevator getInstance() {
     return instance;
   }
-  
+
   /** Creates a new elevator. */
   public Elevator(ElevatorIO elevatorIO) {
     this.elevatorIO = elevatorIO;
