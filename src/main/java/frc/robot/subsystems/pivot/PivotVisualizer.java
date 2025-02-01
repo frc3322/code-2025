@@ -1,5 +1,3 @@
 package frc.robot.subsystems.pivot;
 
-public class PivotVisualizer {
-    
-}
+public class PivotVisualizer {}
