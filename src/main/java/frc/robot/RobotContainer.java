@@ -29,6 +29,10 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOSpark;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -40,6 +44,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Pivot pivot;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -59,6 +64,8 @@ public class RobotContainer {
                 new ModuleIOSpark(1),
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
+        
+        pivot = new Pivot(new PivotIOSpark());
         break;
 
       case SIM:
@@ -70,6 +77,8 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        
+        pivot = new Pivot(new PivotIO() {});
         break;
 
       default:
@@ -81,6 +90,8 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        
+        pivot = new Pivot(new PivotIO() {});
         break;
     }
 
@@ -121,6 +132,10 @@ public class RobotContainer {
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
+
+    pivot.setDefaultCommand(
+        pivot.goToStateCommand(pivot::getPivotState)
+    );
 
     // Lock to 0° when A button is held
     controller

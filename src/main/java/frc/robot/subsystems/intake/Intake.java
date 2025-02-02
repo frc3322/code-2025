@@ -57,15 +57,14 @@ public class Intake extends SubsystemBase {
         });
   }
 
-  public Command adjustToMiddleCommand(){
+  public Command adjustToMiddleCommand() {
     return new InstantCommand(
-      () ->{
-        if(coralNotInPosition()){
-         double direction = inputs.leftSensor ? -1 : 1;
-         intakeIO.setAdjustVelocity(direction);
-        }
-      }
-    );
+        () -> {
+          if (coralNotInPosition()) {
+            double direction = inputs.leftSensor ? -1 : 1;
+            intakeIO.setAdjustVelocity(direction);
+          }
+        });
   }
 
   public boolean coralNotInPosition() {

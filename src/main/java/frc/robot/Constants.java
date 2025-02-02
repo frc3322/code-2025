@@ -34,4 +34,30 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+  
+  public static class CANIDs {
+    public static final int pigeonCanId = 2;
+
+    public static final int frontLeftDriveCanId = 5;
+    public static final int backLeftDriveCanId = 14;
+    public static final int frontRightDriveCanId = 8;
+    public static final int backRightDriveCanId = 11;
+
+    public static final int frontLeftTurnCanId = 3;
+    public static final int backLeftTurnCanId = 12;
+    public static final int frontRightTurnCanId = 6;
+    public static final int backRightTurnCanId = 9;
+
+    public static final int frontLeftEncoderCanId = 4;
+    public static final int backLeftEncoderCanId = 13;
+    public static final int frontRightEncoderCanId = 7;
+    public static final int backRightEncoderCanId = 10;
+
+    public static final int elevatorLeftCanId = 15;
+    public static final int elevatorRightCanId = 16;
+    
+    public static final int pivotLeftCanId = 17;
+    public static final int pivotRightCanId = 18;
+    
+  }
 }

@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.drive;
 
+import static frc.robot.Constants.CANIDs;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.util.SparkUtil.*;
 
@@ -77,20 +78,20 @@ public class ModuleIOSpark implements ModuleIO {
     driveSpark =
         new SparkFlex(
             switch (module) {
-              case 0 -> frontLeftDriveCanId;
-              case 1 -> frontRightDriveCanId;
-              case 2 -> backLeftDriveCanId;
-              case 3 -> backRightDriveCanId;
+              case 0 -> CANIDs.frontLeftDriveCanId;
+              case 1 -> CANIDs.frontRightDriveCanId;
+              case 2 -> CANIDs.backLeftDriveCanId;
+              case 3 -> CANIDs.backRightDriveCanId;
               default -> 0;
             },
             MotorType.kBrushless);
     turnSpark =
         new SparkMax(
             switch (module) {
-              case 0 -> frontLeftTurnCanId;
-              case 1 -> frontRightTurnCanId;
-              case 2 -> backLeftTurnCanId;
-              case 3 -> backRightTurnCanId;
+              case 0 -> CANIDs.frontLeftTurnCanId;
+              case 1 -> CANIDs.frontRightTurnCanId;
+              case 2 -> CANIDs.backLeftTurnCanId;
+              case 3 -> CANIDs.backRightTurnCanId;
               default -> 0;
             },
             MotorType.kBrushless);
@@ -98,10 +99,10 @@ public class ModuleIOSpark implements ModuleIO {
     turnAbsoluteEncoder =
         new CANcoder(
             switch (module) {
-              case 0 -> frontLeftEncoderCanId;
-              case 1 -> frontRightEncoderCanId;
-              case 2 -> backLeftEncoderCanId;
-              case 3 -> backRightEncoderCanId;
+              case 0 -> CANIDs.frontLeftEncoderCanId;
+              case 1 -> CANIDs.frontRightEncoderCanId;
+              case 2 -> CANIDs.backLeftEncoderCanId;
+              case 3 -> CANIDs.backRightEncoderCanId;
               default -> 0;
             });
     driveEncoder = driveSpark.getEncoder();

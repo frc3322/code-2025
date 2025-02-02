@@ -1,17 +1,13 @@
 package frc.robot.subsystems.intake;
 
+import au.grapplerobotics.LaserCan;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-import au.grapplerobotics.LaserCan;
-
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class IntakeIOSpark implements IntakeIO {
-
-  public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
   public SparkMax adjustMotor;
   public SparkFlex intakeMotor;

@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems.pivot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 
@@ -13,9 +16,13 @@ public class Pivot extends SubsystemBase {
 
   private final PivotIO pivotIO;
 
+  private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
+
   private static Pivot instance;
 
   private PivotStates pivotState = PivotStates.STOW;
+
+  private boolean atGoal = false;
 
   public static Pivot initialize(PivotIO pivotIO) {
     if (instance == null) {
@@ -33,39 +40,42 @@ public class Pivot extends SubsystemBase {
     this.pivotIO = pivotIO;
   }
 
+  public void updateInputs() {
+    pivotIO.updateInputs(inputs);
+    atGoal = inputs.atGoal;
+  }
+
   @Override
   public void periodic() {
-    switch (pivotState) {
-      case STOW:
-        break;
-      case GROUND:
-        break;
-      case AGROUND:
-        break;
-      case L1:
-        break;
-      case L2:
-        break;
-      case L3:
-        break;
-      case L4:
-        break;
-      case REEFALGAE:
-        break;
-      case PROCESSER:
-        break;
-      case BARGE:
-        break;
-      default:
-        break;
-    }
+
+  }
+
+  public boolean isAtGoal() {
+    return atGoal;
+  }
+
+  public PivotStates getPivotState(){
+    return pivotState;
   }
 
   private void setState(PivotStates pivotState) {
     this.pivotState = pivotState;
   }
 
-  public Command setStateCommand(PivotStates pivotState) {
-    return new InstantCommand(() -> setState(pivotState), getInstance());
+  public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
+    return new RunCommand(() -> {
+      PivotStates pivotSetpoint = pivotStateSupplier.get();
+      pivotIO.goToPosition(pivotSetpoint.armSetpoint, pivotSetpoint.armVelocity);
+      }, getInstance()
+    );
   }
+
+  public Command setStateCommand(PivotStates pivotState) {
+    return new InstantCommand( () -> {
+      setState(pivotState);
+      pivotIO.goToPosition(pivotState.armSetpoint, pivotState.armVelocity);
+    }, getInstance());
+  } 
+
+
 }
