@@ -4,13 +4,12 @@
 
 package frc.robot.subsystems.pivot;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
+import java.util.function.Supplier;
 
 public class Pivot extends SubsystemBase {
 
@@ -46,15 +45,13 @@ public class Pivot extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-
-  }
+  public void periodic() {}
 
   public boolean isAtGoal() {
     return atGoal;
   }
 
-  public PivotStates getPivotState(){
+  public PivotStates getPivotState() {
     return pivotState;
   }
 
@@ -63,19 +60,20 @@ public class Pivot extends SubsystemBase {
   }
 
   public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
-    return new RunCommand(() -> {
-      PivotStates pivotSetpoint = pivotStateSupplier.get();
-      pivotIO.goToPosition(pivotSetpoint.armSetpoint, pivotSetpoint.armVelocity);
-      }, getInstance()
-    );
+    return new RunCommand(
+        () -> {
+          PivotStates pivotSetpoint = pivotStateSupplier.get();
+          pivotIO.goToPosition(pivotSetpoint.armSetpoint, pivotSetpoint.armVelocity);
+        },
+        getInstance());
   }
 
   public Command setStateCommand(PivotStates pivotState) {
-    return new InstantCommand( () -> {
-      setState(pivotState);
-      pivotIO.goToPosition(pivotState.armSetpoint, pivotState.armVelocity);
-    }, getInstance());
-  } 
-
-
+    return new InstantCommand(
+        () -> {
+          setState(pivotState);
+          pivotIO.goToPosition(pivotState.armSetpoint, pivotState.armVelocity);
+        },
+        getInstance());
+  }
 }

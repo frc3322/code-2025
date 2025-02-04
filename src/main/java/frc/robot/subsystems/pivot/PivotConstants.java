@@ -3,7 +3,7 @@ package frc.robot.subsystems.pivot;
 public class PivotConstants {
 
   public static final int pivotMotorCurrentLimit = 60;
-  
+
   public static class ControllerConstants {
     public static final double kP = 0;
     public static final double kI = 0;
@@ -56,13 +56,17 @@ public class PivotConstants {
     L2(PivotSetpoints.l2Position, PivotSetpoints.l2Velocity), // L2 coral scoring
     L3(PivotSetpoints.l3Position, PivotSetpoints.l3Velocity), // L3 coral scoring
     L4(PivotSetpoints.l4Position, PivotSetpoints.l4Velocity), // L4 coral scoring
-    REEFALGAE(PivotSetpoints.reefAlgaePosition, PivotSetpoints.reefAlgaeVelocity), // Algae from reef
-    PROCESSER(PivotSetpoints.processerPosition, PivotSetpoints.processerVelocity), // Scoring Algae in processer
+    REEFALGAE(
+        PivotSetpoints.reefAlgaePosition, PivotSetpoints.reefAlgaeVelocity), // Algae from reef
+    PROCESSER(
+        PivotSetpoints.processerPosition,
+        PivotSetpoints.processerVelocity), // Scoring Algae in processer
     BARGE(PivotSetpoints.bargeVelocity, PivotSetpoints.bargePosition); // Scoring Algae in barge
 
     public double armSetpoint;
     public double armVelocity;
-    private PivotStates(double armSetpoint, double armVelocity){
+
+    private PivotStates(double armSetpoint, double armVelocity) {
       this.armSetpoint = armSetpoint;
       this.armVelocity = armVelocity;
     }

@@ -32,7 +32,6 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSpark;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -64,7 +63,7 @@ public class RobotContainer {
                 new ModuleIOSpark(1),
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
-        
+
         pivot = new Pivot(new PivotIOSpark());
         break;
 
@@ -77,7 +76,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
-        
+
         pivot = new Pivot(new PivotIO() {});
         break;
 
@@ -90,7 +89,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        
+
         pivot = new Pivot(new PivotIO() {});
         break;
     }
@@ -133,9 +132,7 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    pivot.setDefaultCommand(
-        pivot.goToStateCommand(pivot::getPivotState)
-    );
+    pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
 
     // Lock to 0° when A button is held
     controller
