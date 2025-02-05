@@ -13,13 +13,12 @@ public class PivotIOSim implements PivotIO {
       new SingleJointedArmSim(
           pivotMotors,
           SimConstants.gearRatio,
-          0,
+          SimConstants.jKgMetersSquared,
           SimConstants.armLengthMeters,
           0,
           0,
           true,
-          SimConstants.startingAngleRads,
-          null);
+          SimConstants.startingAngleRads);
 
   private ProfiledPIDController pivotPID =
       new ProfiledPIDController(
@@ -43,6 +42,7 @@ public class PivotIOSim implements PivotIO {
     // !!!!!! THE PIVOT SIM UNITS ARE IN RADIANS !!!!!!
     // !!!!!! THE PIVOT SIM UNITS ARE IN RADIANS !!!!!!
     // !!!!!! THE PIVOT SIM UNITS ARE IN RADIANS !!!!!!
+    pivotPID.setTolerance(SimConstants.positionTolerance, SimConstants.velocityTolerance);
   }
 
   @Override
@@ -60,6 +60,8 @@ public class PivotIOSim implements PivotIO {
   }
 
   public void updateInputs(PivotIOInputsAutoLogged inputs) {
+    pivotSim.update(0.020);
+
     inputs.absolutePosition = PivotConstants.radiansToRotations(pivotSim.getAngleRads());
     inputs.absoluteVelocity = PivotConstants.radiansToRotations(pivotSim.getVelocityRadPerSec());
 

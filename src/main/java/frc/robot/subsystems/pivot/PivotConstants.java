@@ -30,7 +30,7 @@ public class PivotConstants {
   public static class PivotSetpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
     public static final double stowPosition = 0;
-    public static final double groundPosition = 0;
+    public static final double groundPosition = 0.25;
     public static final double aGroundPosition = 0;
     public static final double sourcePosition = 0;
     public static final double l1Position = 0;
@@ -43,7 +43,7 @@ public class PivotConstants {
 
     // ALL VELOCITY SETPOINTS ARE IN ROT/SEC
     public static final double stowVelocity = 0;
-    public static final double groundVelocity = 0;
+    public static final double groundVelocity = .5;
     public static final double aGroundVelocity = 0;
     public static final double sourceVelocity = 0;
     public static final double l1Velocity = 0;
@@ -57,18 +57,18 @@ public class PivotConstants {
 
   public static final class SimConstants {
     public static final double gearRatio = 48; // 4:1 -> 3:1 -> 4:1
-
+    public static final double jKgMetersSquared = 1.161288; // Rough guess
     public static final double armLengthMeters = 0.6223;
 
     public static final double startingAngleRads = Math.PI;
 
-    public static final double kP = 0;
+    public static final double kP = 1;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
-    public static final double positionTolerance = 0;
-    public static final double velocityTolerance = 0;
+    public static final double positionTolerance = .1;
+    public static final double velocityTolerance = .1;
 
     public static final double kS = 0;
     public static final double kG = 0;

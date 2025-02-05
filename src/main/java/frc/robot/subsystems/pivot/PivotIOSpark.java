@@ -73,6 +73,9 @@ public class PivotIOSpark implements PivotIO {
                 ControllerConstants.velocityConstraint,
                 ControllerConstants.accelerationConstraint));
 
+    pivotPID.setTolerance(
+        ControllerConstants.positionTolerance, ControllerConstants.velocityTolerance);
+
     pivotFeedforward =
         new ArmFeedforward(
             ControllerConstants.kS,

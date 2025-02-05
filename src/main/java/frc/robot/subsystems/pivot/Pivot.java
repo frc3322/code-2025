@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class Pivot extends SubsystemBase {
 
@@ -42,10 +43,14 @@ public class Pivot extends SubsystemBase {
   public void updateInputs() {
     pivotIO.updateInputs(inputs);
     atGoal = inputs.atGoal;
+
+    Logger.processInputs("Pivot", inputs);
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    updateInputs();
+  }
 
   public boolean isAtGoal() {
     return atGoal;
@@ -65,7 +70,7 @@ public class Pivot extends SubsystemBase {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           pivotIO.goToPosition(pivotSetpoint.armSetpoint, pivotSetpoint.armVelocity);
         },
-        getInstance());
+        this);
   }
 
   public Command setStateCommand(PivotStates pivotState) {
@@ -74,6 +79,6 @@ public class Pivot extends SubsystemBase {
           setState(pivotState);
           pivotIO.goToPosition(pivotState.armSetpoint, pivotState.armVelocity);
         },
-        getInstance());
+        this);
   }
 }
