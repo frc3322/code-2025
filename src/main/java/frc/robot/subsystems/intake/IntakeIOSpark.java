@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import au.grapplerobotics.LaserCan;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -15,9 +14,6 @@ public class IntakeIOSpark implements IntakeIO {
   public SparkFlexConfig intakeConfig;
   public SparkMaxConfig adjustConfig;
 
-  public LaserCan leftSensor;
-  public LaserCan rightSensor;
-
   public IntakeIOSpark() {
     intakeMotor = new SparkFlex(IntakeConstants.intakeCANId, null);
     adjustMotor = new SparkMax(IntakeConstants.adjustCANId, null);
@@ -25,9 +21,6 @@ public class IntakeIOSpark implements IntakeIO {
     intakeConfig.idleMode(IdleMode.kCoast);
 
     adjustConfig.idleMode(IdleMode.kBrake);
-
-    leftSensor = new LaserCan(IntakeConstants.leftSensorCAN);
-    rightSensor = new LaserCan(IntakeConstants.rightSensorCAN);
   }
 
   public double getIntakeVelocity() {
@@ -36,16 +29,6 @@ public class IntakeIOSpark implements IntakeIO {
 
   public double getAdjustVelocity() {
     return adjustMotor.getEncoder().getVelocity();
-  }
-
-  public boolean leftSensorOutput() {
-    LaserCan.Measurement measurement = leftSensor.getMeasurement();
-    return measurement == null || measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT;
-  }
-
-  public boolean rightSensorOutput() {
-    LaserCan.Measurement measurement = rightSensor.getMeasurement();
-    return measurement == null || measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT;
   }
 
   public void setIntakeVelocity(double velocity) {
@@ -60,7 +43,5 @@ public class IntakeIOSpark implements IntakeIO {
   public void updateInputs(IntakeIOInputs inputs) {
     inputs.intakeVelocity = getIntakeVelocity();
     inputs.adjustVelocity = getAdjustVelocity();
-    inputs.leftSensor = leftSensorOutput();
-    inputs.rightSensor = rightSensorOutput();
   }
 }

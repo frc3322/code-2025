@@ -34,7 +34,7 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
-  
+
   public static class CANIDs {
     public static final int pigeonCanId = 2;
 
@@ -55,9 +55,8 @@ public final class Constants {
 
     public static final int elevatorLeftCanId = 15;
     public static final int elevatorRightCanId = 16;
-    
+
     public static final int pivotLeftCanId = 17;
     public static final int pivotRightCanId = 18;
-    
   }
 }

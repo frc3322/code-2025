@@ -14,6 +14,8 @@ public class Intake extends SubsystemBase {
 
   private static Intake instance;
   private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+  private SensorIOInputsAutoLogged leftSensor = new SensorIOInputsAutoLogged();
+  private SensorIOInputsAutoLogged rightSensor = new SensorIOInputsAutoLogged();
   private double intakeState;
   private double adjustState;
 
@@ -61,13 +63,13 @@ public class Intake extends SubsystemBase {
     return new InstantCommand(
         () -> {
           if (coralNotInPosition()) {
-            double direction = inputs.leftSensor ? -1 : 1;
+            double direction = leftSensor.detected ? -1 : 1;
             intakeIO.setAdjustVelocity(direction);
           }
         });
   }
 
   public boolean coralNotInPosition() {
-    return inputs.leftSensor ^ inputs.rightSensor;
+    return leftSensor.detected ^ rightSensor.detected;
   }
 }

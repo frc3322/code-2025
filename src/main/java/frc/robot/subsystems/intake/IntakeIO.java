@@ -7,18 +7,12 @@ public interface IntakeIO {
   public class IntakeIOInputs {
     public double intakeVelocity = 0;
     public double adjustVelocity = 0;
-    public boolean leftSensor = false;
-    public boolean rightSensor = false;
     public boolean inPosition = false;
   }
 
   public double getIntakeVelocity();
 
   public double getAdjustVelocity();
-
-  public boolean leftSensorOutput();
-
-  public boolean rightSensorOutput();
 
   public void setIntakeVelocity(double velocity);
 
