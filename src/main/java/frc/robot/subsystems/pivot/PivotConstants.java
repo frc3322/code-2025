@@ -3,7 +3,15 @@ package frc.robot.subsystems.pivot;
 public class PivotConstants {
 
   public static final int pivotMotorCurrentLimit = 60;
-  
+
+  public static double rotationsToRadians(double rotations) {
+    return rotations * 2 * Math.PI;
+  }
+
+  public static double radiansToRotations(double radians) {
+    return radians / (2 * Math.PI);
+  }
+
   public static class ControllerConstants {
     public static final double kP = 0;
     public static final double kI = 0;
@@ -47,6 +55,27 @@ public class PivotConstants {
     public static final double bargeVelocity = 0;
   }
 
+  public static final class SimConstants {
+    public static final double gearRatio = 48; // 4:1 -> 3:1 -> 4:1
+
+    public static final double armLengthMeters = 0.6223;
+
+    public static final double startingAngleRads = Math.PI;
+
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double velocityConstraint = 0;
+    public static final double accelerationConstraint = 0;
+    public static final double positionTolerance = 0;
+    public static final double velocityTolerance = 0;
+
+    public static final double kS = 0;
+    public static final double kG = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+  }
+
   public static enum PivotStates {
     STOW(PivotSetpoints.stowPosition, PivotSetpoints.stowVelocity), // Arm straight up
     GROUND(PivotSetpoints.groundPosition, PivotSetpoints.groundVelocity), // Coral ground intake
@@ -56,13 +85,17 @@ public class PivotConstants {
     L2(PivotSetpoints.l2Position, PivotSetpoints.l2Velocity), // L2 coral scoring
     L3(PivotSetpoints.l3Position, PivotSetpoints.l3Velocity), // L3 coral scoring
     L4(PivotSetpoints.l4Position, PivotSetpoints.l4Velocity), // L4 coral scoring
-    REEFALGAE(PivotSetpoints.reefAlgaePosition, PivotSetpoints.reefAlgaeVelocity), // Algae from reef
-    PROCESSER(PivotSetpoints.processerPosition, PivotSetpoints.processerVelocity), // Scoring Algae in processer
+    REEFALGAE(
+        PivotSetpoints.reefAlgaePosition, PivotSetpoints.reefAlgaeVelocity), // Algae from reef
+    PROCESSER(
+        PivotSetpoints.processerPosition,
+        PivotSetpoints.processerVelocity), // Scoring Algae in processer
     BARGE(PivotSetpoints.bargeVelocity, PivotSetpoints.bargePosition); // Scoring Algae in barge
 
     public double armSetpoint;
     public double armVelocity;
-    private PivotStates(double armSetpoint, double armVelocity){
+
+    private PivotStates(double armSetpoint, double armVelocity) {
       this.armSetpoint = armSetpoint;
       this.armVelocity = armVelocity;
     }
