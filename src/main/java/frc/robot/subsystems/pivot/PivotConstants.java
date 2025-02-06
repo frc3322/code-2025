@@ -59,10 +59,12 @@ public class PivotConstants {
     public static final double gearRatio = 48; // 4:1 -> 3:1 -> 4:1
     public static final double jKgMetersSquared = 1.161288; // Rough guess
     public static final double armLengthMeters = 0.6223;
+    public static final double minRotationRadians = -Math.PI;
+    public static final double maxRotationRadians = Math.PI;
 
     public static final double startingAngleRads = Math.PI;
 
-    public static final double kP = 1;
+    public static final double kP = 5;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double velocityConstraint = 0;

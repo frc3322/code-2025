@@ -15,8 +15,8 @@ public class PivotIOSim implements PivotIO {
           SimConstants.gearRatio,
           SimConstants.jKgMetersSquared,
           SimConstants.armLengthMeters,
-          0,
-          0,
+          SimConstants.minRotationRadians,
+          SimConstants.maxRotationRadians,
           true,
           SimConstants.startingAngleRads);
 
