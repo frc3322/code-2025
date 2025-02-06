@@ -64,5 +64,7 @@ public final class Constants {
 
     public static final int leftSensorCAN = 0;
     public static final int rightSensorCAN = 0;
+
+    public static final int wristCANId = 0;
   }
 }
