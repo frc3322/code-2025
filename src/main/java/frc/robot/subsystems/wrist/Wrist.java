@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -16,9 +18,15 @@ public class Wrist extends SubsystemBase {
 
   private static Wrist instance;
 
+  private WristVisualizer visualizer = new WristVisualizer();
+
   private WristStates wristState = WristStates.STOW;
 
   private boolean atGoal = false;
+
+  private Elevator elevator = Elevator.getInstance();
+
+  private Pivot pivot = Pivot.getInstance();
 
   public static Wrist initialize(WristIO wristIO) {
     if (instance == null) {
@@ -46,6 +54,8 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     updateInputs();
+
+    visualizer.update(-Math.PI/2, pivot.getPivotAngleRadians(), elevator.getElevatorHeightMeters());
   }
 
   public boolean isAtGoal() {

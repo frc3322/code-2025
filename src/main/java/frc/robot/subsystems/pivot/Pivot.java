@@ -27,6 +27,8 @@ public class Pivot extends SubsystemBase {
 
   private boolean atGoal = false;
 
+  private double pivotAngle = 0;
+
   private Elevator elevator = Elevator.getInstance();
 
   public static Pivot initialize(PivotIO pivotIO) {
@@ -50,6 +52,8 @@ public class Pivot extends SubsystemBase {
     atGoal = inputs.atGoal;
 
     Logger.processInputs("Pivot", inputs);
+
+    pivotAngle = inputs.absolutePosition * 2 * Math.PI;
   }
 
   @Override
@@ -57,12 +61,16 @@ public class Pivot extends SubsystemBase {
     updateInputs();
 
     if (elevator != null) {
-      pivotVisualizer.update(elevator.getElevatorHeight(), elevator.getElevatorHeight());
+      pivotVisualizer.update(getPivotAngleRadians(), elevator.getElevatorHeightMeters());
     }
   }
 
   public boolean isAtGoal() {
     return atGoal;
+  }
+
+  public double getPivotAngleRadians() {
+    return pivotAngle;
   }
 
   public PivotStates getPivotState() {
