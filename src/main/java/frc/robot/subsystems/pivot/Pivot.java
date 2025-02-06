@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -20,9 +21,13 @@ public class Pivot extends SubsystemBase {
 
   private static Pivot instance;
 
+  private static PivotVisualizer pivotVisualizer = new PivotVisualizer();
+
   private PivotStates pivotState = PivotStates.STOW;
 
   private boolean atGoal = false;
+
+  private Elevator elevator = Elevator.getInstance();
 
   public static Pivot initialize(PivotIO pivotIO) {
     if (instance == null) {
@@ -50,6 +55,10 @@ public class Pivot extends SubsystemBase {
   @Override
   public void periodic() {
     updateInputs();
+
+    if (elevator != null) {
+      pivotVisualizer.update(elevator.getElevatorHeight(), elevator.getElevatorHeight());
+    }
   }
 
   public boolean isAtGoal() {
