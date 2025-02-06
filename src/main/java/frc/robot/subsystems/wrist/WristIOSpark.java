@@ -9,42 +9,42 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants.CANIDs;
 
 public class WristIOSpark implements WristIO {
-    private SparkMax wristMotor;
+  private SparkMax wristMotor;
 
-    private AbsoluteEncoder absoluteEncoder;
+  private AbsoluteEncoder absoluteEncoder;
 
-    private ProfiledPIDController wristPID;
+  private ProfiledPIDController wristPID;
 
-    private double pidOutput;
+  private double pidOutput;
 
-    public WristIOSpark() {
-        wristMotor = new SparkMax(CANIDs.wristCANId, MotorType.kBrushless);
+  public WristIOSpark() {
+    wristMotor = new SparkMax(CANIDs.wristCANId, MotorType.kBrushless);
 
-        SparkMaxConfig wristConfig = new SparkMaxConfig();
+    SparkMaxConfig wristConfig = new SparkMaxConfig();
 
-        wristConfig
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(WristConstants.wristMotorCurrentLimit)
-            .voltageCompensation(12)
-            .inverted(false);
-        wristConfig.absoluteEncoder.inverted(true).averageDepth(2);
-        wristConfig.signals.absoluteEncoderPositionAlwaysOn(true);
-        tryUntilOk(
-            wristMotor,
-            5,
-            () ->
-                wristMotor.configure(
-                    wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    wristConfig
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(WristConstants.wristMotorCurrentLimit)
+        .voltageCompensation(12)
+        .inverted(false);
+    wristConfig.absoluteEncoder.inverted(true).averageDepth(2);
+    wristConfig.signals.absoluteEncoderPositionAlwaysOn(true);
+    tryUntilOk(
+        wristMotor,
+        5,
+        () ->
+            wristMotor.configure(
+                wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
-        absoluteEncoder = wristMotor.getAbsoluteEncoder();
+    absoluteEncoder = wristMotor.getAbsoluteEncoder();
 
-        wristPID = new ProfiledPIDController(
+    wristPID =
+        new ProfiledPIDController(
             WristConstants.ControllerConstants.kP,
             WristConstants.ControllerConstants.kI,
             WristConstants.ControllerConstants.kD,
@@ -52,29 +52,29 @@ public class WristIOSpark implements WristIO {
                 WristConstants.ControllerConstants.velocityConstraint,
                 WristConstants.ControllerConstants.accelerationConstraint));
 
-        wristPID.setTolerance(
-            WristConstants.ControllerConstants.positionTolerance,
-            WristConstants.ControllerConstants.velocityTolerance);
-    }
+    wristPID.setTolerance(
+        WristConstants.ControllerConstants.positionTolerance,
+        WristConstants.ControllerConstants.velocityTolerance);
+  }
 
-    @Override
-    public void goToPosition(double position) {
-        wristPID.setGoal(position);
-        pidOutput = wristPID.calculate(absoluteEncoder.getPosition());
+  @Override
+  public void goToPosition(double position) {
+    wristPID.setGoal(position);
+    pidOutput = wristPID.calculate(absoluteEncoder.getPosition());
 
-        wristMotor.set(pidOutput);
-    }
+    wristMotor.set(pidOutput);
+  }
 
-    @Override
-    public void updateInputs(WristIOInputsAutoLogged inputs) {
-        inputs.absolutePosition = absoluteEncoder.getPosition();
-        inputs.absoluteVelocity = absoluteEncoder.getVelocity();
+  @Override
+  public void updateInputs(WristIOInputsAutoLogged inputs) {
+    inputs.absolutePosition = absoluteEncoder.getPosition();
+    inputs.absoluteVelocity = absoluteEncoder.getVelocity();
 
-        inputs.motorPower = wristMotor.get();
+    inputs.motorPower = wristMotor.get();
 
-        inputs.setpoint = wristPID.getGoal().position;
-        inputs.pidOut = pidOutput;
+    inputs.setpoint = wristPID.getGoal().position;
+    inputs.pidOut = pidOutput;
 
-        inputs.atGoal = wristPID.atGoal();
-    }
+    inputs.atGoal = wristPID.atGoal();
+  }
 }
