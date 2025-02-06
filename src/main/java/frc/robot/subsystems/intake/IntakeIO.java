@@ -7,12 +7,7 @@ public interface IntakeIO {
   public class IntakeIOInputs {
     public double intakeVelocity = 0;
     public double adjustVelocity = 0;
-    public boolean inPosition = false;
   }
-
-  public double getIntakeVelocity();
-
-  public double getAdjustVelocity();
 
   public void setIntakeVelocity(double velocity);
 

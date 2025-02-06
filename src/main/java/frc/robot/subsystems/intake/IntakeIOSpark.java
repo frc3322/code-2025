@@ -1,10 +1,14 @@
 package frc.robot.subsystems.intake;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import frc.robot.Constants.CANIDs;
 
 public class IntakeIOSpark implements IntakeIO {
 
@@ -15,20 +19,23 @@ public class IntakeIOSpark implements IntakeIO {
   public SparkMaxConfig adjustConfig;
 
   public IntakeIOSpark() {
-    intakeMotor = new SparkFlex(IntakeConstants.intakeCANId, null);
-    adjustMotor = new SparkMax(IntakeConstants.adjustCANId, null);
+    intakeMotor = new SparkFlex(CANIDs.intakeCANId, MotorType.kBrushless);
+    adjustMotor = new SparkMax(CANIDs.adjustCANId, MotorType.kBrushless);
 
-    intakeConfig.idleMode(IdleMode.kCoast);
+    intakeConfig
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit)
+        .inverted(false);
 
-    adjustConfig.idleMode(IdleMode.kBrake);
-  }
+    adjustConfig
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(IntakeConstants.adjustMotorCurrentLimit)
+        .inverted(false);
 
-  public double getIntakeVelocity() {
-    return intakeMotor.getEncoder().getVelocity();
-  }
-
-  public double getAdjustVelocity() {
-    return adjustMotor.getEncoder().getVelocity();
+    intakeMotor.configure(
+        intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    adjustMotor.configure(
+        adjustConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void setIntakeVelocity(double velocity) {
@@ -41,7 +48,8 @@ public class IntakeIOSpark implements IntakeIO {
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.intakeVelocity = getIntakeVelocity();
-    inputs.adjustVelocity = getAdjustVelocity();
+    inputs.intakeVelocity = intakeMotor.getEncoder().getVelocity();
+    ;
+    inputs.adjustVelocity = adjustMotor.getEncoder().getVelocity();
   }
 }
