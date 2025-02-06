@@ -30,13 +30,17 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
 import frc.robot.subsystems.intake.SensorIOLaserCAN;
 import frc.robot.subsystems.intake.SensorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
-import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.pivot.PivotIOSpark;
@@ -51,8 +55,9 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Pivot pivot;
+  private final Elevator elevator;
   private final Intake intake;
+  private final Pivot pivot;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -74,11 +79,15 @@ public class RobotContainer {
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
 
-        pivot = new Pivot(new PivotIOSpark());
+        elevator = Elevator.initialize(new ElevatorIOSpark());
+
         intake =
             new Intake(
                 new IntakeIOSpark(),
                 new SensorIOLaserCAN(CANIDs.leftSensorCAN, CANIDs.rightSensorCAN));
+
+        pivot = Pivot.initialize(new PivotIOSpark());
+
         break;
 
       case SIM:
@@ -91,8 +100,12 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
 
-        pivot = new Pivot(new PivotIOSim());
+        elevator = Elevator.initialize(new ElevatorIOSim());
+
         intake = new Intake(new IntakeIOSim(), new SensorIOSim());
+
+        pivot = Pivot.initialize(new PivotIOSim());
+
         break;
 
       default:
@@ -105,8 +118,12 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        pivot = new Pivot(new PivotIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
+
         intake = new Intake(null, null);
+
+        pivot = new Pivot(new PivotIO() {});
+
         break;
     }
 
@@ -148,6 +165,8 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
+    elevator.setDefaultCommand(elevator.goToStateCommand(elevator::getElevatorState));
+
     pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
 
     // Lock to 0° when A button is held
@@ -174,8 +193,8 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    operatorController.a().onTrue(pivot.setStateCommand(PivotStates.STOW));
-    operatorController.b().onTrue(pivot.setStateCommand(PivotStates.GROUND));
+    operatorController.a().onTrue(elevator.setStateCommand(ElevatorStates.STOW));
+    operatorController.b().onTrue(elevator.setStateCommand(ElevatorStates.BARGE));
   }
 
   /**

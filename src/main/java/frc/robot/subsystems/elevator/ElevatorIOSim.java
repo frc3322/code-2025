@@ -11,7 +11,16 @@ public class ElevatorIOSim implements ElevatorIO {
   private DCMotor elevatorMotor =
       DCMotor.getNeoVortex(2); // Using a single NEO motor for the elevator
 
-  private ElevatorSim elevatorSim = new ElevatorSim(elevatorMotor, 0, 0, 0, 0, 0, false, 0);
+  private ElevatorSim elevatorSim =
+      new ElevatorSim(
+          elevatorMotor,
+          SimConstants.gearRatio,
+          SimConstants.elevatorMassKg,
+          SimConstants.drumRadiusMeters,
+          SimConstants.minHeightMeters,
+          SimConstants.maxHeightMeters,
+          true,
+          SimConstants.maxHeightMeters);
 
   private ProfiledPIDController elevatorPID =
       new ProfiledPIDController(
@@ -47,9 +56,8 @@ public class ElevatorIOSim implements ElevatorIO {
   public void updateInputs(ElevatorIOInputsAutoLogged inputs) {
     elevatorSim.update(0.020); // Update the elevator simulation with a 20ms timestep
 
-    inputs.absolutePosition = elevatorSim.getPositionMeters(); // Position in meters
-    inputs.absoluteVelocity =
-        elevatorSim.getVelocityMetersPerSecond(); // Velocity in meters per second
+    inputs.position = elevatorSim.getPositionMeters(); // Position in meters
+    inputs.velocity = elevatorSim.getVelocityMetersPerSecond(); // Velocity in meters per second
 
     inputs.leftMotorPower = pidOutput + ffOutput; // The power applied to the motor
     inputs.rightMotorPower = pidOutput + ffOutput;

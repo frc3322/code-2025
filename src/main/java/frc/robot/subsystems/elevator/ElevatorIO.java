@@ -9,8 +9,8 @@ public interface ElevatorIO {
     public double leftMotorPower = 0;
     public double rightMotorPower = 0; // Power applied to the motor
 
-    public double absolutePosition = 0; // Current position in meters
-    public double absoluteVelocity = 0; // Current velocity in meters per second
+    public double position = 0; // Current position in meters
+    public double velocity = 0; // Current velocity in meters per second
 
     public double setpoint = 0; // Target position in meters
     public double pidOut = 0; // PID output

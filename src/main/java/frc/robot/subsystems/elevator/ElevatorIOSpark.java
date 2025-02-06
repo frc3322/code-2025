@@ -41,6 +41,10 @@ public class ElevatorIOSpark implements ElevatorIO {
         .smartCurrentLimit(ElevatorConstants.elevatorMotorCurrentLimit)
         .voltageCompensation(12)
         .inverted(false);
+    leftConfig
+        .encoder
+        .positionConversionFactor(ElevatorConstants.positionConversionFactor)
+        .velocityConversionFactor(ElevatorConstants.velocityConversionFactor);
 
     tryUntilOk(
         leftMotor,
@@ -109,8 +113,8 @@ public class ElevatorIOSpark implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputsAutoLogged inputs) {
     // Update the inputs for logging
-    inputs.absolutePosition = leftEncoder.getPosition();
-    inputs.absoluteVelocity = leftEncoder.getVelocity();
+    inputs.position = leftEncoder.getPosition();
+    inputs.velocity = leftEncoder.getVelocity();
 
     inputs.leftMotorPower = leftMotor.get();
     inputs.rightMotorPower = rightMotor.get();

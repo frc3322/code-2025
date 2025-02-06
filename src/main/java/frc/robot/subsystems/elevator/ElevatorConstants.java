@@ -4,6 +4,9 @@ public class ElevatorConstants {
 
   public static final int elevatorMotorCurrentLimit = 60;
 
+  public static final double positionConversionFactor = 1;
+  public static final double velocityConversionFactor = 1;
+
   public static class ControllerConstants {
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -30,9 +33,9 @@ public class ElevatorConstants {
     public static final double reefAlgaeLowPosition = 0.0;
     public static final double reefAlgaeHighPosition = 0.0;
     public static final double processerPosition = 0.0;
-    public static final double bargePosition = 0.0;
+    public static final double bargePosition = 2.5;
 
-    public static final double stowVelocity = 0.0;
+    public static final double stowVelocity = 2;
     public static final double groundVelocity = 0.0;
     public static final double aGroundVelocity = 0.0;
     public static final double l1Velocity = 0.0;
@@ -42,20 +45,19 @@ public class ElevatorConstants {
     public static final double reefAlgaeLowVelocity = 0.0;
     public static final double reefAlgaeHighVelocity = 0.0;
     public static final double processerVelocity = 0.0;
-    public static final double bargeVelocity = 0.0;
+    public static final double bargeVelocity = 2;
   }
 
   public static final class SimConstants {
-    public static final double gearRatio = 0.0; // Gear ratio
-    public static final double elevatorMassKg = 0.0; // Mass of elevator
-    public static final double elevatorHeightMeters = 0.0; // Height of elevator
+    public static final double gearRatio = 5; // Gear ratio
+    public static final double elevatorMassKg = 18.1437 * 2; // Mass of elevator
+    public static final double drumRadiusMeters = 0.01905; // .75 in
+    public static final double startingHeightMeters = 0.0; // Height of elevator
     public static final double minHeightMeters = 0.0;
-    public static final double maxHeightMeters = 0.0;
-
-    public static final double startingHeightMeters = 0.0;
+    public static final double maxHeightMeters = 0.8636; // guess, 95 in
 
     // PID and feedforward constants
-    public static final double kP = 0.0;
+    public static final double kP = 10;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double velocityConstraint = 0.0;
