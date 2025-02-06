@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -66,5 +68,22 @@ public final class Constants {
     public static final int rightSensorCAN = 0;
 
     public static final int wristCANId = 0;
+  }
+
+  public static class PlacementPoints {
+    // positions starting from left bottom coral position going counter clockwise (in meters)
+    private static final Rotation2d emptyRotation = Rotation2d.fromDegrees(0);
+    public static final Pose2d coralPosition1 = new Pose2d(3.709, 3.862, emptyRotation);
+    public static final Pose2d coralPosition2 = new Pose2d(3.957, 3.433, emptyRotation);
+    public static final Pose2d coralPosition3 = new Pose2d(4.241, 3.268, emptyRotation);
+    public static final Pose2d coralPosition4 = new Pose2d(4.737, 3.269, emptyRotation);
+    public static final Pose2d coralPosition5 = new Pose2d(5.022, 3.432, emptyRotation);
+    public static final Pose2d coralPosition6 = new Pose2d(5.269, 3.862, emptyRotation);
+    public static final Pose2d coralPosition7 = new Pose2d(5.27, 4.19, emptyRotation);
+    public static final Pose2d coralPosition8 = new Pose2d(5.021, 4.619, emptyRotation);
+    public static final Pose2d coralPosition9 = new Pose2d(4.737, 4.784, emptyRotation);
+    public static final Pose2d coralPosition10 = new Pose2d(4.242, 4.783, emptyRotation);
+    public static final Pose2d coralPosition11 = new Pose2d(3.957, 4.62, emptyRotation);
+    public static final Pose2d coralPosition12 = new Pose2d(3.71, 4.19, emptyRotation);
   }
 }
