@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,24 +14,27 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   private final IntakeIO intakeIO;
 
+  private final SensorIO sensorIO;
+
   private static Intake instance;
+
   private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
-  private SensorIOInputsAutoLogged leftSensor = new SensorIOInputsAutoLogged();
-  private SensorIOInputsAutoLogged rightSensor = new SensorIOInputsAutoLogged();
+  private SensorIOInputsAutoLogged sensor = new SensorIOInputsAutoLogged();
   private double intakeState;
   private double adjustState;
 
-  public Intake(IntakeIO intake) {
+  public Intake(IntakeIO intake, SensorIO sensor) {
     intakeIO = intake;
+    sensorIO = sensor;
   }
 
   public static Intake getInstance() {
     return instance;
   }
 
-  public static Intake initialize(IntakeIO intake) {
+  public static Intake initialize(IntakeIO intake, SensorIO sensor) {
     if (instance == null) {
-      instance = new Intake(intake);
+      instance = new Intake(intake, sensor);
     }
     return instance;
   }
@@ -43,6 +48,9 @@ public class Intake extends SubsystemBase {
     updateInputs();
     intakeIO.setIntakeVelocity(intakeState);
     intakeIO.setAdjustVelocity(adjustState);
+
+    
+    Logger.processInputs("Intake", inputs);
   }
 
   public Command setIntakeStateCommand(double state) {
@@ -63,13 +71,13 @@ public class Intake extends SubsystemBase {
     return new InstantCommand(
         () -> {
           if (coralNotInPosition()) {
-            double direction = leftSensor.detected ? -1 : 1;
+            double direction = sensor.leftDetected ? -1 : 1;
             intakeIO.setAdjustVelocity(direction);
           }
         });
   }
 
   public boolean coralNotInPosition() {
-    return leftSensor.detected ^ rightSensor.detected;
+    return sensor.leftDetected ^ sensor.rightDetected;
   }
 }

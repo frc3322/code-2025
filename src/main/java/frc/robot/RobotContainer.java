@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.CANIDs;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -29,6 +30,11 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOSpark;
+import frc.robot.subsystems.intake.SensorIOLaserCAN;
+import frc.robot.subsystems.intake.SensorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
@@ -45,6 +51,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Pivot pivot;
+  private final Intake intake;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -66,6 +73,10 @@ public class RobotContainer {
                 new ModuleIOSpark(3));
 
         pivot = new Pivot(new PivotIOSpark());
+        intake =
+            new Intake(
+                new IntakeIOSpark(),
+                new SensorIOLaserCAN(CANIDs.leftSensorCAN, CANIDs.rightSensorCAN));
         break;
 
       case SIM:
@@ -79,6 +90,7 @@ public class RobotContainer {
                 new ModuleIOSim());
 
         pivot = new Pivot(new PivotIOSim());
+        intake = new Intake(new IntakeIOSim(), new SensorIOSim());
         break;
 
       default:
@@ -92,6 +104,7 @@ public class RobotContainer {
                 new ModuleIO() {});
 
         pivot = new Pivot(new PivotIO() {});
+        intake = new Intake(null, null);
         break;
     }
 

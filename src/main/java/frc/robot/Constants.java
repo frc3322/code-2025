@@ -58,5 +58,11 @@ public final class Constants {
 
     public static final int pivotLeftCanId = 17;
     public static final int pivotRightCanId = 18;
+
+    public static final int intakeCANId = 0;
+    public static final int adjustCANId = 0;
+
+    public static final int leftSensorCAN = 0;
+    public static final int rightSensorCAN = 0;
   }
 }
