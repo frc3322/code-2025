@@ -44,6 +44,11 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.pivot.PivotIOSpark;
+import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.subsystems.wrist.WristIO;
+import frc.robot.subsystems.wrist.WristIOSim;
+import frc.robot.subsystems.wrist.WristIOSpark;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -58,6 +63,7 @@ public class RobotContainer {
   private final Elevator elevator;
   private final Intake intake;
   private final Pivot pivot;
+  private final Wrist wrist;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -88,6 +94,8 @@ public class RobotContainer {
 
         pivot = Pivot.initialize(new PivotIOSpark());
 
+        wrist = Wrist.initialize(new WristIOSpark());
+
         break;
 
       case SIM:
@@ -106,6 +114,8 @@ public class RobotContainer {
 
         pivot = Pivot.initialize(new PivotIOSim());
 
+        wrist = Wrist.initialize(new WristIOSim());
+
         break;
 
       default:
@@ -123,6 +133,8 @@ public class RobotContainer {
         intake = new Intake(null, null);
 
         pivot = new Pivot(new PivotIO() {});
+
+        wrist = Wrist.initialize(new WristIO() {});
 
         break;
     }
