@@ -1,0 +1,44 @@
+{
+    "name": "3322 2025",
+    "sourceUrl": "",
+    "rotations": [
+      {"axis": "x", "degrees": 90},
+      {"axis": "z", "degrees": -90}
+    ],
+    "position": [0, 0, 0.043],
+    "cameras": [],
+    "components": [
+      {
+        "zeroedRotations": [
+        { "axis": "x", "degrees": 90},
+        { "axis": "y", "degrees": 0},
+        { "axis": "z", "degrees": -90}
+      ],
+      "zeroedPosition": [0, 0, 0.043]
+      },
+      {
+        "zeroedRotations": [
+        { "axis": "x", "degrees": 90},
+        { "axis": "y", "degrees": 0},
+        { "axis": "z", "degrees": -90}
+      ],
+      "zeroedPosition": [0, 0, 0.043]
+      },
+      {
+        "zeroedRotations": [
+        { "axis": "x", "degrees": 90},
+        { "axis": "y", "degrees": 0},
+        { "axis": "z", "degrees": -90}
+      ],
+      "zeroedPosition": [0, 0, -0.14]
+      },
+      {
+        "zeroedRotations": [
+        { "axis": "x", "degrees": 90},
+        { "axis": "y", "degrees": 0},
+        { "axis": "z", "degrees": -90}
+      ],
+      "zeroedPosition": [-0.005, 0.0023, -0.14]
+      }
+    ]  
+  }
