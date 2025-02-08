@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
-
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -72,7 +70,12 @@ public class Pivot extends SubsystemBase {
     }
 
     Logger.recordOutput("Pivot/reveredBoolean", getDirectionReversed());
-    Logger.recordOutput("Pivot/atPoseBoolean", Math.abs(PivotConstants.rightSourceTargetAngleRadians - drivetrainPoseSupplier.get().getRotation().getRadians()) < Math.PI / 2);
+    Logger.recordOutput(
+        "Pivot/atPoseBoolean",
+        Math.abs(
+                PivotConstants.rightSourceTargetAngleRadians
+                    - drivetrainPoseSupplier.get().getRotation().getRadians())
+            < Math.PI / 2);
     Logger.recordOutput("Pivot/drivePose", drivetrainPoseSupplier.get());
   }
 
@@ -94,25 +97,31 @@ public class Pivot extends SubsystemBase {
           robotPose.getTranslation(),
           Constants.FieldConstants.SourceConstants.leftSource.getTranslation(),
           PivotConstants.sourceDetectionRadiusMeters)) {
-            // Rotation close enough?
-            
+        // Rotation close enough?
+        if (Math.abs(
+                PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
+            < Math.PI / 2) {
+          return true;
+        } else return false;
+
       }
       // Near right source?
       else if (Constants.FieldConstants.PoseMethods.atTranslation(
           robotPose.getTranslation(),
           Constants.FieldConstants.SourceConstants.rightSource.getTranslation(),
           PivotConstants.sourceDetectionRadiusMeters)) {
-            if(Math.abs(PivotConstants.rightSourceTargetAngleRadians - robotPose.getRotation().getRadians()) < Math.PI / 2){
-              return false;
-            }
-            else return true;
+        if (Math.abs(
+                PivotConstants.rightSourceTargetAngleRadians - robotPose.getRotation().getRadians())
+            < Math.PI / 2) {
+          return false;
+        } else return true;
       }
     }
 
     return false;
   }
 
-  public boolean getDirectionReversed(){
+  public boolean getDirectionReversed() {
     return reverseArmDirection(true);
   }
 
@@ -128,7 +137,8 @@ public class Pivot extends SubsystemBase {
     return new RunCommand(
         () -> {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
-          double modifiedArmSetpoint = reverseArmDirection(true) ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+          double modifiedArmSetpoint =
+              reverseArmDirection(true) ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);

@@ -6,6 +6,7 @@ public class PivotConstants {
 
   public static final double sourceDetectionRadiusMeters = 2;
 
+  public static final double leftSourceTargetAngleRadians = 0.523598776;
   public static final double rightSourceTargetAngleRadians = -0.523598776;
 
   public static double rotationsToRadians(double rotations) {
