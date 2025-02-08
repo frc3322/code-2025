@@ -12,17 +12,17 @@ public class IntakeConstants {
     public static final double adjustA = 0.1;
   }
 
-  public static enum IntakeStates{
+  public static enum IntakeStates {
     INTAKE(1, 0),
     OUTTAKE(0.1, 1),
     REVERSE(-1, 0),
     SOFTINTAKE(0.5, 0),
-    OFF(0,0);
+    OFF(0, 0);
 
     public double intakeVelocity;
     public double adjustVelocity;
 
-    private IntakeStates(double intakeV, double adjustV){
+    private IntakeStates(double intakeV, double adjustV) {
       intakeVelocity = intakeV;
       adjustVelocity = adjustV;
     }

@@ -77,7 +77,7 @@ public final class Constants {
     // positions starting from left bottom coral position going counter clockwise (in meters)
     public static final class ReefConstants {
       public static final Pose2d reefCenter = new Pose2d(4.5, 4, new Rotation2d());
-      
+
       public static final Pose2d coralPosition1 =
           new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
       public static final Pose2d coralPosition2 =

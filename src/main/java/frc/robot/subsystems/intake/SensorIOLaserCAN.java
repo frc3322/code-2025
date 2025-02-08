@@ -1,15 +1,16 @@
 package frc.robot.subsystems.intake;
 
 import au.grapplerobotics.LaserCan;
+import frc.robot.Constants.CANIDs;
 
 public class SensorIOLaserCAN implements SensorIO {
 
   public LaserCan leftSensor;
   public LaserCan rightSensor;
 
-  public SensorIOLaserCAN(int leftId, int rightId) {
-    leftSensor = new LaserCan(leftId);
-    rightSensor = new LaserCan(rightId);
+  public SensorIOLaserCAN() {
+    leftSensor = new LaserCan(CANIDs.leftSensorCAN);
+    rightSensor = new LaserCan(CANIDs.rightSensorCAN);
   }
 
   public boolean leftDetected() {
