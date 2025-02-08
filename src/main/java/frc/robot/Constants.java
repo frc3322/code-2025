@@ -13,6 +13,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -64,5 +67,91 @@ public final class Constants {
 
     public static final int leftSensorCAN = 0;
     public static final int rightSensorCAN = 0;
+
+    public static final int wristCANId = 0;
+  }
+
+  public static class FieldConstants {
+    // LEFT and RIGHT are defined from the perspective of standing in the driver station
+
+    // positions starting from left bottom coral position going counter clockwise (in meters)
+    public static final class ReefConstants {
+      public static final Pose2d reefCenter = new Pose2d(4.5, 4, new Rotation2d());
+      
+      public static final Pose2d coralPosition1 =
+          new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
+      public static final Pose2d coralPosition2 =
+          new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(-60));
+      public static final Pose2d coralPosition3 =
+          new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(-60));
+      public static final Pose2d coralPosition4 =
+          new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(-120));
+      public static final Pose2d coralPosition5 =
+          new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(-120));
+      public static final Pose2d coralPosition6 =
+          new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180));
+      public static final Pose2d coralPosition7 =
+          new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180));
+      public static final Pose2d coralPosition8 =
+          new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(120));
+      public static final Pose2d coralPosition9 =
+          new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(120));
+      public static final Pose2d coralPosition10 =
+          new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(60));
+      public static final Pose2d coralPosition11 =
+          new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(60));
+      public static final Pose2d coralPosition12 =
+          new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0));
+    }
+
+    public static final class SourceConstants {
+      // TODO: fill in source constants
+      public static final Pose2d leftSource = new Pose2d(.8, 7.5, new Rotation2d());
+      public static final Pose2d rightSource = new Pose2d(0.8, 0.5, new Rotation2d());
+    }
+
+    public static final class PoseMethods {
+      public static Pose2d flipPose(Pose2d poseToFlip) {
+        return null;
+      }
+
+      // TODO: In these checks include an optional velocity that expands the radius
+      public boolean atPose(
+          Pose2d currentPose,
+          Pose2d targetPose,
+          double translationThreshold,
+          double rotationThreshold) {
+        boolean translationInThreshold =
+            atTranslation(
+                currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
+        boolean rotationInThreshold =
+            atRotation(currentPose.getRotation(), targetPose.getRotation(), rotationThreshold);
+
+        if (rotationThreshold == 0) {
+          return translationInThreshold;
+        }
+        if (translationThreshold == 0) {
+          return rotationInThreshold;
+        }
+
+        return translationInThreshold && rotationInThreshold;
+      }
+
+      public static boolean atTranslation(
+          Translation2d currentTranslation, Translation2d targetTranslation, double threshold) {
+        Translation2d robotTranslation = currentTranslation;
+
+        return robotTranslation.getDistance(targetTranslation) < threshold;
+      }
+
+      public static boolean atRotation(
+          Rotation2d currentRotation, Rotation2d targetRotation, double threshold) {
+        Rotation2d robotRotation = currentRotation;
+
+        double rotOffset = robotRotation.getDegrees() - targetRotation.getDegrees();
+
+        return Math.abs(rotOffset) < threshold;
+      }
+    }
   }
 }

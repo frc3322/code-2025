@@ -30,7 +30,7 @@ public class PivotIOSpark implements PivotIO {
 
   public PivotIOSpark() {
     leftMotor = new SparkMax(CANIDs.pivotLeftCanId, MotorType.kBrushless);
-    rightMotor = new SparkMax(CANIDs.pivotLeftCanId, MotorType.kBrushless);
+    rightMotor = new SparkMax(CANIDs.pivotRightCanId, MotorType.kBrushless);
 
     SparkMaxConfig leftConfig = new SparkMaxConfig();
     SparkMaxConfig rightConfig = new SparkMaxConfig();

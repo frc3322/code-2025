@@ -30,6 +30,11 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
@@ -39,6 +44,10 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.pivot.PivotIOSpark;
+import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.subsystems.wrist.WristIO;
+import frc.robot.subsystems.wrist.WristIOSim;
+import frc.robot.subsystems.wrist.WristIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -50,11 +59,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Pivot pivot;
+  private final Elevator elevator;
   private final Intake intake;
+  private final Pivot pivot;
+  private final Wrist wrist;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -72,11 +84,17 @@ public class RobotContainer {
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
 
-        pivot = new Pivot(new PivotIOSpark());
+        elevator = Elevator.initialize(new ElevatorIOSpark());
+
         intake =
             new Intake(
                 new IntakeIOSpark(),
                 new SensorIOLaserCAN(CANIDs.leftSensorCAN, CANIDs.rightSensorCAN));
+
+        pivot = Pivot.initialize(new PivotIOSpark(), drive::getPose);
+
+        wrist = Wrist.initialize(new WristIOSpark());
+
         break;
 
       case SIM:
@@ -89,8 +107,14 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
 
-        pivot = new Pivot(new PivotIOSim());
+        elevator = Elevator.initialize(new ElevatorIOSim());
+
         intake = new Intake(new IntakeIOSim(), new SensorIOSim());
+
+        pivot = Pivot.initialize(new PivotIOSim(), drive::getPose);
+
+        wrist = Wrist.initialize(new WristIOSim());
+
         break;
 
       default:
@@ -103,8 +127,14 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        pivot = new Pivot(new PivotIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
+
         intake = new Intake(null, null);
+
+        pivot = new Pivot(new PivotIO() {}, drive::getPose);
+
+        wrist = Wrist.initialize(new WristIO() {});
+
         break;
     }
 
@@ -142,27 +172,29 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
+
+    elevator.setDefaultCommand(elevator.goToStateCommand(elevator::getElevatorState));
 
     pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
 
     // Lock to 0° when A button is held
-    controller
+    driverController
         .a()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    driverController
         .b()
         .onTrue(
             Commands.runOnce(
@@ -171,6 +203,9 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    operatorController.a().onTrue(elevator.setStateCommand(ElevatorStates.STOW));
+    operatorController.b().onTrue(elevator.setStateCommand(ElevatorStates.BARGE));
   }
 
   /**

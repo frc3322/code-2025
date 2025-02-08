@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems.pivot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -20,13 +23,21 @@ public class Pivot extends SubsystemBase {
 
   private static Pivot instance;
 
+  private static PivotVisualizer pivotVisualizer = new PivotVisualizer();
+
   private PivotStates pivotState = PivotStates.STOW;
 
   private boolean atGoal = false;
 
-  public static Pivot initialize(PivotIO pivotIO) {
+  private double pivotAngle = 0;
+
+  private Elevator elevator = Elevator.getInstance();
+
+  private Supplier<Pose2d> drivetrainPoseSupplier;
+
+  public static Pivot initialize(PivotIO pivotIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     if (instance == null) {
-      instance = new Pivot(pivotIO);
+      instance = new Pivot(pivotIO, drivetrainPoseSupplier);
     }
     return instance;
   }
@@ -36,8 +47,9 @@ public class Pivot extends SubsystemBase {
   }
 
   /** Creates a new Pivot. */
-  public Pivot(PivotIO pivotIO) {
+  public Pivot(PivotIO pivotIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     this.pivotIO = pivotIO;
+    this.drivetrainPoseSupplier = drivetrainPoseSupplier;
   }
 
   public void updateInputs() {
@@ -45,15 +57,72 @@ public class Pivot extends SubsystemBase {
     atGoal = inputs.atGoal;
 
     Logger.processInputs("Pivot", inputs);
+
+    pivotAngle = inputs.absolutePosition * 2 * Math.PI;
   }
 
   @Override
   public void periodic() {
     updateInputs();
+
+    if (elevator != null) {
+      pivotVisualizer.update(getPivotAngleRadians(), elevator.getElevatorHeightMeters());
+    }
+
+    Logger.recordOutput("Pivot/reveredBoolean", getDirectionReversed());
+    Logger.recordOutput(
+        "Pivot/atPoseBoolean",
+        Math.abs(
+                PivotConstants.rightSourceTargetAngleRadians
+                    - drivetrainPoseSupplier.get().getRotation().getRadians())
+            < Math.PI / 2);
+    Logger.recordOutput("Pivot/drivePose", drivetrainPoseSupplier.get());
   }
 
   public boolean isAtGoal() {
     return atGoal;
+  }
+
+  public double getPivotAngleRadians() {
+    return pivotAngle;
+  }
+
+  public boolean reverseArmDirection(boolean intaking) {
+    // See which direction the arm should go to for the source
+    Pose2d robotPose = drivetrainPoseSupplier.get();
+
+    if (intaking) {
+      // Near left source?
+      if (Constants.FieldConstants.PoseMethods.atTranslation(
+          robotPose.getTranslation(),
+          Constants.FieldConstants.SourceConstants.leftSource.getTranslation(),
+          PivotConstants.sourceDetectionRadiusMeters)) {
+        // Rotation close enough?
+        if (Math.abs(
+                PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
+            < Math.PI / 2) {
+          return true;
+        } else return false;
+
+      }
+      // Near right source?
+      else if (Constants.FieldConstants.PoseMethods.atTranslation(
+          robotPose.getTranslation(),
+          Constants.FieldConstants.SourceConstants.rightSource.getTranslation(),
+          PivotConstants.sourceDetectionRadiusMeters)) {
+        if (Math.abs(
+                PivotConstants.rightSourceTargetAngleRadians - robotPose.getRotation().getRadians())
+            < Math.PI / 2) {
+          return false;
+        } else return true;
+      }
+    }
+
+    return false;
+  }
+
+  public boolean getDirectionReversed() {
+    return reverseArmDirection(true);
   }
 
   public PivotStates getPivotState() {
@@ -68,7 +137,9 @@ public class Pivot extends SubsystemBase {
     return new RunCommand(
         () -> {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
-          pivotIO.goToPosition(pivotSetpoint.armSetpoint, pivotSetpoint.armVelocity);
+          double modifiedArmSetpoint =
+              reverseArmDirection(true) ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+          pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);
   }

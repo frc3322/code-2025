@@ -4,6 +4,11 @@ public class PivotConstants {
 
   public static final int pivotMotorCurrentLimit = 60;
 
+  public static final double sourceDetectionRadiusMeters = 2;
+
+  public static final double leftSourceTargetAngleRadians = 0.523598776;
+  public static final double rightSourceTargetAngleRadians = -0.523598776;
+
   public static double rotationsToRadians(double rotations) {
     return rotations * 2 * Math.PI;
   }
@@ -29,7 +34,7 @@ public class PivotConstants {
 
   public static class PivotSetpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
-    public static final double stowPosition = 0;
+    public static final double stowPosition = 0.25;
     public static final double groundPosition = 0.25;
     public static final double aGroundPosition = 0;
     public static final double sourcePosition = 0;
@@ -59,10 +64,12 @@ public class PivotConstants {
     public static final double gearRatio = 48; // 4:1 -> 3:1 -> 4:1
     public static final double jKgMetersSquared = 1.161288; // Rough guess
     public static final double armLengthMeters = 0.6223;
+    public static final double minRotationRadians = -Math.PI;
+    public static final double maxRotationRadians = Math.PI;
 
     public static final double startingAngleRads = Math.PI;
 
-    public static final double kP = 1;
+    public static final double kP = 5;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double velocityConstraint = 0;

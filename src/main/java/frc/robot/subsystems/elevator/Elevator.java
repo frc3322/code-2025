@@ -4,13 +4,29 @@
 
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
 
   private final ElevatorIO elevatorIO;
 
+  private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
+
   private static Elevator instance;
+
+  private final ElevatorVisualizer elevatorVisualizer = new ElevatorVisualizer();
+
+  private ElevatorStates elevatorState = ElevatorStates.STOW;
+
+  private boolean atGoal = false;
+
+  private double elevatorHeight = 0;
 
   public static Elevator initialize(ElevatorIO elevatorIO) {
     if (instance == null) {
@@ -23,13 +39,59 @@ public class Elevator extends SubsystemBase {
     return instance;
   }
 
-  /** Creates a new elevator. */
+  /** Creates a new Elevator. */
   public Elevator(ElevatorIO elevatorIO) {
     this.elevatorIO = elevatorIO;
   }
 
+  public void updateInputs() {
+    elevatorIO.updateInputs(inputs);
+    atGoal = inputs.atGoal;
+
+    Logger.processInputs("Elevator", inputs);
+
+    elevatorHeight = inputs.position;
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    updateInputs();
+
+    elevatorVisualizer.update(elevatorHeight);
+  }
+
+  public boolean isAtGoal() {
+    return atGoal;
+  }
+
+  public double getElevatorHeightMeters() {
+    return elevatorHeight;
+  }
+
+  public ElevatorStates getElevatorState() {
+    return elevatorState;
+  }
+
+  private void setState(ElevatorStates elevatorState) {
+    this.elevatorState = elevatorState;
+  }
+
+  public Command goToStateCommand(Supplier<ElevatorStates> elevatorStateSupplier) {
+    return new RunCommand(
+        () -> {
+          ElevatorStates elevatorSetpoint = elevatorStateSupplier.get();
+          elevatorIO.goToPosition(
+              elevatorSetpoint.elevatorSetpoint, elevatorSetpoint.elevatorSetpoint);
+        },
+        this);
+  }
+
+  public Command setStateCommand(ElevatorStates elevatorState) {
+    return new InstantCommand(
+        () -> {
+          setState(elevatorState);
+          elevatorIO.goToPosition(elevatorState.elevatorSetpoint, elevatorState.elevatorVelocity);
+        },
+        this);
   }
 }
