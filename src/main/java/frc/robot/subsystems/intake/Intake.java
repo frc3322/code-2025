@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase {
 
   private final SensorIO sensorIO;
 
-  public IntakeStates intakeState;
+  public IntakeStates intakeState = IntakeStates.OFF;
 
   private static Intake instance;
 
