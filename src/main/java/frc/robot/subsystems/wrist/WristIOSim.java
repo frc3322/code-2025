@@ -1,3 +1,3 @@
 package frc.robot.subsystems.wrist;
 
-public class WristIOSim implements WristIO{}
+public class WristIOSim implements WristIO {}

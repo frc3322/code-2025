@@ -72,6 +72,8 @@ public final class Constants {
   }
 
   public static class FieldConstants {
+    // LEFT and RIGHT are defined from the perspective of standing in the driver station
+
     // positions starting from left bottom coral position going counter clockwise (in meters)
     public static final class ReefConstants {
       private static final Rotation2d emptyRotation = Rotation2d.fromDegrees(0);
@@ -90,17 +92,27 @@ public final class Constants {
     }
 
     public static final class SourceConstants {
-      
+      // TODO: fill in source constants
+      public static final Pose2d leftSource = new Pose2d(999, 0, new Rotation2d());
+      public static final Pose2d rightSource = new Pose2d(0, 0, new Rotation2d());
     }
 
     public static final class PoseMethods {
-      public static Pose2d flipPose (Pose2d poseToFlip){
+      public static Pose2d flipPose(Pose2d poseToFlip) {
         return null;
       }
 
-      public boolean atPose(Pose2d currentPose, Pose2d targetPose, double translationThreshold, double rotationThreshold){
-        boolean translationInThreshold = atTranslation(currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
-        boolean rotationInThreshold = atRotation(currentPose.getRotation(), targetPose.getRotation(), rotationThreshold);
+      // TODO: In these checks include an optional velocity that expands the radius
+      public boolean atPose(
+          Pose2d currentPose,
+          Pose2d targetPose,
+          double translationThreshold,
+          double rotationThreshold) {
+        boolean translationInThreshold =
+            atTranslation(
+                currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
+        boolean rotationInThreshold =
+            atRotation(currentPose.getRotation(), targetPose.getRotation(), rotationThreshold);
 
         if (rotationThreshold == 0) {
           return translationInThreshold;
@@ -112,15 +124,17 @@ public final class Constants {
         return translationInThreshold && rotationInThreshold;
       }
 
-      public static boolean atTranslation(Translation2d currentTranslation, Translation2d targetTranslation, double threshold){
+      public static boolean atTranslation(
+          Translation2d currentTranslation, Translation2d targetTranslation, double threshold) {
         Translation2d robotTranslation = currentTranslation;
 
         return robotTranslation.getDistance(targetTranslation) < threshold;
       }
 
-      public static boolean atRotation(Rotation2d currentRotation, Rotation2d targetRotation, double threshold){
+      public static boolean atRotation(
+          Rotation2d currentRotation, Rotation2d targetRotation, double threshold) {
         Rotation2d robotRotation = currentRotation;
-        
+
         double rotOffset = robotRotation.getDegrees() - targetRotation.getDegrees();
 
         return Math.abs(rotOffset) < threshold;

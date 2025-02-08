@@ -48,7 +48,6 @@ import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOSim;
 import frc.robot.subsystems.wrist.WristIOSpark;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -92,7 +91,7 @@ public class RobotContainer {
                 new IntakeIOSpark(),
                 new SensorIOLaserCAN(CANIDs.leftSensorCAN, CANIDs.rightSensorCAN));
 
-        pivot = Pivot.initialize(new PivotIOSpark());
+        pivot = Pivot.initialize(new PivotIOSpark(), drive::getPose);
 
         wrist = Wrist.initialize(new WristIOSpark());
 
@@ -112,7 +111,7 @@ public class RobotContainer {
 
         intake = new Intake(new IntakeIOSim(), new SensorIOSim());
 
-        pivot = Pivot.initialize(new PivotIOSim());
+        pivot = Pivot.initialize(new PivotIOSim(), drive::getPose);
 
         wrist = Wrist.initialize(new WristIOSim());
 
@@ -132,7 +131,7 @@ public class RobotContainer {
 
         intake = new Intake(null, null);
 
-        pivot = new Pivot(new PivotIO() {});
+        pivot = new Pivot(new PivotIO() {}, drive::getPose);
 
         wrist = Wrist.initialize(new WristIO() {});
 

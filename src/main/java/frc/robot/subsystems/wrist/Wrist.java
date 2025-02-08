@@ -55,7 +55,8 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     updateInputs();
 
-    visualizer.update(-Math.PI/2, pivot.getPivotAngleRadians(), elevator.getElevatorHeightMeters());
+    visualizer.update(
+        -Math.PI / 2, pivot.getPivotAngleRadians(), elevator.getElevatorHeightMeters());
   }
 
   public boolean isAtGoal() {

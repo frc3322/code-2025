@@ -34,7 +34,7 @@ public class WristVisualizer {
             0.005,
             -0.0023,
             (elevatorHeight * .8333) + (elevatorHeight * .9193) + .183,
-            new Rotation3d(pivotAngle, 0, wristAngle));
+            new Rotation3d(0, pivotAngle, wristAngle));
     Logger.recordOutput("wristMechanism3d/wrist", wristPose);
   }
 }
