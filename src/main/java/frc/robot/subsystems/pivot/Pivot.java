@@ -127,7 +127,7 @@ public class Pivot extends SubsystemBase {
       }
     }
     else if (reefScoring) {
-
+      return Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
     }
 
     return false;
