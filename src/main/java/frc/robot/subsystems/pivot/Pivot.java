@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import java.util.function.Supplier;
@@ -69,7 +70,10 @@ public class Pivot extends SubsystemBase {
       pivotVisualizer.update(getPivotAngleRadians(), elevator.getElevatorHeightMeters());
     }
 
-    Logger.recordOutput("Pivot/reveredBoolean", getDirectionReversed());
+    Logger.recordOutput(
+        "Pivot/angle to reef",
+        Constants.FieldConstants.PoseMethods.getAngleToPoseRads(
+            drivetrainPoseSupplier.get(), ReefConstants.reefCenter, -Math.PI / 2, true));
     Logger.recordOutput(
         "Pivot/atPoseBoolean",
         Math.abs(
@@ -88,9 +92,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean reverseArmDirection(boolean intaking) {
-    // See which direction the arm should go to for the source
     Pose2d robotPose = drivetrainPoseSupplier.get();
-
+    // See which direction the arm should go while intaking.
     if (intaking) {
       // Near left source?
       if (Constants.FieldConstants.PoseMethods.atTranslation(
@@ -115,6 +118,10 @@ public class Pivot extends SubsystemBase {
             < Math.PI / 2) {
           return false;
         } else return true;
+      }
+      // Flip towards reef (if not near source, we are most likely targeting dropped coral)
+      else {
+        return !Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
       }
     }
 

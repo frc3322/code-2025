@@ -77,7 +77,7 @@ public final class Constants {
     // positions starting from left bottom coral position going counter clockwise (in meters)
     public static final class ReefConstants {
       public static final Pose2d reefCenter = new Pose2d(4.5, 4, new Rotation2d());
-      
+
       public static final Pose2d coralPosition1 =
           new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
       public static final Pose2d coralPosition2 =
@@ -116,6 +116,9 @@ public final class Constants {
       }
 
       // TODO: In these checks include an optional velocity that expands the radius
+
+      // Js make another one that takes the velocity, and shift the coords of the target by the
+      // velocity.
       public boolean atPose(
           Pose2d currentPose,
           Pose2d targetPose,
@@ -151,6 +154,35 @@ public final class Constants {
         double rotOffset = robotRotation.getDegrees() - targetRotation.getDegrees();
 
         return Math.abs(rotOffset) < threshold;
+      }
+
+      public static final double getAngleToPoseRads(
+          Pose2d currentPose, Pose2d targetPose, double offsetRads, boolean reversable) {
+        Translation2d targetTranslation = targetPose.getTranslation();
+        Pose2d robotPose = currentPose;
+
+        // Corrected formula with correct X and Y difference
+        double dx = targetTranslation.getX() - robotPose.getX();
+        double dy = targetTranslation.getY() - robotPose.getY();
+
+        // Calculate the angle in radians
+        double calculatedAngleRads = Math.atan2(dy, dx);
+        
+        if ((calculatedAngleRads + offsetRads) > Math.PI){
+          return -Math.PI + ((calculatedAngleRads + offsetRads) % Math.PI);
+        }
+        else if ((calculatedAngleRads + offsetRads) < -Math.PI){
+          return Math.PI + ((calculatedAngleRads + offsetRads) % Math.PI);
+        }
+        return calculatedAngleRads + offsetRads;
+
+      }
+
+      public static final boolean reverseSideScoring(Pose2d robotPose) {
+        return Math.abs(
+                getAngleToPoseRads(robotPose, ReefConstants.reefCenter, -Math.PI/2, true) // Math.PI/2)
+                    - robotPose.getRotation().getRadians())
+            > Math.PI / 2;
       }
     }
   }
