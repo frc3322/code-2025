@@ -17,6 +17,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.subsystems.climber.ClimberConstants.ClimberStates;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
+import frc.robot.subsystems.wrist.WristConstants.WristStates;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -24,6 +29,96 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+  public static enum RobotState {
+    STOW(
+        ClimberStates.STOW,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW),
+    GROUNDINTAKE(
+        ClimberStates.STOW,
+        ElevatorStates.GROUND,
+        IntakeStates.INTAKE,
+        PivotStates.GROUND,
+        WristStates.STOW),
+    ALGAEGROUNDINTAKE(
+        ClimberStates.STOW,
+        ElevatorStates.AGROUND,
+        IntakeStates.INTAKE,
+        PivotStates.AGROUND,
+        WristStates.STOW),
+    SOURCEINTAKE(
+        ClimberStates.STOW,
+        ElevatorStates.STOW,
+        IntakeStates.OFF, 
+        PivotStates.STOW,
+        WristStates.STOW),
+    REEFL1(
+        ClimberStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.STOW),
+    REEFL2(
+        ClimberStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.STOW),
+    REEFL3(
+        ClimberStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.L3, WristStates.STOW),
+    REEFL4(
+        ClimberStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.STOW),
+    ALGAEINTAKELOW(
+        ClimberStates.STOW,
+        ElevatorStates.REEFALGAELOW,
+        IntakeStates.INTAKE,
+        PivotStates.REEFALGAE,
+        WristStates.STOW),
+    ALGAEINTAKEHIGH(
+        ClimberStates.STOW,
+        ElevatorStates.REEFALGAEHIGH,
+        IntakeStates.INTAKE,
+        PivotStates.REEFALGAE,
+        WristStates.STOW),
+    PROCESSOR(
+        ClimberStates.STOW,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW),
+    BARGE(
+        ClimberStates.STOW,
+        ElevatorStates.BARGE,
+        IntakeStates.OFF,
+        PivotStates.BARGE,
+        WristStates.STOW),
+    CLIMB(
+        ClimberStates.STOW,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW),
+    CLIMBED(
+        ClimberStates.STOW,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW);
+
+    public final ClimberStates CLIMBER_STATE;
+    public final ElevatorStates ELEVATOR_STATE;
+    public final IntakeStates INTAKE_STATE;
+    public final PivotStates PIVOT_STATE;
+    public final WristStates WRIST_STATE;
+
+    private RobotState(
+        ClimberStates climberState,
+        ElevatorStates elevatorState,
+        IntakeStates intakeState,
+        PivotStates pivotState,
+        WristStates wristState) {
+      CLIMBER_STATE = climberState;
+      ELEVATOR_STATE = elevatorState;
+      INTAKE_STATE = intakeState;
+      PIVOT_STATE = pivotState;
+      WRIST_STATE = wristState;
+    }
+  };
+
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
@@ -167,20 +262,19 @@ public final class Constants {
 
         // Calculate the angle in radians
         double calculatedAngleRads = Math.atan2(dy, dx);
-        
-        if ((calculatedAngleRads + offsetRads) > Math.PI){
+
+        if ((calculatedAngleRads + offsetRads) > Math.PI) {
           return -Math.PI + ((calculatedAngleRads + offsetRads) % Math.PI);
-        }
-        else if ((calculatedAngleRads + offsetRads) < -Math.PI){
+        } else if ((calculatedAngleRads + offsetRads) < -Math.PI) {
           return Math.PI + ((calculatedAngleRads + offsetRads) % Math.PI);
         }
         return calculatedAngleRads + offsetRads;
-
       }
 
       public static final boolean reverseSideScoring(Pose2d robotPose) {
         return Math.abs(
-                getAngleToPoseRads(robotPose, ReefConstants.reefCenter, -Math.PI/2, true) // Math.PI/2)
+                getAngleToPoseRads(
+                        robotPose, ReefConstants.reefCenter, -Math.PI / 2, true) // Math.PI/2)
                     - robotPose.getRotation().getRadians())
             > Math.PI / 2;
       }

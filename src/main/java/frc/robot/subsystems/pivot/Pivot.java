@@ -14,7 +14,6 @@ import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
-
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -125,8 +124,7 @@ public class Pivot extends SubsystemBase {
       else {
         return !Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
       }
-    }
-    else if (reefScoring) {
+    } else if (reefScoring) {
       return Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
     }
 
@@ -136,7 +134,7 @@ public class Pivot extends SubsystemBase {
   public boolean getDirectionReversed() {
     boolean intaking = getPivotState().stateType == StateType.INTAKING;
     boolean reefScoring = getPivotState().stateType == StateType.REEFSCORING;
-    
+
     return reverseArmDirection(intaking, reefScoring);
   }
 
