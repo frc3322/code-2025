@@ -13,6 +13,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
+import frc.robot.subsystems.pivot.PivotConstants.StateType;
+
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -91,7 +93,7 @@ public class Pivot extends SubsystemBase {
     return pivotAngle;
   }
 
-  public boolean reverseArmDirection(boolean intaking) {
+  public boolean reverseArmDirection(boolean intaking, boolean reefScoring) {
     Pose2d robotPose = drivetrainPoseSupplier.get();
     // See which direction the arm should go while intaking.
     if (intaking) {
@@ -124,12 +126,18 @@ public class Pivot extends SubsystemBase {
         return !Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
       }
     }
+    else if (reefScoring) {
+
+    }
 
     return false;
   }
 
   public boolean getDirectionReversed() {
-    return reverseArmDirection(true);
+    boolean intaking = getPivotState().stateType == StateType.INTAKING;
+    boolean reefScoring = getPivotState().stateType == StateType.REEFSCORING;
+    
+    return reverseArmDirection(intaking, reefScoring);
   }
 
   public PivotStates getPivotState() {
@@ -145,7 +153,7 @@ public class Pivot extends SubsystemBase {
         () -> {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           double modifiedArmSetpoint =
-              reverseArmDirection(true) ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+              getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);

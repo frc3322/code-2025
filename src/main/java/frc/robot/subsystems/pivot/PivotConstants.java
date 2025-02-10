@@ -84,27 +84,36 @@ public class PivotConstants {
   }
 
   public static enum PivotStates {
-    STOW(PivotSetpoints.stowPosition, PivotSetpoints.stowVelocity), // Arm straight up
-    GROUND(PivotSetpoints.groundPosition, PivotSetpoints.groundVelocity), // Coral ground intake
-    AGROUND(PivotSetpoints.aGroundPosition, PivotSetpoints.aGroundVelocity), // Algae ground intake
-    SOURCE(PivotSetpoints.sourcePosition, PivotSetpoints.sourceVelocity),
-    L1(PivotSetpoints.l1Position, PivotSetpoints.l1Velocity), // L1 coral scoring
-    L2(PivotSetpoints.l2Position, PivotSetpoints.l2Velocity), // L2 coral scoring
-    L3(PivotSetpoints.l3Position, PivotSetpoints.l3Velocity), // L3 coral scoring
-    L4(PivotSetpoints.l4Position, PivotSetpoints.l4Velocity), // L4 coral scoring
+    STOW(PivotSetpoints.stowPosition, PivotSetpoints.stowVelocity, StateType.NONE), // Arm straight up
+    GROUND(PivotSetpoints.groundPosition, PivotSetpoints.groundVelocity, StateType.INTAKING), // Coral ground intake
+    AGROUND(PivotSetpoints.aGroundPosition, PivotSetpoints.aGroundVelocity, StateType.INTAKING), // Algae ground intake
+    SOURCE(PivotSetpoints.sourcePosition, PivotSetpoints.sourceVelocity, StateType.INTAKING),
+    L1(PivotSetpoints.l1Position, PivotSetpoints.l1Velocity, StateType.REEFSCORING), // L1 coral scoring
+    L2(PivotSetpoints.l2Position, PivotSetpoints.l2Velocity, StateType.REEFSCORING), // L2 coral scoring
+    L3(PivotSetpoints.l3Position, PivotSetpoints.l3Velocity, StateType.REEFSCORING), // L3 coral scoring
+    L4(PivotSetpoints.l4Position, PivotSetpoints.l4Velocity, StateType.REEFSCORING), // L4 coral scoring
     REEFALGAE(
-        PivotSetpoints.reefAlgaePosition, PivotSetpoints.reefAlgaeVelocity), // Algae from reef
+        PivotSetpoints.reefAlgaePosition, PivotSetpoints.reefAlgaeVelocity, StateType.REEFSCORING), // Algae from reef
     PROCESSER(
         PivotSetpoints.processerPosition,
-        PivotSetpoints.processerVelocity), // Scoring Algae in processer
-    BARGE(PivotSetpoints.bargeVelocity, PivotSetpoints.bargePosition); // Scoring Algae in barge
+        PivotSetpoints.processerVelocity, StateType.NONE), // Scoring Algae in processer
+    BARGE(PivotSetpoints.bargeVelocity, PivotSetpoints.bargePosition, StateType.BARGESCORING); // Scoring Algae in barge
 
     public double armSetpoint;
     public double armVelocity;
+    public StateType stateType;
 
-    private PivotStates(double armSetpoint, double armVelocity) {
+    private PivotStates(double armSetpoint, double armVelocity, StateType stateType) {
       this.armSetpoint = armSetpoint;
       this.armVelocity = armVelocity;
+      this.stateType = stateType;
     }
+  }
+
+  public static enum StateType {
+    NONE,
+    INTAKING,
+    REEFSCORING,
+    BARGESCORING
   }
 }
