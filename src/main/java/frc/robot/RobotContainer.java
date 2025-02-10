@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.CANIDs;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -86,10 +85,7 @@ public class RobotContainer {
 
         elevator = Elevator.initialize(new ElevatorIOSpark());
 
-        intake =
-            new Intake(
-                new IntakeIOSpark(),
-                new SensorIOLaserCAN(CANIDs.leftSensorCAN, CANIDs.rightSensorCAN));
+        intake = new Intake(new IntakeIOSpark(), new SensorIOLaserCAN());
 
         pivot = Pivot.initialize(new PivotIOSpark(), drive::getPose);
 
@@ -179,6 +175,8 @@ public class RobotContainer {
     elevator.setDefaultCommand(elevator.goToStateCommand(elevator::getElevatorState));
 
     pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
+
+    intake.setDefaultCommand(intake.goToStateCommand(intake::getState));
 
     // Lock to 0° when A button is held
     driverController

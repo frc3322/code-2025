@@ -6,7 +6,10 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -15,12 +18,12 @@ public class Intake extends SubsystemBase {
 
   private final SensorIO sensorIO;
 
+  public IntakeStates intakeState = IntakeStates.OFF;
+
   private static Intake instance;
 
   private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private SensorIOInputsAutoLogged sensor = new SensorIOInputsAutoLogged();
-  private double intakeState;
-  private double adjustState;
 
   public Intake(IntakeIO intake, SensorIO sensor) {
     intakeIO = intake;
@@ -40,29 +43,34 @@ public class Intake extends SubsystemBase {
 
   public void updateInputs() {
     intakeIO.updateInputs(inputs);
+
+    Logger.processInputs("Intake", inputs);
   }
 
   @Override
   public void periodic() {
     updateInputs();
-    intakeIO.setIntakeVelocity(intakeState);
-    intakeIO.setAdjustVelocity(adjustState);
-
-    Logger.processInputs("Intake", inputs);
   }
 
-  public Command setIntakeStateCommand(double state) {
+  public IntakeStates getState() {
+    return intakeState;
+  }
+
+  public Command setIntakeStateCommand(IntakeStates state) {
     return new InstantCommand(
         () -> {
           intakeState = state;
         });
   }
 
-  public Command setAdjustStateCommand(double state) {
-    return new InstantCommand(
+  public Command goToStateCommand(Supplier<IntakeStates> stateSupplier) {
+    return new RunCommand(
         () -> {
-          adjustState = state;
-        });
+          IntakeStates state = stateSupplier.get();
+          intakeIO.setIntakeVelocity(state.intakeVelocity);
+          intakeIO.setAdjustVelocity(state.adjustVelocity);
+        },
+        this);
   }
 
   public Command adjustToMiddleCommand() {
