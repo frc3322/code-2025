@@ -2,6 +2,10 @@ package frc.robot.subsystems.wrist;
 
 public class WristConstants {
   public static final int wristMotorCurrentLimit = 40;
+  public static final double minDistanceAutoAdjust = 1;
+
+  public static final double wristMaxRotations = 1;
+  public static final double wristMinRotations = -1;
 
   public static double rotationsToRadians(double rotations) {
     return rotations * 2 * Math.PI;
@@ -37,7 +41,8 @@ public class WristConstants {
 
   public static class Setpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
-    public static final double intakePosition = 0;
+    public static final double intakeForwardsPosition = 0;
+    public static final double intakeBackwardsPosition = 0.5;
     public static final double stowPosition = 0;
 
     public static final double algeaStowPosition = 0.25;
@@ -47,7 +52,8 @@ public class WristConstants {
   }
 
   public static enum WristStates {
-    INTAKE(Setpoints.intakePosition),
+    INTAKEFORWARDS(Setpoints.intakeForwardsPosition),
+    INTAKEBACKWARDS(Setpoints.intakeBackwardsPosition),
     STOW(Setpoints.stowPosition),
     ALGEA_STOW(Setpoints.algeaStowPosition),
     OUTAKE_FORWARD(Setpoints.outakeForwardPosition),

@@ -11,7 +11,10 @@ import frc.robot.subsystems.wrist.WristConstants.SimConstants;
 public class WristIOSim implements WristIO {
   private DCMotor wristMotor = DCMotor.getNEO(1);
 
-  private DCMotorSim wristMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(wristMotor, 1, GearboxConstants.gearRatio), wristMotor);
+  private DCMotorSim wristMotorSim =
+      new DCMotorSim(
+          LinearSystemId.createDCMotorSystem(wristMotor, 1, GearboxConstants.gearRatio),
+          wristMotor);
 
   private ProfiledPIDController wristPID =
       new ProfiledPIDController(
@@ -40,8 +43,10 @@ public class WristIOSim implements WristIO {
   public void updateInputs(WristIOInputsAutoLogged inputs) {
     wristMotorSim.update(0.020);
 
-    inputs.absolutePosition = WristConstants.radiansToRotations(wristMotorSim.getAngularPositionRad());
-    inputs.absoluteVelocity = WristConstants.radiansToRotations(wristMotorSim.getAngularVelocityRadPerSec());
+    inputs.absolutePosition =
+        WristConstants.radiansToRotations(wristMotorSim.getAngularPositionRad());
+    inputs.absoluteVelocity =
+        WristConstants.radiansToRotations(wristMotorSim.getAngularVelocityRadPerSec());
 
     inputs.motorPower = pidOuput;
 

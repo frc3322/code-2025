@@ -1,5 +1,6 @@
 package frc.robot.subsystems.wrist;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -28,9 +29,15 @@ public class Wrist extends SubsystemBase {
 
   private Pivot pivot = Pivot.getInstance();
 
-  public static Wrist initialize(WristIO wristIO) {
+  private Supplier<Pose2d> drivetrainPoseSupplier;
+
+  private Supplier<Pose2d> targetPositionSupplier;
+
+  private Supplier<Double> heightSupplier;
+
+  public static Wrist initialize(WristIO wristIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     if (instance == null) {
-      instance = new Wrist(wristIO);
+      instance = new Wrist(wristIO, drivetrainPoseSupplier);
     }
     return instance;
   }
@@ -40,8 +47,9 @@ public class Wrist extends SubsystemBase {
   }
 
   /** Creates a new Wrist. */
-  public Wrist(WristIO wristIO) {
+  public Wrist(WristIO wristIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     this.wristIO = wristIO;
+    this.drivetrainPoseSupplier = drivetrainPoseSupplier;
   }
 
   public void updateInputs() {
@@ -71,11 +79,26 @@ public class Wrist extends SubsystemBase {
     this.wristState = wristState;
   }
 
+  private double getWristOffset(WristStates wristState) {
+    if (wristState == WristStates.INTAKEFORWARDS || wristState == WristStates.INTAKEBACKWARDS){
+      double distance = drivetrainPoseSupplier.get().getTranslation().getDistance(targetPositionSupplier.get().getTranslation());
+      if (distance < WristConstants.minDistanceAutoAdjust) {
+        return Math.atan(distance / heightSupplier.get());
+      }
+    }
+    return 0;
+  }
+
+  private void goToPositionLimited(double position) {
+    wristIO.goToPosition(
+        Math.min(WristConstants.wristMaxRotations, Math.max(WristConstants.wristMinRotations, position)));
+  }
+
   public Command goToStateCommand(Supplier<WristStates> wristStateSupplier) {
     return new RunCommand(
         () -> {
-          WristStates wristSetpoint = wristStateSupplier.get();
-          wristIO.goToPosition(wristSetpoint.wristSetpoint);
+          WristStates wristState = wristStateSupplier.get();
+          goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
         },
         this);
   }
@@ -84,7 +107,7 @@ public class Wrist extends SubsystemBase {
     return new InstantCommand(
         () -> {
           setState(wristState);
-          wristIO.goToPosition(wristState.wristSetpoint);
+          goToPositionLimited(wristState.wristSetpoint);
         },
         this);
   }
