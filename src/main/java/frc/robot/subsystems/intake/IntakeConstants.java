@@ -14,7 +14,8 @@ public class IntakeConstants {
 
   public static enum IntakeStates {
     INTAKE(1, 0),
-    OUTTAKE(0.1, 1),
+    OUTTAKEFORWARD(0.1, 1),
+    OUTTAKEBACKWARD(0.1, -1),
     REVERSE(-1, 0),
     SOFTINTAKE(0.5, 0),
     OFF(0, 0);

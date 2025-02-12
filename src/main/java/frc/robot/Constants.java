@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.subsystems.climber.ClimberConstants.ClimberStates;
+import frc.robot.subsystems.climber.ClimberConstants.FlipStates;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
@@ -31,82 +31,82 @@ import frc.robot.subsystems.wrist.WristConstants.WristStates;
 public final class Constants {
   public static enum RobotState {
     STOW(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.STOW,
         WristStates.STOW),
     GROUNDINTAKE(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.GROUND,
         IntakeStates.INTAKE,
         PivotStates.GROUND,
         WristStates.STOW),
     ALGAEGROUNDINTAKE(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.AGROUND,
         IntakeStates.INTAKE,
         PivotStates.AGROUND,
         WristStates.STOW),
     SOURCEINTAKE(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.STOW,
         IntakeStates.OFF, 
         PivotStates.STOW,
         WristStates.STOW),
     REEFL1(
-        ClimberStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.STOW),
     REEFL2(
-        ClimberStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.STOW),
     REEFL3(
-        ClimberStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.L3, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.L3, WristStates.STOW),
     REEFL4(
-        ClimberStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.STOW),
     ALGAEINTAKELOW(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.REEFALGAELOW,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.STOW),
     ALGAEINTAKEHIGH(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.REEFALGAEHIGH,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.STOW),
     PROCESSOR(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.STOW,
         WristStates.STOW),
     BARGE(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.BARGE,
         IntakeStates.OFF,
         PivotStates.BARGE,
         WristStates.STOW),
     CLIMB(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.STOW,
         WristStates.STOW),
     CLIMBED(
-        ClimberStates.STOW,
+        FlipStates.STOW,
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.STOW,
         WristStates.STOW);
 
-    public final ClimberStates CLIMBER_STATE;
+    public final FlipStates CLIMBER_STATE;
     public final ElevatorStates ELEVATOR_STATE;
     public final IntakeStates INTAKE_STATE;
     public final PivotStates PIVOT_STATE;
     public final WristStates WRIST_STATE;
 
     private RobotState(
-        ClimberStates climberState,
+        FlipStates climberState,
         ElevatorStates elevatorState,
         IntakeStates intakeState,
         PivotStates pivotState,
@@ -164,6 +164,9 @@ public final class Constants {
     public static final int rightSensorCAN = 0;
 
     public static final int wristCANId = 0;
+
+    public static final int flipCANId = 0;
+    public static final int winchCANId = 0;
   }
 
   public static class FieldConstants {

@@ -5,16 +5,19 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimberIO {
   @AutoLog
   public class ClimberIOInputs {
-    public double climberPosition;
-    public double climberSetpoint;
-    public double winchPower;
+    public double position = 0; // Current position in meters
+    public double velocity = 0; // Current velocity in meters per second
+
+    public double setpoint = 0; // Target position in meters
+    public double pidOut = 0; // PID output
+    public double ffOut = 0; // Feedforward output
   }
 
-  public void setClimberVelocity(double power);
+  public default void runWinch(double velocity) {}
 
-  public void setClimberSetpoint(double setpoint);
+  public default void goToPosition(double setPoint) {}
 
-  public void setWinchVelocity(double power);
+  public default void setSetPoint(double setPoint) {}
 
-  public void updateInputs(ClimberIOInputs inputs);
+  public default void updateInputs(ClimberIOInputsAutoLogged inputs) {}
 }

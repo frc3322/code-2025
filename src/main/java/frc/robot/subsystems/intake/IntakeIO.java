@@ -9,9 +9,9 @@ public interface IntakeIO {
     public double adjustVelocity = 0;
   }
 
-  public void setIntakeVelocity(double velocity);
+  public default void setIntakeVelocity(double velocity) {}
 
-  public void setAdjustVelocity(double velocity);
+  public default void setAdjustVelocity(double velocity) {}
 
-  public void updateInputs(IntakeIOInputs inputs);
+  public default void updateInputs(IntakeIOInputs inputs) {}
 }

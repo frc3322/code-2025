@@ -23,6 +23,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -35,8 +39,10 @@ import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
+import frc.robot.subsystems.intake.SensorIO;
 import frc.robot.subsystems.intake.SensorIOLaserCAN;
 import frc.robot.subsystems.intake.SensorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
@@ -62,6 +68,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Pivot pivot;
   private final Wrist wrist;
+  private final Climber climber;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -85,11 +92,13 @@ public class RobotContainer {
 
         elevator = Elevator.initialize(new ElevatorIOSpark());
 
-        intake = new Intake(new IntakeIOSpark(), new SensorIOLaserCAN());
+        intake = Intake.initialize(new IntakeIOSpark(), new SensorIOLaserCAN());
 
         pivot = Pivot.initialize(new PivotIOSpark(), drive::getPose);
 
-        wrist = Wrist.initialize(new WristIOSpark());
+        wrist = Wrist.initialize(new WristIOSpark(), drive::getPose);
+
+        climber = Climber.initialize(new ClimberIOSpark());
 
         break;
 
@@ -105,11 +114,13 @@ public class RobotContainer {
 
         elevator = Elevator.initialize(new ElevatorIOSim());
 
-        intake = new Intake(new IntakeIOSim(), new SensorIOSim());
+        intake = Intake.initialize(new IntakeIOSim(), new SensorIOSim());
 
         pivot = Pivot.initialize(new PivotIOSim(), drive::getPose);
 
-        wrist = Wrist.initialize(new WristIOSim());
+        wrist = Wrist.initialize(new WristIOSim(), drive::getPose);
+
+        climber = Climber.initialize(new ClimberIOSim());
 
         break;
 
@@ -125,11 +136,13 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIO() {});
 
-        intake = new Intake(null, null);
+        intake = new Intake(new IntakeIO() {}, new SensorIO() {});
 
         pivot = new Pivot(new PivotIO() {}, drive::getPose);
 
-        wrist = Wrist.initialize(new WristIO() {});
+        wrist = Wrist.initialize(new WristIO() {}, drive::getPose);
+
+        climber = new Climber(new ClimberIO() {});
 
         break;
     }
@@ -177,6 +190,9 @@ public class RobotContainer {
     pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
 
     intake.setDefaultCommand(intake.goToStateCommand(intake::getState));
+
+    climber.setDefaultCommand(
+        climber.goToStateCommand(climber::getFlipState, climber::getWinchState));
 
     // Lock to 0° when A button is held
     driverController

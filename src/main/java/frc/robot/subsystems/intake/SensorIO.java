@@ -9,5 +9,5 @@ public interface SensorIO {
     public boolean rightDetected = false;
   }
 
-  public void updateInputs(SensorIOInputs inputs);
+  public default void updateInputs(SensorIOInputs inputs) {}
 }
