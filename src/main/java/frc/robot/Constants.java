@@ -29,56 +29,52 @@ import frc.robot.subsystems.wrist.WristConstants.WristStates;
  * (log replay from a file).
  */
 public final class Constants {
-  public static enum RobotState {
+  public static enum SuperState {
     STOW(
-        FlipStates.STOW,
-        ElevatorStates.STOW,
-        IntakeStates.OFF,
-        PivotStates.STOW,
-        WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW),
     GROUNDINTAKE(
         FlipStates.STOW,
         ElevatorStates.GROUND,
         IntakeStates.INTAKE,
         PivotStates.GROUND,
-        WristStates.STOW),
+        WristStates.INTAKE),
     ALGAEGROUNDINTAKE(
         FlipStates.STOW,
         ElevatorStates.AGROUND,
         IntakeStates.INTAKE,
         PivotStates.AGROUND,
-        WristStates.STOW),
+        WristStates.ALGAEGROUNDINTAKE),
     SOURCEINTAKE(
         FlipStates.STOW,
-        ElevatorStates.STOW,
-        IntakeStates.OFF, 
-        PivotStates.STOW,
-        WristStates.STOW),
+        ElevatorStates.SOURCE,
+        IntakeStates.INTAKE,
+        PivotStates.SOURCE,
+        WristStates.INTAKE),
     REEFL1(
-        FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.OUTAKE),
     REEFL2(
-        FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.OUTAKE),
     REEFL3(
-        FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.L3, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.L3, WristStates.OUTAKE),
     REEFL4(
-        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.STOW),
+        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.OUTAKE),
     ALGAEINTAKELOW(
         FlipStates.STOW,
         ElevatorStates.REEFALGAELOW,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
-        WristStates.STOW),
+        WristStates.INTAKE),
     ALGAEINTAKEHIGH(
         FlipStates.STOW,
         ElevatorStates.REEFALGAEHIGH,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
-        WristStates.STOW),
+        WristStates.INTAKE),
     PROCESSOR(
         FlipStates.STOW,
-        ElevatorStates.STOW,
+        ElevatorStates.PROCESSER,
         IntakeStates.OFF,
-        PivotStates.STOW,
+        PivotStates.PROCESSER,
         WristStates.STOW),
     BARGE(
         FlipStates.STOW,
@@ -87,17 +83,9 @@ public final class Constants {
         PivotStates.BARGE,
         WristStates.STOW),
     CLIMB(
-        FlipStates.STOW,
-        ElevatorStates.STOW,
-        IntakeStates.OFF,
-        PivotStates.STOW,
-        WristStates.STOW),
+        FlipStates.DOWN, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW),
     CLIMBED(
-        FlipStates.STOW,
-        ElevatorStates.STOW,
-        IntakeStates.OFF,
-        PivotStates.STOW,
-        WristStates.STOW);
+        FlipStates.STOW, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW);
 
     public final FlipStates CLIMBER_STATE;
     public final ElevatorStates ELEVATOR_STATE;
@@ -105,7 +93,7 @@ public final class Constants {
     public final PivotStates PIVOT_STATE;
     public final WristStates WRIST_STATE;
 
-    private RobotState(
+    private SuperState(
         FlipStates climberState,
         ElevatorStates elevatorState,
         IntakeStates intakeState,

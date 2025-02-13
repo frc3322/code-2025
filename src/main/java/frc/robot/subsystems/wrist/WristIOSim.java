@@ -9,11 +9,11 @@ import frc.robot.subsystems.wrist.WristConstants.GearboxConstants;
 import frc.robot.subsystems.wrist.WristConstants.SimConstants;
 
 public class WristIOSim implements WristIO {
-  private DCMotor wristMotor = DCMotor.getNEO(1);
+  private DCMotor wristMotor = DCMotor.getNeo550(1);
 
   private DCMotorSim wristMotorSim =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(wristMotor, 1, GearboxConstants.gearRatio),
+          LinearSystemId.createDCMotorSystem(wristMotor, 0.005, GearboxConstants.gearRatio),
           wristMotor);
 
   private ProfiledPIDController wristPID =

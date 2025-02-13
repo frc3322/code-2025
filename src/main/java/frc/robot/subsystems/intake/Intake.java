@@ -56,10 +56,14 @@ public class Intake extends SubsystemBase {
     return intakeState;
   }
 
+  public void setState(IntakeStates intakeState) {
+    this.intakeState = intakeState;
+  }
+
   public Command setIntakeStateCommand(IntakeStates state) {
     return new InstantCommand(
         () -> {
-          intakeState = state;
+          setState(state);
         });
   }
 

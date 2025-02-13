@@ -26,6 +26,7 @@ public class ElevatorConstants {
     public static final double stowPosition = 0.0;
     public static final double groundPosition = 0.0;
     public static final double aGroundPosition = 0.0;
+    public static final double sourcePosition = 0.0;
     public static final double l1Position = 0.0;
     public static final double l2Position = 0.0;
     public static final double l3Position = 0.0;
@@ -38,6 +39,7 @@ public class ElevatorConstants {
     public static final double stowVelocity = 2;
     public static final double groundVelocity = 0.0;
     public static final double aGroundVelocity = 0.0;
+    public static final double sourceVelocity = 0.0;
     public static final double l1Velocity = 0.0;
     public static final double l2Velocity = 0.0;
     public static final double l3Velocity = 0.0;
@@ -75,6 +77,7 @@ public class ElevatorConstants {
     STOW(ElevatorSetpoints.stowPosition, ElevatorSetpoints.stowVelocity),
     GROUND(ElevatorSetpoints.groundPosition, ElevatorSetpoints.groundVelocity),
     AGROUND(ElevatorSetpoints.aGroundPosition, ElevatorSetpoints.aGroundVelocity),
+    SOURCE(ElevatorSetpoints.sourcePosition, ElevatorSetpoints.sourceVelocity),
     L1(ElevatorSetpoints.l1Position, ElevatorSetpoints.l1Velocity),
     L2(ElevatorSetpoints.l2Position, ElevatorSetpoints.l2Velocity),
     L3(ElevatorSetpoints.l3Position, ElevatorSetpoints.l3Velocity),

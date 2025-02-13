@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import frc.robot.subsystems.pivot.PivotConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class WristVisualizer {
@@ -34,7 +35,10 @@ public class WristVisualizer {
             0.005,
             -0.0023,
             (elevatorHeight * .8333) + (elevatorHeight * .9193) + .183,
-            new Rotation3d(0, pivotAngle, wristAngle));
+            new Rotation3d(
+                pivotAngle,
+                wristAngle * Math.pow(Math.sin(pivotAngle), 2),
+                wristAngle * Math.pow(Math.cos(pivotAngle), 2)));
     Logger.recordOutput("wristMechanism3d/wrist", wristPose);
   }
 }

@@ -16,7 +16,7 @@ public class WristConstants {
   }
 
   public static class GearboxConstants {
-    public static final double gearRatio = .01;
+    public static final double gearRatio = 1;
   }
 
   public static class ControllerConstants {
@@ -30,34 +30,27 @@ public class WristConstants {
   }
 
   public static final class SimConstants {
-    public static final double kP = 0;
+    public static final double kP = .01;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double velocityConstraint = 1;
-    public static final double accelerationConstraint = 2;
+    public static final double velocityConstraint = 0;
+    public static final double accelerationConstraint = 0;
     public static final double positionTolerance = 0;
     public static final double velocityTolerance = 0;
   }
 
   public static class Setpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
-    public static final double intakeForwardsPosition = 0;
-    public static final double intakeBackwardsPosition = 0.5;
+    public static final double intakePosition = -.25;
     public static final double stowPosition = 0;
-
-    public static final double algeaStowPosition = 0.25;
-
-    public static final double outakeForwardPosition = 0.25;
-    public static final double outakeBackwardPosition = -0.25;
+    public static final double outakePosition = 0;
   }
 
   public static enum WristStates {
-    INTAKEFORWARDS(Setpoints.intakeForwardsPosition),
-    INTAKEBACKWARDS(Setpoints.intakeBackwardsPosition),
+    INTAKE(Setpoints.intakePosition),
+    ALGAEGROUNDINTAKE(-Setpoints.intakePosition),
     STOW(Setpoints.stowPosition),
-    ALGEA_STOW(Setpoints.algeaStowPosition),
-    OUTAKE_FORWARD(Setpoints.outakeForwardPosition),
-    OUTAKE_BACKWARD(Setpoints.outakeBackwardPosition);
+    OUTAKE(Setpoints.outakePosition);
 
     public double wristSetpoint;
 

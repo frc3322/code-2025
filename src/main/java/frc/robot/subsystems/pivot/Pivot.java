@@ -71,6 +71,8 @@ public class Pivot extends SubsystemBase {
       pivotVisualizer.update(getPivotAngleRadians(), elevator.getElevatorHeightMeters());
     }
 
+    Logger.recordOutput("Pivot/State", getPivotState());
+
     Logger.recordOutput(
         "Pivot/angle to reef",
         Constants.FieldConstants.PoseMethods.getAngleToPoseRads(
@@ -142,7 +144,7 @@ public class Pivot extends SubsystemBase {
     return pivotState;
   }
 
-  private void setState(PivotStates pivotState) {
+  public void setState(PivotStates pivotState) {
     this.pivotState = pivotState;
   }
 

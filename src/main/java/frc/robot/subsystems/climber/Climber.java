@@ -42,6 +42,10 @@ public class Climber extends SubsystemBase {
     return winchState;
   }
 
+  public void setFlipState(FlipStates flipState) {
+    this.flipState = flipState;
+  }
+
   public Command goToStateCommand(
       Supplier<FlipStates> flipSupplier, Supplier<WinchStates> winchSupplier) {
     return new RunCommand(
@@ -57,7 +61,7 @@ public class Climber extends SubsystemBase {
   public Command setFlipStateCommand(FlipStates flipState) {
     return new InstantCommand(
         () -> {
-          this.flipState = flipState;
+          setFlipState(flipState);
         });
   }
 

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -35,6 +36,8 @@ public class Wrist extends SubsystemBase {
 
   private Supplier<Double> heightSupplier;
 
+  private double wristAngle = 0;
+
   public static Wrist initialize(WristIO wristIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     if (instance == null) {
       instance = new Wrist(wristIO, drivetrainPoseSupplier);
@@ -57,14 +60,15 @@ public class Wrist extends SubsystemBase {
     atGoal = inputs.atGoal;
 
     Logger.processInputs("Wrist", inputs);
+
+    wristAngle = inputs.absolutePosition;
   }
 
   @Override
   public void periodic() {
     updateInputs();
 
-    visualizer.update(
-        -Math.PI / 2, pivot.getPivotAngleRadians(), elevator.getElevatorHeightMeters());
+    visualizer.update(wristAngle, pivot.getPivotAngleRadians(), elevator.getElevatorHeightMeters());
   }
 
   public boolean isAtGoal() {
@@ -80,8 +84,12 @@ public class Wrist extends SubsystemBase {
   }
 
   private double getWristOffset(WristStates wristState) {
-    if (wristState == WristStates.INTAKEFORWARDS || wristState == WristStates.INTAKEBACKWARDS){
-      double distance = drivetrainPoseSupplier.get().getTranslation().getDistance(targetPositionSupplier.get().getTranslation());
+    if (wristState == WristStates.OUTAKE) {
+      double distance =
+          drivetrainPoseSupplier
+              .get()
+              .getTranslation()
+              .getDistance(targetPositionSupplier.get().getTranslation());
       if (distance < WristConstants.minDistanceAutoAdjust) {
         return Math.atan(distance / heightSupplier.get());
       }
@@ -91,14 +99,21 @@ public class Wrist extends SubsystemBase {
 
   private void goToPositionLimited(double position) {
     wristIO.goToPosition(
-        Math.min(WristConstants.wristMaxRotations, Math.max(WristConstants.wristMinRotations, position)));
+        Math.min(
+            WristConstants.wristMaxRotations,
+            Math.max(WristConstants.wristMinRotations, position)));
   }
 
-  public Command goToStateCommand(Supplier<WristStates> wristStateSupplier) {
+  public Command goToStateCommand(
+      Supplier<WristStates> wristStateSupplier, BooleanSupplier flippedPositionSupplier) {
     return new RunCommand(
         () -> {
           WristStates wristState = wristStateSupplier.get();
-          goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
+          double realWristSetpont =
+              flippedPositionSupplier.getAsBoolean()
+                  ? -(.5 - wristState.wristSetpoint)
+                  : wristState.wristSetpoint;
+          goToPositionLimited(realWristSetpont + getWristOffset(wristState));
         },
         this);
   }

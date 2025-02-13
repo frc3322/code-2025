@@ -72,7 +72,7 @@ public class Elevator extends SubsystemBase {
     return elevatorState;
   }
 
-  private void setState(ElevatorStates elevatorState) {
+  public void setState(ElevatorStates elevatorState) {
     this.elevatorState = elevatorState;
   }
 
