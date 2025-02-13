@@ -204,7 +204,7 @@ public class RobotContainer {
         .rightTrigger(0.1)
         .onTrue(superstructure.setAndGoToRobotStateCommand(SuperState.GROUNDINTAKE))
         .onFalse(superstructure.setAndGoToRobotStateCommand(SuperState.STOW));
-        
+
     // // Lock to 0° when A button is held
     // driverController
     //     .a()

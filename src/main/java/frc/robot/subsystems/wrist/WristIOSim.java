@@ -13,7 +13,7 @@ public class WristIOSim implements WristIO {
 
   private DCMotorSim wristMotorSim =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(wristMotor, 0.005, GearboxConstants.gearRatio),
+          LinearSystemId.createDCMotorSystem(wristMotor, 0.0005, GearboxConstants.gearRatio),
           wristMotor);
 
   private ProfiledPIDController wristPID =
@@ -31,11 +31,9 @@ public class WristIOSim implements WristIO {
 
   @Override
   public void goToPosition(double targetPositionRotations) {
-    double targetPositionRadians = WristConstants.rotationsToRadians(targetPositionRotations);
+    wristPID.setGoal(targetPositionRotations);
 
-    wristPID.setGoal(targetPositionRadians);
-
-    pidOuput = wristPID.calculate(wristMotorSim.getAngularPositionRad());
+    pidOuput = wristPID.calculate(wristMotorSim.getAngularPositionRotations());
 
     wristMotorSim.setInputVoltage(pidOuput * 12);
   }
@@ -43,14 +41,12 @@ public class WristIOSim implements WristIO {
   public void updateInputs(WristIOInputsAutoLogged inputs) {
     wristMotorSim.update(0.020);
 
-    inputs.absolutePosition =
-        WristConstants.radiansToRotations(wristMotorSim.getAngularPositionRad());
-    inputs.absoluteVelocity =
-        WristConstants.radiansToRotations(wristMotorSim.getAngularVelocityRadPerSec());
+    inputs.absolutePosition = wristMotorSim.getAngularPositionRotations();
+    inputs.absoluteVelocity = wristMotorSim.getAngularVelocityRPM();
 
     inputs.motorPower = pidOuput;
 
-    inputs.setpoint = WristConstants.radiansToRotations(wristPID.getGoal().position);
+    inputs.setpoint = wristPID.getGoal().position;
     inputs.pidOut = pidOuput;
 
     inputs.atGoal = wristPID.atGoal();

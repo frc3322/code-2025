@@ -61,7 +61,7 @@ public class Wrist extends SubsystemBase {
 
     Logger.processInputs("Wrist", inputs);
 
-    wristAngle = inputs.absolutePosition;
+    wristAngle = WristConstants.rotationsToRadians(inputs.absolutePosition);
   }
 
   @Override

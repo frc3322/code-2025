@@ -16,7 +16,7 @@ public class WristConstants {
   }
 
   public static class GearboxConstants {
-    public static final double gearRatio = 1;
+    public static final double gearRatio = 0.01;
   }
 
   public static class ControllerConstants {
@@ -30,9 +30,9 @@ public class WristConstants {
   }
 
   public static final class SimConstants {
-    public static final double kP = .01;
+    public static final double kP = 10;
     public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kD = 2;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
     public static final double positionTolerance = 0;
