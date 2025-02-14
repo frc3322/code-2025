@@ -32,11 +32,13 @@ public class WristConstants {
   public static final class SimConstants {
     public static final double kP = 10;
     public static final double kI = 0;
-    public static final double kD = 2;
+    public static final double kD = .2;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
     public static final double positionTolerance = 0;
     public static final double velocityTolerance = 0;
+
+    public static final double simGearRatio = 100;
   }
 
   public static class Setpoints {

@@ -189,21 +189,40 @@ public class RobotContainer {
 
     elevator.setDefaultCommand(elevator.goToStateCommand(elevator::getElevatorState));
 
-    pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
+    pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState, false));
 
     intake.setDefaultCommand(intake.goToStateCommand(intake::getState));
 
     climber.setDefaultCommand(
         climber.goToStateCommand(climber::getFlipState, climber::getWinchState));
 
-    wrist.setDefaultCommand(
-        wrist.goToStateCommand(wrist::getWristState, pivot::getDirectionReversed));
+    wrist.setDefaultCommand(wrist.goToStateCommand(wrist::getWristState));
 
     // Driver Controls
     driverController
         .rightTrigger(0.1)
-        .onTrue(superstructure.setAndGoToRobotStateCommand(SuperState.GROUNDINTAKE))
-        .onFalse(superstructure.setAndGoToRobotStateCommand(SuperState.STOW));
+        .onTrue(superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE))
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    driverController
+        .rightBumper()
+        .onTrue(superstructure.setSuperStateCommand(superstructure::getTargetLevel))
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    // Operator Controls
+    operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
+    operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
+    operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
+    operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
+
+    // Manual arm direction
+    operatorController.povRight()
+    .onTrue(pivot.setDirectionBooleanCommand(false))
+    .whileTrue(pivot.goToStateCommand(pivot::getPivotState, true));
+
+    operatorController.povLeft()
+    .onTrue(pivot.setDirectionBooleanCommand(true))
+    .whileTrue(pivot.goToStateCommand(pivot::getPivotState, true));
 
     // // Lock to 0° when A button is held
     // driverController

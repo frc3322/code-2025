@@ -5,7 +5,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.subsystems.wrist.WristConstants.GearboxConstants;
 import frc.robot.subsystems.wrist.WristConstants.SimConstants;
 
 public class WristIOSim implements WristIO {
@@ -13,7 +12,7 @@ public class WristIOSim implements WristIO {
 
   private DCMotorSim wristMotorSim =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(wristMotor, 0.0005, GearboxConstants.gearRatio),
+          LinearSystemId.createDCMotorSystem(wristMotor, 0.0005, SimConstants.simGearRatio),
           wristMotor);
 
   private ProfiledPIDController wristPID =

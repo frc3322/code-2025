@@ -51,7 +51,7 @@ public final class Constants {
         PivotStates.SOURCE,
         WristStates.INTAKE),
     REEFL1(
-        FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.OUTAKE),
+        FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.INTAKE),
     REEFL2(
         FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.OUTAKE),
     REEFL3(

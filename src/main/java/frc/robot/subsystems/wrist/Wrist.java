@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -79,10 +78,11 @@ public class Wrist extends SubsystemBase {
     return wristState;
   }
 
-  private void setState(WristStates wristState) {
+  public void setState(WristStates wristState) {
     this.wristState = wristState;
   }
 
+  // TODO: fix supplier not initialized
   private double getWristOffset(WristStates wristState) {
     if (wristState == WristStates.OUTAKE) {
       double distance =
@@ -104,16 +104,12 @@ public class Wrist extends SubsystemBase {
             Math.max(WristConstants.wristMinRotations, position)));
   }
 
-  public Command goToStateCommand(
-      Supplier<WristStates> wristStateSupplier, BooleanSupplier flippedPositionSupplier) {
+  public Command goToStateCommand(Supplier<WristStates> wristStateSupplier) {
     return new RunCommand(
         () -> {
           WristStates wristState = wristStateSupplier.get();
-          double realWristSetpont =
-              flippedPositionSupplier.getAsBoolean()
-                  ? -(.5 - wristState.wristSetpoint)
-                  : wristState.wristSetpoint;
-          goToPositionLimited(realWristSetpont + getWristOffset(wristState));
+
+          goToPositionLimited(wristState.wristSetpoint /*+ getWristOffset(wristState)*/);
         },
         this);
   }

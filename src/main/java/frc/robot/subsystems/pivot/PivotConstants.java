@@ -38,10 +38,10 @@ public class PivotConstants {
     public static final double groundPosition = 0.25;
     public static final double aGroundPosition = 0;
     public static final double sourcePosition = 0;
-    public static final double l1Position = 0;
-    public static final double l2Position = 0;
-    public static final double l3Position = 0;
-    public static final double l4Position = 0;
+    public static final double l1Position = -.1;
+    public static final double l2Position = -.1;
+    public static final double l3Position = -.1;
+    public static final double l4Position = -.15;
     public static final double reefAlgaePosition = 0;
     public static final double processerPosition = 0;
     public static final double bargePosition = 0;
