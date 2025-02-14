@@ -69,9 +69,9 @@ public class PivotConstants {
 
     public static final double startingAngleRads = Math.PI;
 
-    public static final double kP = 5;
+    public static final double kP = 3;
     public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kD = 0.25;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
     public static final double positionTolerance = .1;

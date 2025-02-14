@@ -38,6 +38,7 @@ public class Pivot extends SubsystemBase {
   private Supplier<Pose2d> drivetrainPoseSupplier;
 
   private boolean manualFlipDirection = false;
+  boolean manualDirection = false;
 
   public static Pivot initialize(PivotIO pivotIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     if (instance == null) {
@@ -150,26 +151,23 @@ public class Pivot extends SubsystemBase {
     this.pivotState = pivotState;
   }
 
-  public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier, boolean manualDirection) {
+  public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
     return new RunCommand(
         () -> {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           double modifiedArmSetpoint;
-          
+
           if (!manualDirection) {
             modifiedArmSetpoint =
                 getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
-          }
-          else {
+          } else {
             if (pivotSetpoint.stateType == StateType.REEFSCORING) {
               modifiedArmSetpoint =
-                manualFlipDirection ? pivotSetpoint.armSetpoint : -pivotSetpoint.armSetpoint;
-            }
-            else if (pivotSetpoint.stateType == StateType.INTAKING){
+                  manualFlipDirection ? pivotSetpoint.armSetpoint : -pivotSetpoint.armSetpoint;
+            } else if (pivotSetpoint.stateType == StateType.INTAKING) {
               modifiedArmSetpoint =
-                manualFlipDirection ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
-            }
-            else {
+                  manualFlipDirection ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+            } else {
               modifiedArmSetpoint = pivotSetpoint.armSetpoint;
             }
           }
@@ -187,9 +185,15 @@ public class Pivot extends SubsystemBase {
         this);
   }
 
-  public Command setDirectionBooleanCommand(boolean direction) {
+  public Command setDirectionBooleanCommand(boolean flip) {
     return new InstantCommand(
-      () -> this.manualFlipDirection = direction
-    );
+        () -> {
+          this.manualFlipDirection = flip;
+          this.manualDirection = true;
+        });
+  }
+
+  public Command releaseManualDirectionCommand() {
+    return new InstantCommand(() -> this.manualDirection = false);
   }
 }

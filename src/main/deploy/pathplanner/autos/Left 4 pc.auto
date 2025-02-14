@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left start to Reef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left center reef return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to left outer reef 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left outer reef 1 return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to left outer reef 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left outer reef 2 return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to left center outer reef Path"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -41,7 +41,7 @@ public class DriveConstants {
   public static final Rotation2d backRightZeroRotation = new Rotation2d(0);
 
   // Drive motor configuration
-  public static final int driveMotorCurrentLimit = 50;
+  public static final int driveMotorCurrentLimit = 60;
   public static final double wheelRadiusMeters = Units.inchesToMeters(2);
   public static final double driveMotorReduction = 5.9; // SDS MK4c L2+
 
@@ -85,7 +85,7 @@ public class DriveConstants {
   public static final double turnPIDMaxInput = 2 * Math.PI; // Radians
 
   // PathPlanner configuration
-  public static final double robotMassKg = 74.088;
+  public static final double robotMassKg = 45.36;
   public static final double robotMOI = 6.883;
   public static final double wheelCOF = 1.2;
   public static final RobotConfig ppConfig =

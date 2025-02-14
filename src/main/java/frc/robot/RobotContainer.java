@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -149,6 +150,14 @@ public class RobotContainer {
 
     superstructure = new Superstructure(climber, elevator, intake, pivot, wrist);
 
+    // Set up named commands
+    NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
+    
+    NamedCommands.registerCommand(
+        "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE, true));
+    NamedCommands.registerCommand("LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
+    NamedCommands.registerCommand("LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -189,7 +198,7 @@ public class RobotContainer {
 
     elevator.setDefaultCommand(elevator.goToStateCommand(elevator::getElevatorState));
 
-    pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState, false));
+    pivot.setDefaultCommand(pivot.goToStateCommand(pivot::getPivotState));
 
     intake.setDefaultCommand(intake.goToStateCommand(intake::getState));
 
@@ -216,13 +225,15 @@ public class RobotContainer {
     operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
 
     // Manual arm direction
-    operatorController.povRight()
-    .onTrue(pivot.setDirectionBooleanCommand(false))
-    .whileTrue(pivot.goToStateCommand(pivot::getPivotState, true));
+    operatorController
+        .povRight()
+        .onTrue(pivot.setDirectionBooleanCommand(false))
+        .onFalse(pivot.releaseManualDirectionCommand());
 
-    operatorController.povLeft()
-    .onTrue(pivot.setDirectionBooleanCommand(true))
-    .whileTrue(pivot.goToStateCommand(pivot::getPivotState, true));
+    operatorController
+        .povLeft()
+        .onTrue(pivot.setDirectionBooleanCommand(true))
+        .onFalse(pivot.releaseManualDirectionCommand());
 
     // // Lock to 0° when A button is held
     // driverController
