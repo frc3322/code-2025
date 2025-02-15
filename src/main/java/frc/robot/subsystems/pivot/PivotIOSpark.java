@@ -32,29 +32,16 @@ public class PivotIOSpark implements PivotIO {
     leftMotor = new SparkMax(CANIDs.pivotLeftCanId, MotorType.kBrushless);
     rightMotor = new SparkMax(CANIDs.pivotRightCanId, MotorType.kBrushless);
 
-    SparkMaxConfig leftConfig = new SparkMaxConfig();
     SparkMaxConfig rightConfig = new SparkMaxConfig();
-
-    leftConfig
-        .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(PivotConstants.pivotMotorCurrentLimit)
-        .voltageCompensation(12)
-        .inverted(false);
-    leftConfig.absoluteEncoder.inverted(true).averageDepth(2);
-    leftConfig.signals.absoluteEncoderPositionAlwaysOn(true);
-    tryUntilOk(
-        leftMotor,
-        5,
-        () ->
-            leftMotor.configure(
-                leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    SparkMaxConfig leftConfig = new SparkMaxConfig();
 
     rightConfig
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(PivotConstants.pivotMotorCurrentLimit)
         .voltageCompensation(12)
-        .inverted(false)
-        .follow(leftMotor);
+        .inverted(false);
+    rightConfig.absoluteEncoder.inverted(false).averageDepth(2).zeroCentered(true);
+    rightConfig.signals.absoluteEncoderPositionAlwaysOn(true);
     tryUntilOk(
         rightMotor,
         5,
@@ -62,7 +49,20 @@ public class PivotIOSpark implements PivotIO {
             rightMotor.configure(
                 rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
-    absoluteEncoder = leftMotor.getAbsoluteEncoder();
+    leftConfig
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(PivotConstants.pivotMotorCurrentLimit)
+        .voltageCompensation(12)
+        .inverted(false)
+        .follow(rightMotor);
+    tryUntilOk(
+        leftMotor,
+        5,
+        () ->
+            leftMotor.configure(
+                leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+
+    absoluteEncoder = rightMotor.getAbsoluteEncoder();
 
     pivotPID =
         new ProfiledPIDController(
@@ -93,7 +93,7 @@ public class PivotIOSpark implements PivotIO {
 
     double combinedOutput = ffOutput + pidOutput;
 
-    leftMotor.set(combinedOutput);
+    rightMotor.set(combinedOutput);
   }
 
   @Override

@@ -2,25 +2,23 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.Constants.CANIDs;
 
 public class IntakeIOSpark implements IntakeIO {
 
   public SparkMax adjustMotor;
-  public SparkFlex intakeMotor;
-
-  public SparkFlexConfig intakeConfig;
-  public SparkMaxConfig adjustConfig;
+  public SparkMax intakeMotor;
 
   public IntakeIOSpark() {
-    intakeMotor = new SparkFlex(CANIDs.intakeCANId, MotorType.kBrushless);
+    intakeMotor = new SparkMax(CANIDs.intakeCANId, MotorType.kBrushless);
     adjustMotor = new SparkMax(CANIDs.adjustCANId, MotorType.kBrushless);
+
+    SparkMaxConfig intakeConfig = new SparkMaxConfig();
+    SparkMaxConfig adjustConfig = new SparkMaxConfig();
 
     intakeConfig
         .idleMode(IdleMode.kCoast)

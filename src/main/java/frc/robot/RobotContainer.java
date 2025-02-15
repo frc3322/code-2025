@@ -43,7 +43,6 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
 import frc.robot.subsystems.intake.SensorIO;
-import frc.robot.subsystems.intake.SensorIOLaserCAN;
 import frc.robot.subsystems.intake.SensorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
@@ -94,7 +93,7 @@ public class RobotContainer {
 
         elevator = Elevator.initialize(new ElevatorIOSpark());
 
-        intake = Intake.initialize(new IntakeIOSpark(), new SensorIOLaserCAN());
+        intake = Intake.initialize(new IntakeIOSpark(), new SensorIO() {});
 
         pivot = Pivot.initialize(new PivotIOSpark(), drive::getPose);
 

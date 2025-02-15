@@ -143,19 +143,19 @@ public final class Constants {
     public static final int elevatorLeftCanId = 15;
     public static final int elevatorRightCanId = 16;
 
-    public static final int pivotLeftCanId = 17;
-    public static final int pivotRightCanId = 18;
+    public static final int pivotLeftCanId = 18;
+    public static final int pivotRightCanId = 17;
 
-    public static final int intakeCANId = 0;
-    public static final int adjustCANId = 0;
+    public static final int intakeCANId = 54;
+    public static final int adjustCANId = 62;
 
     public static final int leftSensorCAN = 0;
     public static final int rightSensorCAN = 0;
 
-    public static final int wristCANId = 0;
+    public static final int wristCANId = 56;
 
-    public static final int flipCANId = 0;
-    public static final int winchCANId = 0;
+    public static final int flipCANId = 22;
+    public static final int winchCANId = 23;
   }
 
   public static class FieldConstants {
