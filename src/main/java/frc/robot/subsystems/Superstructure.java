@@ -81,6 +81,10 @@ public class Superstructure extends SubsystemBase {
     return targetLevel;
   }
 
+  public Pose2d getTargetReefPose() {
+    return targetReefPose;
+  }
+
   public ReefSides chooseReefSideFromJoystick(double x, double y) {
     double angle = (Math.atan2(x, y) + Math.PI) * 180 / Math.PI;
     int side = (int) (angle / 60) % 6;

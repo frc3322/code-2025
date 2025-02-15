@@ -33,13 +33,14 @@ public class Wrist extends SubsystemBase {
 
   private Supplier<Pose2d> targetPositionSupplier;
 
-  private Supplier<Double> heightSupplier;
-
   private double wristAngle = 0;
 
-  public static Wrist initialize(WristIO wristIO, Supplier<Pose2d> drivetrainPoseSupplier) {
+  public static Wrist initialize(
+      WristIO wristIO,
+      Supplier<Pose2d> drivetrainPoseSupplier,
+      Supplier<Pose2d> targetPositionSupplier) {
     if (instance == null) {
-      instance = new Wrist(wristIO, drivetrainPoseSupplier);
+      instance = new Wrist(wristIO, drivetrainPoseSupplier, targetPositionSupplier);
     }
     return instance;
   }
@@ -49,9 +50,13 @@ public class Wrist extends SubsystemBase {
   }
 
   /** Creates a new Wrist. */
-  public Wrist(WristIO wristIO, Supplier<Pose2d> drivetrainPoseSupplier) {
+  public Wrist(
+      WristIO wristIO,
+      Supplier<Pose2d> drivetrainPoseSupplier,
+      Supplier<Pose2d> targetPositionSupplier) {
     this.wristIO = wristIO;
     this.drivetrainPoseSupplier = drivetrainPoseSupplier;
+    this.targetPositionSupplier = targetPositionSupplier;
   }
 
   public void updateInputs() {
@@ -82,7 +87,6 @@ public class Wrist extends SubsystemBase {
     this.wristState = wristState;
   }
 
-  // TODO: fix supplier not initialized
   private double getWristOffset(WristStates wristState) {
     if (wristState == WristStates.OUTAKE) {
       double distance =
@@ -91,7 +95,7 @@ public class Wrist extends SubsystemBase {
               .getTranslation()
               .getDistance(targetPositionSupplier.get().getTranslation());
       if (distance < WristConstants.minDistanceAutoAdjust) {
-        return Math.atan(distance / heightSupplier.get());
+        return Math.atan(distance / WristConstants.placementHeight);
       }
     }
     return 0;
@@ -109,7 +113,7 @@ public class Wrist extends SubsystemBase {
         () -> {
           WristStates wristState = wristStateSupplier.get();
 
-          goToPositionLimited(wristState.wristSetpoint /*+ getWristOffset(wristState)*/);
+          goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
         },
         this);
   }

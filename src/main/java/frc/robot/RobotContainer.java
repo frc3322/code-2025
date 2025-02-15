@@ -15,6 +15,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -97,7 +98,7 @@ public class RobotContainer {
 
         pivot = Pivot.initialize(new PivotIOSpark(), drive::getPose);
 
-        wrist = Wrist.initialize(new WristIOSpark(), drive::getPose);
+        wrist = Wrist.initialize(new WristIOSpark(), drive::getPose, this::getTargetReefPose);
 
         climber = Climber.initialize(new ClimberIOSpark());
 
@@ -119,7 +120,7 @@ public class RobotContainer {
 
         pivot = Pivot.initialize(new PivotIOSim(), drive::getPose);
 
-        wrist = Wrist.initialize(new WristIOSim(), drive::getPose);
+        wrist = Wrist.initialize(new WristIOSim(), drive::getPose, this::getTargetReefPose);
 
         climber = Climber.initialize(new ClimberIOSim());
 
@@ -141,7 +142,7 @@ public class RobotContainer {
 
         pivot = new Pivot(new PivotIO() {}, drive::getPose);
 
-        wrist = Wrist.initialize(new WristIO() {}, drive::getPose);
+        wrist = Wrist.initialize(new WristIO() {}, drive::getPose, this::getTargetReefPose);
 
         climber = new Climber(new ClimberIO() {});
 
@@ -282,5 +283,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  public Pose2d getTargetReefPose() {
+    return superstructure.getTargetReefPose();
   }
 }

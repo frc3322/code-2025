@@ -6,6 +6,7 @@ public class WristConstants {
 
   public static final double wristMaxRotations = 1;
   public static final double wristMinRotations = -1;
+  public static double placementHeight = 0.3048;
 
   public static double rotationsToRadians(double rotations) {
     return rotations * 2 * Math.PI;
