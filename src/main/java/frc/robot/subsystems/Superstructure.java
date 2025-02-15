@@ -69,18 +69,17 @@ public class Superstructure extends SubsystemBase {
 
   public Command setSuperStateCommand(SuperState superState, boolean pivotFlipped) {
     return new SequentialCommandGroup(
-      new InstantCommand(
-        () -> {
-          this.superState = superState;
-          climber.setFlipState(superState.CLIMBER_STATE);
-          elevator.setState(superState.ELEVATOR_STATE);
-          intake.setState(superState.INTAKE_STATE);
-          pivot.setState(superState.PIVOT_STATE);
-          wrist.setState(superState.WRIST_STATE);
-        },
-        this),
-        pivot.setDirectionBooleanCommand(pivotFlipped)
-    );
+        new InstantCommand(
+            () -> {
+              this.superState = superState;
+              climber.setFlipState(superState.CLIMBER_STATE);
+              elevator.setState(superState.ELEVATOR_STATE);
+              intake.setState(superState.INTAKE_STATE);
+              pivot.setState(superState.PIVOT_STATE);
+              wrist.setState(superState.WRIST_STATE);
+            },
+            this),
+        pivot.setDirectionBooleanCommand(pivotFlipped));
   }
 
   public Command setSuperStateCommand(Supplier<SuperState> superStateSupplier) {

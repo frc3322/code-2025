@@ -33,6 +33,8 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.eagleEye.EagleEye;
+import frc.robot.subsystems.eagleEye.EagleEyeIOAll;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
@@ -68,6 +70,7 @@ public class RobotContainer {
   private final Pivot pivot;
   private final Wrist wrist;
   private final Climber climber;
+  private final EagleEye eagleEye;
 
   private final Superstructure superstructure;
 
@@ -101,6 +104,8 @@ public class RobotContainer {
 
         climber = Climber.initialize(new ClimberIOSpark());
 
+        eagleEye = EagleEye.initialize(new EagleEyeIOAll());
+
         break;
 
       case SIM:
@@ -122,6 +127,8 @@ public class RobotContainer {
         wrist = Wrist.initialize(new WristIOSim(), drive::getPose);
 
         climber = Climber.initialize(new ClimberIOSim());
+
+        eagleEye = EagleEye.initialize(new EagleEyeIOAll());
 
         break;
 
@@ -145,6 +152,8 @@ public class RobotContainer {
 
         climber = new Climber(new ClimberIO() {});
 
+        eagleEye = new EagleEye(new EagleEyeIOAll() {});
+
         break;
     }
 
@@ -152,11 +161,13 @@ public class RobotContainer {
 
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
-    
+
     NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE, true));
-    NamedCommands.registerCommand("LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
-    NamedCommands.registerCommand("LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
+    NamedCommands.registerCommand(
+        "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
+    NamedCommands.registerCommand(
+        "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
