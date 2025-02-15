@@ -29,6 +29,7 @@ import frc.robot.subsystems.wrist.WristConstants.WristStates;
  * (log replay from a file).
  */
 public final class Constants {
+
   public static enum SuperState {
     STOW(
         FlipStates.STOW, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW),
@@ -159,9 +160,27 @@ public final class Constants {
 
   public static class FieldConstants {
     // LEFT and RIGHT are defined from the perspective of standing in the driver station
+    // CENTER is the center of the field, OUTER is more towards the driver station
 
     // positions starting from left bottom coral position going counter clockwise (in meters)
     public static final class ReefConstants {
+      public static enum ReefSides {
+        CENTER(coralPosition6, coralPosition7),
+        CENTERLEFT(coralPosition8, coralPosition9),
+        OUTERLEFT(coralPosition10, coralPosition11),
+        OUTER(coralPosition12, coralPosition1),
+        OUTERRIGHT(coralPosition2, coralPosition3),
+        CENTERRIGHT(coralPosition4, coralPosition5);
+
+        public Pose2d leftPose;
+        public Pose2d rightPose;
+
+        private ReefSides(Pose2d leftPose, Pose2d rightPose) {
+          this.leftPose = leftPose;
+          this.rightPose = rightPose;
+        }
+      };
+
       public static final Pose2d reefCenter = new Pose2d(4.5, 4, new Rotation2d());
 
       public static final Pose2d coralPosition1 =

@@ -152,11 +152,13 @@ public class RobotContainer {
 
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
-    
+
     NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE, true));
-    NamedCommands.registerCommand("LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
-    NamedCommands.registerCommand("LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
+    NamedCommands.registerCommand(
+        "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
+    NamedCommands.registerCommand(
+        "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -234,6 +236,18 @@ public class RobotContainer {
         .povLeft()
         .onTrue(pivot.setDirectionBooleanCommand(true))
         .onFalse(pivot.releaseManualDirectionCommand());
+
+    // Reef Selector
+    operatorController
+        .leftBumper()
+        .whileTrue(
+            superstructure.setTargetReefPoseCommand(
+                true, operatorController::getLeftX, operatorController::getLeftY));
+    operatorController
+        .rightBumper()
+        .whileTrue(
+            superstructure.setTargetReefPoseCommand(
+                false, operatorController::getLeftX, operatorController::getLeftY));
 
     // // Lock to 0° when A button is held
     // driverController
