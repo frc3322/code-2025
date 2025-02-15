@@ -9,7 +9,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Wrist extends SubsystemBase {
@@ -93,15 +92,19 @@ public class Wrist extends SubsystemBase {
     if (wristState == WristStates.OUTAKE) {
       Logger.recordOutput("Wrist/Target Position", targetPositionSupplier.get());
       double localYDistance =
-      - targetPositionSupplier
+          -targetPositionSupplier.get().relativeTo(drivetrainPoseSupplier.get()).getX()
+              - WristConstants.intakeOffset;
+      if (targetPositionSupplier
               .get()
-              .relativeTo(drivetrainPoseSupplier.get()).getX() - WristConstants.intakeOffset;
-      if (targetPositionSupplier.get().getTranslation().getDistance(drivetrainPoseSupplier.get().getTranslation()) < WristConstants.minDistanceAutoAdjust) {
+              .getTranslation()
+              .getDistance(drivetrainPoseSupplier.get().getTranslation())
+          < WristConstants.minDistanceAutoAdjust) {
         Logger.recordOutput("Wrist/Within Distance", true);
-        Logger.recordOutput("Wrist/Wrist Offset", Math.atan(localYDistance / WristConstants.placementHeight));
-        return WristConstants.radiansToRotations(Math.atan(localYDistance / WristConstants.placementHeight));
-      }
-      else {
+        Logger.recordOutput(
+            "Wrist/Wrist Offset", Math.atan(localYDistance / WristConstants.placementHeight));
+        return WristConstants.radiansToRotations(
+            Math.atan(localYDistance / WristConstants.placementHeight));
+      } else {
         Logger.recordOutput("Wrist/Within Distance", false);
       }
     }

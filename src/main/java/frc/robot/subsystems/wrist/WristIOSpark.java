@@ -45,16 +45,16 @@ public class WristIOSpark implements WristIO {
 
     wristPID =
         new ProfiledPIDController(
-            WristConstants.ControllerConstants.kP,
-            WristConstants.ControllerConstants.kI,
-            WristConstants.ControllerConstants.kD,
+            WristConstants.ControllerConstants.kP.get(),
+            WristConstants.ControllerConstants.kI.get(),
+            WristConstants.ControllerConstants.kD.get(),
             new Constraints(
-                WristConstants.ControllerConstants.velocityConstraint,
-                WristConstants.ControllerConstants.accelerationConstraint));
+                WristConstants.ControllerConstants.velocityConstraint.get(),
+                WristConstants.ControllerConstants.accelerationConstraint.get()));
 
     wristPID.setTolerance(
-        WristConstants.ControllerConstants.positionTolerance,
-        WristConstants.ControllerConstants.velocityTolerance);
+        WristConstants.ControllerConstants.positionTolerance.get(),
+        WristConstants.ControllerConstants.velocityTolerance.get());
   }
 
   @Override
