@@ -7,6 +7,7 @@ public class WristConstants {
   public static final double wristMaxRotations = 1;
   public static final double wristMinRotations = -1;
   public static double placementHeight = 0.3048;
+public static double intakeOffset = inchesToMeters(2.566);
 
   public static double rotationsToRadians(double rotations) {
     return rotations * 2 * Math.PI;
@@ -15,6 +16,10 @@ public class WristConstants {
   public static double radiansToRotations(double radians) {
     return radians / (2 * Math.PI);
   }
+
+  public static double inchesToMeters(double inches) {
+    return inches * 0.0254;
+}
 
   public static class GearboxConstants {
     public static final double gearRatio = 0.01;

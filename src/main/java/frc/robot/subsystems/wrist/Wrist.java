@@ -9,6 +9,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Wrist extends SubsystemBase {
@@ -85,19 +86,26 @@ public class Wrist extends SubsystemBase {
 
   public void setState(WristStates wristState) {
     this.wristState = wristState;
+    Logger.recordOutput("Wrist/Wrist State", wristState);
   }
 
   private double getWristOffset(WristStates wristState) {
     if (wristState == WristStates.OUTAKE) {
-      double distance =
-          drivetrainPoseSupplier
+      Logger.recordOutput("Wrist/Target Position", targetPositionSupplier.get());
+      double localYDistance =
+      - targetPositionSupplier
               .get()
-              .getTranslation()
-              .getDistance(targetPositionSupplier.get().getTranslation());
-      if (distance < WristConstants.minDistanceAutoAdjust) {
-        return Math.atan(distance / WristConstants.placementHeight);
+              .relativeTo(drivetrainPoseSupplier.get()).getX() - WristConstants.intakeOffset;
+      if (targetPositionSupplier.get().getTranslation().getDistance(drivetrainPoseSupplier.get().getTranslation()) < WristConstants.minDistanceAutoAdjust) {
+        Logger.recordOutput("Wrist/Within Distance", true);
+        Logger.recordOutput("Wrist/Wrist Offset", Math.atan(localYDistance / WristConstants.placementHeight));
+        return WristConstants.radiansToRotations(Math.atan(localYDistance / WristConstants.placementHeight));
+      }
+      else {
+        Logger.recordOutput("Wrist/Within Distance", false);
       }
     }
+    Logger.recordOutput("Wrist/Wrist Offset", 0);
     return 0;
   }
 
@@ -112,8 +120,10 @@ public class Wrist extends SubsystemBase {
     return new RunCommand(
         () -> {
           WristStates wristState = wristStateSupplier.get();
+          Logger.recordOutput("Wrist/Wrist State", wristState);
 
-          goToPositionLimited(wristState.wristSetpoint/* + getWristOffset(wristState)*/);
+          // goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
+          goToPositionLimited(wristState.wristSetpoint);
         },
         this);
   }
