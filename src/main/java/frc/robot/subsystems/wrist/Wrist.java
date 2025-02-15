@@ -113,7 +113,7 @@ public class Wrist extends SubsystemBase {
         () -> {
           WristStates wristState = wristStateSupplier.get();
 
-          goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
+          goToPositionLimited(wristState.wristSetpoint/* + getWristOffset(wristState)*/);
         },
         this);
   }
