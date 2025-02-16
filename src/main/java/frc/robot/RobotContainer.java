@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.SuperState;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.Superstructure;
@@ -159,6 +160,19 @@ public class RobotContainer {
         "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
     NamedCommands.registerCommand(
         "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
+
+    NamedCommands.registerCommand("R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
+    NamedCommands.registerCommand("R2", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition2));
+    NamedCommands.registerCommand("R3", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition3));
+    NamedCommands.registerCommand("R4", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition4));
+    NamedCommands.registerCommand("R5", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition5));
+    NamedCommands.registerCommand("R6", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition6));
+    NamedCommands.registerCommand("R7", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition7));
+    NamedCommands.registerCommand("R8", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition8));
+    NamedCommands.registerCommand("R9", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition9));
+    NamedCommands.registerCommand("R10", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition10));
+    NamedCommands.registerCommand("R11", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition11));
+    NamedCommands.registerCommand("R12", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition12));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

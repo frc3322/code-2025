@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.504989461106498,
-        "y": 6.1471962117239505
+        "x": 1.8961313589863678,
+        "y": 6.3948233181428735
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.019,
-        "y": 5.395
+        "x": 3.733,
+        "y": 5.199
       },
       "prevControl": {
-        "x": 3.1196954914554103,
-        "y": 5.873473689029533
+        "x": 3.395339991748663,
+        "y": 5.442743871241457
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,8 +44,19 @@
       }
     },
     {
+      "name": "R8",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "R8"
+        }
+      }
+    },
+    {
       "name": "LEFT L4",
-      "waypointRelativePos": 0.7398568019093118,
+      "waypointRelativePos": 0.7183770883054927,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

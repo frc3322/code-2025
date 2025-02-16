@@ -7,43 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left start to Reef"
+            "pathName": "Left start to R11"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left center reef return"
+            "pathName": "R11 return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "to left outer reef 1"
+            "pathName": "to R8"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left outer reef 1 return"
+            "pathName": "R8 return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "to left outer reef 2"
+            "pathName": "to R9"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left outer reef 2 return"
+            "pathName": "R9 return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "to left center outer reef Path"
+            "pathName": "to R7"
           }
         }
       ]
