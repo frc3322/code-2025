@@ -125,8 +125,8 @@ public class Wrist extends SubsystemBase {
           WristStates wristState = wristStateSupplier.get();
           Logger.recordOutput("Wrist/Wrist State", wristState);
 
-          // goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
-          goToPositionLimited(wristState.wristSetpoint);
+          goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
+          // goToPositionLimited(wristState.wristSetpoint);
         },
         this);
   }

@@ -51,26 +51,26 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("SuperStructure/State", superState);
     Logger.recordOutput("SuperStructure/Target Level", targetLevel);
 
-    Logger.recordOutput("SuperStructure/CenterLeft", targetReefPose == ReefSides.CENTER.leftPose);
-    Logger.recordOutput("SuperStructure/CenterRight", targetReefPose == ReefSides.CENTER.rightPose);
+    Logger.recordOutput("SuperStructure/1", targetReefPose == ReefSides.CENTER.leftPose);
+    Logger.recordOutput("SuperStructure/12", targetReefPose == ReefSides.CENTER.rightPose);
     Logger.recordOutput(
-        "SuperStructure/CenterLeftLeft", targetReefPose == ReefSides.CENTERLEFT.leftPose);
+        "SuperStructure/11", targetReefPose == ReefSides.CENTERLEFT.leftPose);
     Logger.recordOutput(
-        "SuperStructure/CenterLeftRight", targetReefPose == ReefSides.CENTERLEFT.rightPose);
+        "SuperStructure/10", targetReefPose == ReefSides.CENTERLEFT.rightPose);
     Logger.recordOutput(
-        "SuperStructure/OuterLeftLeft", targetReefPose == ReefSides.OUTERLEFT.leftPose);
+        "SuperStructure/9", targetReefPose == ReefSides.OUTERLEFT.leftPose);
     Logger.recordOutput(
-        "SuperStructure/OuterLeftRight", targetReefPose == ReefSides.OUTERLEFT.rightPose);
-    Logger.recordOutput("SuperStructure/OuterLeft", targetReefPose == ReefSides.OUTER.leftPose);
-    Logger.recordOutput("SuperStructure/OuterRight", targetReefPose == ReefSides.OUTER.rightPose);
+        "SuperStructure/8", targetReefPose == ReefSides.OUTERLEFT.rightPose);
+    Logger.recordOutput("SuperStructure/7", targetReefPose == ReefSides.OUTER.leftPose);
+    Logger.recordOutput("SuperStructure/6", targetReefPose == ReefSides.OUTER.rightPose);
     Logger.recordOutput(
-        "SuperStructure/OuterRightLeft", targetReefPose == ReefSides.OUTERRIGHT.leftPose);
+        "SuperStructure/5", targetReefPose == ReefSides.OUTERRIGHT.leftPose);
     Logger.recordOutput(
-        "SuperStructure/OuterRightRight", targetReefPose == ReefSides.OUTERRIGHT.rightPose);
+        "SuperStructure/4", targetReefPose == ReefSides.OUTERRIGHT.rightPose);
     Logger.recordOutput(
-        "SuperStructure/CenterRightLeft", targetReefPose == ReefSides.CENTERRIGHT.leftPose);
+        "SuperStructure/3", targetReefPose == ReefSides.CENTERRIGHT.leftPose);
     Logger.recordOutput(
-        "SuperStructure/CenterRightRight", targetReefPose == ReefSides.CENTERRIGHT.rightPose);
+        "SuperStructure/2", targetReefPose == ReefSides.CENTERRIGHT.rightPose);
   }
 
   public SuperState getSuperState() {
@@ -149,5 +149,12 @@ public class Superstructure extends SubsystemBase {
             targetReefPose = targetSide.rightPose;
           }
         });
+  }
+
+  public Command setTargetReefPoseCommand(Pose2d targetReefPose) {
+      return new InstantCommand(
+          () -> {
+            this.targetReefPose = targetReefPose;
+      });
   }
 }

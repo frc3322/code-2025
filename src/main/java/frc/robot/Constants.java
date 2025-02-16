@@ -162,15 +162,14 @@ public final class Constants {
     // LEFT and RIGHT are defined from the perspective of standing in the driver station
     // CENTER is the center of the field, OUTER is more towards the driver station
 
-    // positions starting from left bottom coral position going counter clockwise (in meters)
     public static final class ReefConstants {
       public static enum ReefSides {
-        CENTER(coralPosition6, coralPosition7),
-        CENTERLEFT(coralPosition8, coralPosition9),
-        OUTERLEFT(coralPosition10, coralPosition11),
-        OUTER(coralPosition12, coralPosition1),
-        OUTERRIGHT(coralPosition2, coralPosition3),
-        CENTERRIGHT(coralPosition4, coralPosition5);
+        CENTER(coralPosition1, coralPosition12),
+        CENTERLEFT(coralPosition11, coralPosition10),
+        OUTERLEFT(coralPosition9, coralPosition8),
+        OUTER(coralPosition7, coralPosition6),
+        OUTERRIGHT(coralPosition5, coralPosition4),
+        CENTERRIGHT(coralPosition3, coralPosition2);
 
         public Pose2d leftPose;
         public Pose2d rightPose;
@@ -183,30 +182,19 @@ public final class Constants {
 
       public static final Pose2d reefCenter = new Pose2d(4.5, 4, new Rotation2d());
 
-      public static final Pose2d coralPosition1 =
-          new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
-      public static final Pose2d coralPosition2 =
-          new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(-60));
-      public static final Pose2d coralPosition3 =
-          new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(-60));
-      public static final Pose2d coralPosition4 =
-          new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(-120));
-      public static final Pose2d coralPosition5 =
-          new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(-120));
-      public static final Pose2d coralPosition6 =
-          new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180));
-      public static final Pose2d coralPosition7 =
-          new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180));
-      public static final Pose2d coralPosition8 =
-          new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(120));
-      public static final Pose2d coralPosition9 =
-          new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(120));
-      public static final Pose2d coralPosition10 =
-          new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(60));
-      public static final Pose2d coralPosition11 =
-          new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(60));
-      public static final Pose2d coralPosition12 =
-          new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0));
+      public static final Pose2d coralPosition1 = new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180));
+      public static final Pose2d coralPosition2 = new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(-120));
+      public static final Pose2d coralPosition3 = new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(-120));
+      public static final Pose2d coralPosition4 = new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(-60));
+      public static final Pose2d coralPosition5 = new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(-60));
+      public static final Pose2d coralPosition6 = new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
+      public static final Pose2d coralPosition7 = new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0));
+      public static final Pose2d coralPosition8 = new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(60));
+      public static final Pose2d coralPosition9 = new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(60));
+      public static final Pose2d coralPosition10 = new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(120));
+      public static final Pose2d coralPosition11 = new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(120));
+      public static final Pose2d coralPosition12 = new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180));
+
     }
 
     public static final class SourceConstants {
