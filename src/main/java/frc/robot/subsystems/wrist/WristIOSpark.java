@@ -32,7 +32,7 @@ public class WristIOSpark implements WristIO {
         .smartCurrentLimit(WristConstants.wristMotorCurrentLimit)
         .voltageCompensation(12)
         .inverted(false);
-    wristConfig.absoluteEncoder.inverted(true).averageDepth(2);
+    wristConfig.absoluteEncoder.inverted(false).averageDepth(2).zeroCentered(true);
     wristConfig.signals.absoluteEncoderPositionAlwaysOn(true);
     tryUntilOk(
         wristMotor,

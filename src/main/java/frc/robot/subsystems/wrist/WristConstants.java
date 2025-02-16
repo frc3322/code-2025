@@ -26,11 +26,11 @@ public class WristConstants {
   }
 
   public static class ControllerConstants {
-    public static final double kP = 0;
+    public static final double kP = 4;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double velocityConstraint = 1;
-    public static final double accelerationConstraint = 2;
+    public static final double velocityConstraint = 8;
+    public static final double accelerationConstraint = 10;
     public static final double positionTolerance = 0;
     public static final double velocityTolerance = 0;
   }
