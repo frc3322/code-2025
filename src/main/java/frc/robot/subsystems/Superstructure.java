@@ -53,24 +53,16 @@ public class Superstructure extends SubsystemBase {
 
     Logger.recordOutput("SuperStructure/1", targetReefPose == ReefSides.CENTER.leftPose);
     Logger.recordOutput("SuperStructure/12", targetReefPose == ReefSides.CENTER.rightPose);
-    Logger.recordOutput(
-        "SuperStructure/11", targetReefPose == ReefSides.CENTERLEFT.leftPose);
-    Logger.recordOutput(
-        "SuperStructure/10", targetReefPose == ReefSides.CENTERLEFT.rightPose);
-    Logger.recordOutput(
-        "SuperStructure/9", targetReefPose == ReefSides.OUTERLEFT.leftPose);
-    Logger.recordOutput(
-        "SuperStructure/8", targetReefPose == ReefSides.OUTERLEFT.rightPose);
+    Logger.recordOutput("SuperStructure/11", targetReefPose == ReefSides.CENTERLEFT.leftPose);
+    Logger.recordOutput("SuperStructure/10", targetReefPose == ReefSides.CENTERLEFT.rightPose);
+    Logger.recordOutput("SuperStructure/9", targetReefPose == ReefSides.OUTERLEFT.leftPose);
+    Logger.recordOutput("SuperStructure/8", targetReefPose == ReefSides.OUTERLEFT.rightPose);
     Logger.recordOutput("SuperStructure/7", targetReefPose == ReefSides.OUTER.leftPose);
     Logger.recordOutput("SuperStructure/6", targetReefPose == ReefSides.OUTER.rightPose);
-    Logger.recordOutput(
-        "SuperStructure/5", targetReefPose == ReefSides.OUTERRIGHT.leftPose);
-    Logger.recordOutput(
-        "SuperStructure/4", targetReefPose == ReefSides.OUTERRIGHT.rightPose);
-    Logger.recordOutput(
-        "SuperStructure/3", targetReefPose == ReefSides.CENTERRIGHT.leftPose);
-    Logger.recordOutput(
-        "SuperStructure/2", targetReefPose == ReefSides.CENTERRIGHT.rightPose);
+    Logger.recordOutput("SuperStructure/5", targetReefPose == ReefSides.OUTERRIGHT.leftPose);
+    Logger.recordOutput("SuperStructure/4", targetReefPose == ReefSides.OUTERRIGHT.rightPose);
+    Logger.recordOutput("SuperStructure/3", targetReefPose == ReefSides.CENTERRIGHT.leftPose);
+    Logger.recordOutput("SuperStructure/2", targetReefPose == ReefSides.CENTERRIGHT.rightPose);
   }
 
   public SuperState getSuperState() {
@@ -152,9 +144,9 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command setTargetReefPoseCommand(Pose2d targetReefPose) {
-      return new InstantCommand(
-          () -> {
-            this.targetReefPose = targetReefPose;
-      });
+    return new InstantCommand(
+        () -> {
+          this.targetReefPose = targetReefPose;
+        });
   }
 }

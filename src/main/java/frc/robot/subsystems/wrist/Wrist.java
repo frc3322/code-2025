@@ -108,7 +108,7 @@ public class Wrist extends SubsystemBase {
         Logger.recordOutput("Wrist/Within Distance", false);
       }
     }
-    Logger.recordOutput("Wrist/Wrist Offset", 0);
+    Logger.recordOutput("Wrist/Wrist Offset", 0.0);
     return 0;
   }
 
