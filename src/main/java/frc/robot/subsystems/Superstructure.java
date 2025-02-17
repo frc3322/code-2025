@@ -15,6 +15,7 @@ import frc.robot.Constants.SuperState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.Wrist;
 import java.util.function.DoubleSupplier;
@@ -123,6 +124,26 @@ public class Superstructure extends SubsystemBase {
           wrist.setState(superState.WRIST_STATE);
         },
         this);
+  }
+
+  public Command scoreCommand(SuperState superState) {
+    if (superState == SuperState.REEFL1 || superState == SuperState.PROCESSOR || superState == SuperState.BARGE){
+      return intake.setIntakeStateCommand(IntakeStates.REVERSE);
+    }
+    if (pivot.getDirectionReversed()){
+      return intake.setIntakeStateCommand(IntakeStates.OUTTAKEBACKWARD);
+    }
+    return intake.setIntakeStateCommand(IntakeStates.OUTTAKEFORWARD);
+  }
+
+  public Command scoreCommand(Supplier<SuperState> superStateSupplier) {
+    if (superStateSupplier.get() == SuperState.REEFL1 || superStateSupplier.get() == SuperState.PROCESSOR || superStateSupplier.get() == SuperState.BARGE){
+      return intake.setIntakeStateCommand(IntakeStates.REVERSE);
+    }
+    if (pivot.getDirectionReversed()){
+      return intake.setIntakeStateCommand(IntakeStates.OUTTAKEBACKWARD);
+    }
+    return intake.setIntakeStateCommand(IntakeStates.OUTTAKEFORWARD);
   }
 
   public Command setTargetLevelCommand(SuperState targetLevel) {

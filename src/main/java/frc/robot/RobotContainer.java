@@ -247,6 +247,10 @@ public class RobotContainer {
         .onTrue(superstructure.setSuperStateCommand(superstructure::getTargetLevel))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
+    driverController
+        .leftBumper()
+        .onTrue(superstructure.scoreCommand(superstructure::getTargetLevel));
+
     // Operator Controls
     operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
     operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
