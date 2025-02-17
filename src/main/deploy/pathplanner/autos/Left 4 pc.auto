@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "R11 return"
@@ -20,6 +26,12 @@
           "type": "path",
           "data": {
             "pathName": "to R8"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
           }
         },
         {
@@ -35,6 +47,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "R9 return"
@@ -44,6 +62,12 @@
           "type": "path",
           "data": {
             "pathName": "to R7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
           }
         }
       ]

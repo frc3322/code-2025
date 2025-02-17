@@ -154,6 +154,8 @@ public class RobotContainer {
 
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
+    NamedCommands.registerCommand("L4 SCORE", superstructure.scoreCommand(SuperState.REEFL4));
+    NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
 
     NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE, true));
