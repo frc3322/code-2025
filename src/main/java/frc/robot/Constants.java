@@ -57,7 +57,7 @@ public final class Constants {
     REEFL3(
         FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
     REEFL4(
-        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
+        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.OUTAKE),
     ALGAEINTAKELOW(
         FlipStates.STOW,
         ElevatorStates.REEFALGAELOW,
