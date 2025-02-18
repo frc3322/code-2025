@@ -40,7 +40,7 @@ public class ElevatorIOSpark implements ElevatorIO {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(ElevatorConstants.elevatorMotorCurrentLimit)
         .voltageCompensation(12)
-        .inverted(false);
+        .inverted(true);
     leftConfig
         .encoder
         .positionConversionFactor(ElevatorConstants.positionConversionFactor)
@@ -59,8 +59,8 @@ public class ElevatorIOSpark implements ElevatorIO {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(ElevatorConstants.elevatorMotorCurrentLimit)
         .voltageCompensation(12)
-        .inverted(false)
-        .follow(leftMotor);
+        .follow(leftMotor, true);
+
     tryUntilOk(
         rightMotor,
         5,

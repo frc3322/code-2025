@@ -4,15 +4,15 @@ public class ElevatorConstants {
 
   public static final int elevatorMotorCurrentLimit = 60;
 
-  public static final double positionConversionFactor = 1;
-  public static final double velocityConversionFactor = 1;
+  public static final double positionConversionFactor = .0526;
+  public static final double velocityConversionFactor = .0526;
 
   public static class ControllerConstants {
-    public static final double kP = 0.0;
+    public static final double kP = 3;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double velocityConstraint = 0.0;
-    public static final double accelerationConstraint = 0.0;
+    public static final double velocityConstraint = 3;
+    public static final double accelerationConstraint = 1;
     public static final double positionTolerance = 0.0;
     public static final double velocityTolerance = 0.0;
 
@@ -28,9 +28,9 @@ public class ElevatorConstants {
     public static final double aGroundPosition = 0.0;
     public static final double sourcePosition = 0.0;
     public static final double l1Position = 0.0;
-    public static final double l2Position = 0.12;
-    public static final double l3Position = 0.36;
-    public static final double l4Position = 0.85;
+    public static final double l2Position = 0.24;
+    public static final double l3Position = 0.72;
+    public static final double l4Position = 1.3;
     public static final double reefAlgaeLowPosition = 0.0;
     public static final double reefAlgaeHighPosition = 0.0;
     public static final double processerPosition = 0.0;

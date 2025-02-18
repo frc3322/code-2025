@@ -23,7 +23,7 @@ public class IntakeIOSpark implements IntakeIO {
     intakeConfig
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit)
-        .inverted(false);
+        .inverted(true);
 
     adjustConfig
         .idleMode(IdleMode.kBrake)
@@ -42,7 +42,6 @@ public class IntakeIOSpark implements IntakeIO {
 
   public void setAdjustVelocity(double velocity) {
     adjustMotor.set(velocity);
-    intakeMotor.set(0.1);
   }
 
   public void updateInputs(IntakeIOInputs inputs) {

@@ -18,7 +18,7 @@ public class PivotConstants {
   }
 
   public static class ControllerConstants {
-    public static final double kP = 4;
+    public static final double kP = 2;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double velocityConstraint = 4;
@@ -26,8 +26,8 @@ public class PivotConstants {
     public static final double positionTolerance = 0;
     public static final double velocityTolerance = 0;
 
-    public static final double kS = 0.015;
-    public static final double kG = -0.05;
+    public static final double kS = 0;
+    public static final double kG = 0;
     public static final double kV = 0;
     public static final double kA = 0;
   }
@@ -35,7 +35,7 @@ public class PivotConstants {
   public static class PivotSetpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
     public static final double stowPosition = 0;
-    public static final double groundPosition = 0.25; // TODO change back to 0.25
+    public static final double groundPosition = 0.2615; // TODO change back to 0.25
     public static final double aGroundPosition = 0;
     public static final double sourcePosition = 0;
     public static final double l1Position = -.1;

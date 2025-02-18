@@ -51,14 +51,13 @@ public final class Constants {
         IntakeStates.INTAKE,
         PivotStates.SOURCE,
         WristStates.INTAKE),
-    REEFL1(
-        FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.INTAKE),
+    REEFL1(FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.L1OUT),
     REEFL2(
-        FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.L2, WristStates.OUTAKE),
+        FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
     REEFL3(
-        FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.L3, WristStates.OUTAKE),
+        FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
     REEFL4(
-        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.OUTAKE),
+        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
     ALGAEINTAKELOW(
         FlipStates.STOW,
         ElevatorStates.REEFALGAELOW,

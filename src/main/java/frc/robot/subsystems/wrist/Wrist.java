@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -119,13 +120,19 @@ public class Wrist extends SubsystemBase {
             Math.max(WristConstants.wristMinRotations, position)));
   }
 
-  public Command goToStateCommand(Supplier<WristStates> wristStateSupplier) {
+  public Command goToStateCommand(
+      Supplier<WristStates> wristStateSupplier, BooleanSupplier pivotFlippedSupplier) {
     return new RunCommand(
         () -> {
           WristStates wristState = wristStateSupplier.get();
           Logger.recordOutput("Wrist/Wrist State", wristState);
 
-          goToPositionLimited(wristState.wristSetpoint + getWristOffset(wristState));
+          double trueWristSetpoint =
+              pivotFlippedSupplier.getAsBoolean()
+                  ? (.5 - wristState.wristSetpoint) % .5
+                  : wristState.wristSetpoint;
+
+          goToPositionLimited(trueWristSetpoint + getWristOffset(wristState));
           // goToPositionLimited(wristState.wristSetpoint);
         },
         this);

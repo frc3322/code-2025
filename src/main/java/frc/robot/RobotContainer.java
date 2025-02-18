@@ -236,7 +236,8 @@ public class RobotContainer {
     climber.setDefaultCommand(
         climber.goToStateCommand(climber::getFlipState, climber::getWinchState));
 
-    wrist.setDefaultCommand(wrist.goToStateCommand(wrist::getWristState));
+    wrist.setDefaultCommand(
+        wrist.goToStateCommand(wrist::getWristState, pivot::getDirectionReversed));
 
     // Driver Controls
     driverController

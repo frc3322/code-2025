@@ -65,7 +65,8 @@ public class WristConstants {
     INTAKE(Setpoints.intakePosition),
     ALGAEGROUNDINTAKE(-Setpoints.intakePosition),
     STOW(Setpoints.stowPosition),
-    OUTAKE(Setpoints.outakePosition);
+    OUTAKE(Setpoints.outakePosition),
+    L1OUT(-Setpoints.intakePosition);
 
     public double wristSetpoint;
 

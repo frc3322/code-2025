@@ -140,11 +140,10 @@ public class Pivot extends SubsystemBase {
     boolean intaking = getPivotState().stateType == StateType.INTAKING;
     boolean reefScoring = getPivotState().stateType == StateType.REEFSCORING;
 
-    if(manual){
-      if (pivotState.stateType == StateType.REEFSCORING){
+    if (manual) {
+      if (pivotState.stateType == StateType.REEFSCORING) {
         return !manualFlipDirection;
-      }
-      else if (pivotState.stateType == StateType.INTAKING){
+      } else if (pivotState.stateType == StateType.INTAKING) {
         return manualFlipDirection;
       }
     }

@@ -127,20 +127,24 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command scoreCommand(SuperState superState) {
-    if (superState == SuperState.REEFL1 || superState == SuperState.PROCESSOR || superState == SuperState.BARGE){
+    if (superState == SuperState.REEFL1
+        || superState == SuperState.PROCESSOR
+        || superState == SuperState.BARGE) {
       return intake.setIntakeStateCommand(IntakeStates.REVERSE);
     }
-    if (pivot.getDirectionReversed()){
+    if (pivot.getDirectionReversed()) {
       return intake.setIntakeStateCommand(IntakeStates.OUTTAKEBACKWARD);
     }
     return intake.setIntakeStateCommand(IntakeStates.OUTTAKEFORWARD);
   }
 
   public Command scoreCommand(Supplier<SuperState> superStateSupplier) {
-    if (superStateSupplier.get() == SuperState.REEFL1 || superStateSupplier.get() == SuperState.PROCESSOR || superStateSupplier.get() == SuperState.BARGE){
+    if (superStateSupplier.get() == SuperState.REEFL1
+        || superStateSupplier.get() == SuperState.PROCESSOR
+        || superStateSupplier.get() == SuperState.BARGE) {
       return intake.setIntakeStateCommand(IntakeStates.REVERSE);
     }
-    if (pivot.getDirectionReversed()){
+    if (pivot.getDirectionReversed()) {
       return intake.setIntakeStateCommand(IntakeStates.OUTTAKEBACKWARD);
     }
     return intake.setIntakeStateCommand(IntakeStates.OUTTAKEFORWARD);
