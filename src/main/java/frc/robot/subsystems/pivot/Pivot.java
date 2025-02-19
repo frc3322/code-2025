@@ -79,7 +79,7 @@ public class Pivot extends SubsystemBase {
     Logger.recordOutput(
         "Pivot/angle to reef",
         Constants.FieldConstants.PoseMethods.getAngleToPoseRads(
-            drivetrainPoseSupplier.get(), ReefConstants.reefCenter, -Math.PI / 2, true));
+            drivetrainPoseSupplier.get(), ReefConstants.reefCenter.get(), -Math.PI / 2, true));
     Logger.recordOutput(
         "Pivot/atPoseBoolean",
         Math.abs(
