@@ -44,8 +44,8 @@ public class EagleEyeIOAll implements EagleEyeIO {
           gamePiecesList.add(
               new GamePiece(
                   gamePieceName,
-                  poseFromString(gamePieceGlobalPositions[i]),
                   poseFromString(gamePieceLocalPositions[i]),
+                  poseFromString(gamePieceGlobalPositions[i]),
                   gamePieceYaws[i]));
         }
       }
@@ -58,6 +58,14 @@ public class EagleEyeIOAll implements EagleEyeIO {
           globalPositions[i] = gamePieces[i].getGamePieceGlobalPosition();
         }
         inputs.globalPositions = globalPositions;
+      }
+
+      if (gamePieces.length > 0) {
+        Pose2d[] localPositions = new Pose2d[gamePieces.length];
+        for (int i = 0; i < gamePieces.length; i++) {
+          localPositions[i] = gamePieces[i].getGamePieceLocalPosition();
+        }
+        inputs.localPositions = localPositions;
       }
 
       gamePiecesStrings = new String[gamePieces.length];
