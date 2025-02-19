@@ -333,9 +333,9 @@ public class Drive extends SubsystemBase {
         poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
         poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
       }
-      Logger.recordOutput(limeLightName + "Detected Mt2", true);
+      Logger.recordOutput(limeLightName + " Detected Mt2", true);
     } else {
-      Logger.recordOutput(limeLightName + "Detected Mt2", false);
+      Logger.recordOutput(limeLightName + " Detected Mt2", false);
     }
   }
 

@@ -13,9 +13,14 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.climber.ClimberConstants.FlipStates;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
@@ -24,12 +29,13 @@ import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 
 /**
- * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
- * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
+ * This class defines the runtime mode used by AdvantageKit. The mode is always
+ * "real" when running
+ * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics
+ * sim) and "replay"
  * (log replay from a file).
  */
 public final class Constants {
-
   public static enum SuperState {
     STOW(
         FlipStates.STOW, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW),
@@ -158,7 +164,8 @@ public final class Constants {
   }
 
   public static class FieldConstants {
-    // LEFT and RIGHT are defined from the perspective of standing in the driver station
+    // LEFT and RIGHT are defined from the perspective of standing in the driver
+    // station
     // CENTER is the center of the field, OUTER is more towards the driver station
 
     public static final class ReefConstants {
@@ -170,46 +177,55 @@ public final class Constants {
         OUTERRIGHT(coralPosition5, coralPosition4),
         CENTERRIGHT(coralPosition3, coralPosition2);
 
-        public Pose2d leftPose;
-        public Pose2d rightPose;
+        public Supplier<Pose2d> leftPose;
+        public Supplier<Pose2d> rightPose;
 
-        private ReefSides(Pose2d leftPose, Pose2d rightPose) {
+        private ReefSides(Supplier<Pose2d> leftPose, Supplier<Pose2d> rightPose) {
           this.leftPose = leftPose;
           this.rightPose = rightPose;
         }
       };
 
-      public static final Pose2d reefCenter = new Pose2d(4.5, 4, new Rotation2d());
+      public static final Supplier<Pose2d> reefCenter = () -> flipPose(new Pose2d(4.5, 4, new Rotation2d()));
 
-      public static final Pose2d coralPosition1 =
-          new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180));
-      public static final Pose2d coralPosition2 =
-          new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(-120));
-      public static final Pose2d coralPosition3 =
-          new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(-120));
-      public static final Pose2d coralPosition4 =
-          new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(-60));
-      public static final Pose2d coralPosition5 =
-          new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(-60));
-      public static final Pose2d coralPosition6 =
-          new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
-      public static final Pose2d coralPosition7 = new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0));
-      public static final Pose2d coralPosition8 =
-          new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(60));
-      public static final Pose2d coralPosition9 =
-          new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(60));
-      public static final Pose2d coralPosition10 =
-          new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(120));
-      public static final Pose2d coralPosition11 =
-          new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(120));
-      public static final Pose2d coralPosition12 =
-          new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180));
+      public static final Supplier<Pose2d> coralPosition1 = () -> flipPose(
+          new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)));
+      public static final Supplier<Pose2d> coralPosition2 = () -> flipPose(
+          new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(-120)));
+      public static final Supplier<Pose2d> coralPosition3 = () -> flipPose(
+          new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(-120)));
+      public static final Supplier<Pose2d> coralPosition4 = () -> flipPose(
+          new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(-60)));
+      public static final Supplier<Pose2d> coralPosition5 = () -> flipPose(
+          new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(-60)));
+      public static final Supplier<Pose2d> coralPosition6 = () -> flipPose(
+          new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)));
+      public static final Supplier<Pose2d> coralPosition7 = () -> flipPose(
+          new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)));
+      public static final Supplier<Pose2d> coralPosition8 = () -> flipPose(
+          new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(60)));
+      public static final Supplier<Pose2d> coralPosition9 = () -> flipPose(
+          new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(60)));
+      public static final Supplier<Pose2d> coralPosition10 = () -> flipPose(
+          new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(120)));
+      public static final Supplier<Pose2d> coralPosition11 = () -> flipPose(
+          new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(120)));
+      public static final Supplier<Pose2d> coralPosition12 = () -> flipPose(
+          new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
+    }
+
+    public static Pose2d flipPose(Pose2d pose) {
+      if (DriverStation.getAlliance().get() == Alliance.Red) {
+        return pose;
+      }
+      return pose.rotateBy(new Rotation2d(Math.PI))
+          .transformBy(new Transform2d(17.548, 8.052, new Rotation2d()));
     }
 
     public static final class SourceConstants {
       // TODO: fill in source constants
-      public static final Pose2d leftSource = new Pose2d(.8, 7.5, new Rotation2d());
-      public static final Pose2d rightSource = new Pose2d(0.8, 0.5, new Rotation2d());
+      public static final Pose2d leftSource = flipPose(new Pose2d(.8, 7.5, new Rotation2d()));
+      public static final Pose2d rightSource = flipPose(new Pose2d(0.8, 0.5, new Rotation2d()));
     }
 
     public static final class PoseMethods {
@@ -219,18 +235,18 @@ public final class Constants {
 
       // TODO: In these checks include an optional velocity that expands the radius
 
-      // Js make another one that takes the velocity, and shift the coords of the target by the
+      // Js make another one that takes the velocity, and shift the coords of the
+      // target by the
       // velocity.
       public boolean atPose(
           Pose2d currentPose,
           Pose2d targetPose,
           double translationThreshold,
           double rotationThreshold) {
-        boolean translationInThreshold =
-            atTranslation(
-                currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
-        boolean rotationInThreshold =
-            atRotation(currentPose.getRotation(), targetPose.getRotation(), rotationThreshold);
+        boolean translationInThreshold = atTranslation(
+            currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
+        boolean rotationInThreshold = atRotation(currentPose.getRotation(), targetPose.getRotation(),
+            rotationThreshold);
 
         if (rotationThreshold == 0) {
           return translationInThreshold;
@@ -280,10 +296,9 @@ public final class Constants {
 
       public static final boolean reverseSideScoring(Pose2d robotPose) {
         return Math.abs(
-                getAngleToPoseRads(
-                        robotPose, ReefConstants.reefCenter, -Math.PI / 2, true) // Math.PI/2)
-                    - robotPose.getRotation().getRadians())
-            > Math.PI / 2;
+            getAngleToPoseRads(
+                robotPose, ReefConstants.reefCenter.get(), -Math.PI / 2, true) // Math.PI/2)
+                - robotPose.getRotation().getRadians()) > Math.PI / 2;
       }
     }
   }
