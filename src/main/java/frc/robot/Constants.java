@@ -13,8 +13,6 @@
 
 package frc.robot;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -27,12 +25,11 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
+import java.util.function.Supplier;
 
 /**
- * This class defines the runtime mode used by AdvantageKit. The mode is always
- * "real" when running
- * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics
- * sim) and "replay"
+ * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
+ * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
  * (log replay from a file).
  */
 public final class Constants {
@@ -186,46 +183,53 @@ public final class Constants {
         }
       };
 
-      public static final Supplier<Pose2d> reefCenter = () -> flipPose(new Pose2d(4.5, 4, new Rotation2d()));
+      public static final Supplier<Pose2d> reefCenter =
+          () -> flipPose(new Pose2d(4.5, 4, new Rotation2d()));
 
-      public static final Supplier<Pose2d> coralPosition1 = () -> flipPose(
-          new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)));
-      public static final Supplier<Pose2d> coralPosition2 = () -> flipPose(
-          new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(-120)));
-      public static final Supplier<Pose2d> coralPosition3 = () -> flipPose(
-          new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(-120)));
-      public static final Supplier<Pose2d> coralPosition4 = () -> flipPose(
-          new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(-60)));
-      public static final Supplier<Pose2d> coralPosition5 = () -> flipPose(
-          new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(-60)));
-      public static final Supplier<Pose2d> coralPosition6 = () -> flipPose(
-          new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)));
-      public static final Supplier<Pose2d> coralPosition7 = () -> flipPose(
-          new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)));
-      public static final Supplier<Pose2d> coralPosition8 = () -> flipPose(
-          new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(60)));
-      public static final Supplier<Pose2d> coralPosition9 = () -> flipPose(
-          new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(60)));
-      public static final Supplier<Pose2d> coralPosition10 = () -> flipPose(
-          new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(120)));
-      public static final Supplier<Pose2d> coralPosition11 = () -> flipPose(
-          new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(120)));
-      public static final Supplier<Pose2d> coralPosition12 = () -> flipPose(
-          new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
+      public static final Supplier<Pose2d> coralPosition1 =
+          () -> flipPose(new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)));
+      public static final Supplier<Pose2d> coralPosition2 =
+          () -> flipPose(new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(120)));
+      public static final Supplier<Pose2d> coralPosition3 =
+          () -> flipPose(new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(120)));
+      public static final Supplier<Pose2d> coralPosition4 =
+          () -> flipPose(new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(60)));
+      public static final Supplier<Pose2d> coralPosition5 =
+          () -> flipPose(new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(60)));
+      public static final Supplier<Pose2d> coralPosition6 =
+          () -> flipPose(new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)));
+      public static final Supplier<Pose2d> coralPosition7 =
+          () -> flipPose(new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)));
+      public static final Supplier<Pose2d> coralPosition8 =
+          () -> flipPose(new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(-60)));
+      public static final Supplier<Pose2d> coralPosition9 =
+          () -> flipPose(new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(-60)));
+      public static final Supplier<Pose2d> coralPosition10 =
+          () -> flipPose(new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(-120)));
+      public static final Supplier<Pose2d> coralPosition11 =
+          () -> flipPose(new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120)));
+      public static final Supplier<Pose2d> coralPosition12 =
+          () -> flipPose(new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
     }
 
     public static Pose2d flipPose(Pose2d pose) {
-      if (DriverStation.getAlliance().get() == Alliance.Red) {
+      if (DriverStation.getAlliance().isPresent()) {
+        if (DriverStation.getAlliance().get() == Alliance.Red) {
+          Translation2d translation = new Translation2d(17.548 / 2, 8.052 / 2);
+          return new Pose2d(
+              translation.plus(translation.minus(pose.getTranslation())),
+              pose.getRotation().rotateBy(new Rotation2d(Math.PI))
+          );
+        }
         return pose;
       }
-      return pose.rotateBy(new Rotation2d(Math.PI))
-          .transformBy(new Transform2d(17.548, 8.052, new Rotation2d()));
+      return pose;
     }
 
     public static final class SourceConstants {
       // TODO: fill in source constants
-      public static final Pose2d leftSource = flipPose(new Pose2d(.8, 7.5, new Rotation2d()));
-      public static final Pose2d rightSource = flipPose(new Pose2d(0.8, 0.5, new Rotation2d()));
+      public static final Supplier<Pose2d> leftSource = () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(126)));
+      public static final Supplier<Pose2d> rightSource = () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(-126)));
     }
 
     public static final class PoseMethods {
@@ -243,10 +247,11 @@ public final class Constants {
           Pose2d targetPose,
           double translationThreshold,
           double rotationThreshold) {
-        boolean translationInThreshold = atTranslation(
-            currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
-        boolean rotationInThreshold = atRotation(currentPose.getRotation(), targetPose.getRotation(),
-            rotationThreshold);
+        boolean translationInThreshold =
+            atTranslation(
+                currentPose.getTranslation(), targetPose.getTranslation(), translationThreshold);
+        boolean rotationInThreshold =
+            atRotation(currentPose.getRotation(), targetPose.getRotation(), rotationThreshold);
 
         if (rotationThreshold == 0) {
           return translationInThreshold;
@@ -296,9 +301,10 @@ public final class Constants {
 
       public static final boolean reverseSideScoring(Pose2d robotPose) {
         return Math.abs(
-            getAngleToPoseRads(
-                robotPose, ReefConstants.reefCenter.get(), -Math.PI / 2, true) // Math.PI/2)
-                - robotPose.getRotation().getRadians()) > Math.PI / 2;
+                getAngleToPoseRads(
+                        robotPose, ReefConstants.reefCenter.get(), -Math.PI / 2, true) // Math.PI/2)
+                    - robotPose.getRotation().getRadians())
+            > Math.PI / 2;
       }
     }
   }

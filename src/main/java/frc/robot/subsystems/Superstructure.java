@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FieldConstants.ReefConstants;
+import frc.robot.Constants.FieldConstants.SourceConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.SuperState;
 import frc.robot.subsystems.climber.Climber;
@@ -36,6 +37,8 @@ public class Superstructure extends SubsystemBase {
 
   private Pose2d targetReefPose = new Pose2d();
 
+  private Pose2d[] reefPoses;
+
   /** Creates a new Superstructure. */
   public Superstructure(
       Climber climber, Elevator elevator, Intake intake, Pivot pivot, Wrist wrist) {
@@ -55,7 +58,8 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("SuperStructure/1", targetReefPose == ReefSides.CENTER.leftPose.get());
     Logger.recordOutput("SuperStructure/12", targetReefPose == ReefSides.CENTER.rightPose.get());
     Logger.recordOutput("SuperStructure/11", targetReefPose == ReefSides.CENTERLEFT.leftPose.get());
-    Logger.recordOutput("SuperStructure/10", targetReefPose == ReefSides.CENTERLEFT.rightPose.get());
+    Logger.recordOutput(
+        "SuperStructure/10", targetReefPose == ReefSides.CENTERLEFT.rightPose.get());
     Logger.recordOutput("SuperStructure/9", targetReefPose == ReefSides.OUTERLEFT.leftPose.get());
     Logger.recordOutput("SuperStructure/8", targetReefPose == ReefSides.OUTERLEFT.rightPose.get());
     Logger.recordOutput("SuperStructure/7", targetReefPose == ReefSides.OUTER.leftPose.get());
@@ -63,7 +67,28 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("SuperStructure/5", targetReefPose == ReefSides.OUTERRIGHT.leftPose.get());
     Logger.recordOutput("SuperStructure/4", targetReefPose == ReefSides.OUTERRIGHT.rightPose.get());
     Logger.recordOutput("SuperStructure/3", targetReefPose == ReefSides.CENTERRIGHT.leftPose.get());
-    Logger.recordOutput("SuperStructure/2", targetReefPose == ReefSides.CENTERRIGHT.rightPose.get());
+    Logger.recordOutput(
+        "SuperStructure/2", targetReefPose == ReefSides.CENTERRIGHT.rightPose.get());
+
+    // make reef pose list
+    reefPoses = new Pose2d[12];
+    reefPoses[0] = ReefSides.CENTER.leftPose.get();
+    reefPoses[1] = ReefSides.CENTER.rightPose.get();
+    reefPoses[2] = ReefSides.CENTERLEFT.leftPose.get();
+    reefPoses[3] = ReefSides.CENTERLEFT.rightPose.get();
+    reefPoses[4] = ReefSides.OUTERLEFT.leftPose.get();
+    reefPoses[5] = ReefSides.OUTERLEFT.rightPose.get();
+    reefPoses[6] = ReefSides.OUTER.leftPose.get();
+    reefPoses[7] = ReefSides.OUTER.rightPose.get();
+    reefPoses[8] = ReefSides.OUTERRIGHT.leftPose.get();
+    reefPoses[9] = ReefSides.OUTERRIGHT.rightPose.get();
+    reefPoses[10] = ReefSides.CENTERRIGHT.leftPose.get();
+    reefPoses[11] = ReefSides.CENTERRIGHT.rightPose.get();
+
+    Logger.recordOutput("FieldConstants/Reef Poses", reefPoses);
+
+    Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
+    Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
   }
 
   public SuperState getSuperState() {

@@ -104,7 +104,7 @@ public class Pivot extends SubsystemBase {
       // Near left source?
       if (Constants.FieldConstants.PoseMethods.atTranslation(
           robotPose.getTranslation(),
-          Constants.FieldConstants.SourceConstants.leftSource.getTranslation(),
+          Constants.FieldConstants.SourceConstants.leftSource.get().getTranslation(),
           PivotConstants.sourceDetectionRadiusMeters)) {
         // Rotation close enough?
         if (Math.abs(
@@ -117,7 +117,7 @@ public class Pivot extends SubsystemBase {
       // Near right source?
       else if (Constants.FieldConstants.PoseMethods.atTranslation(
           robotPose.getTranslation(),
-          Constants.FieldConstants.SourceConstants.rightSource.getTranslation(),
+          Constants.FieldConstants.SourceConstants.rightSource.get().getTranslation(),
           PivotConstants.sourceDetectionRadiusMeters)) {
         if (Math.abs(
                 PivotConstants.rightSourceTargetAngleRadians - robotPose.getRotation().getRadians())
