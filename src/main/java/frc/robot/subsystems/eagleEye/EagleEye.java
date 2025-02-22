@@ -67,7 +67,7 @@ public class EagleEye extends SubsystemBase {
    *
    * @return A Pose2d object representing the global position of the closest game piece.
    */
-  public Pose2d get_clostest_game_piece() {
+  public Pose2d get_closest_game_piece() {
     return gamePieces[0].getGamePieceGlobalPosition();
   }
 }
