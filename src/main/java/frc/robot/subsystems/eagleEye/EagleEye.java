@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.eagleEye;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -40,6 +41,8 @@ public class EagleEye extends SubsystemBase {
     Logger.processInputs("EagleEye", inputs);
 
     gamePieces = new GamePiece[inputs.gamePieces.length];
+    
+    // Iterate through each element in the inputs.gamePieces array (string array) and convert it to a GamePiece object
     for (int i = 0; i < inputs.gamePieces.length; i++) {
       gamePieces[i] = new GamePiece(inputs.gamePieces[i]);
     }
@@ -59,5 +62,23 @@ public class EagleEye extends SubsystemBase {
    */
   public void set_camera(int camera) {
     eagleEyeIO.set_camera(camera);
+  }
+
+  /**
+   * Retrieves the global position of the closest game piece.
+   *
+   * @return A Pose2d object representing the global position of the closest game piece.
+   */
+  public Pose2d get_closest_game_piece_position() {
+    return gamePieces[0].getGamePieceGlobalPosition();
+  }
+
+  /**
+   * Retrieves the yaw (rotation in degrees) of the closest game piece.
+   *
+   * @return the yaw of the closest game piece in degrees.
+   */
+  public double get_closest_game_piece_yaw() {
+    return gamePieces[0].getGamePieceGlobalPosition().getRotation().getDegrees();
   }
 }
