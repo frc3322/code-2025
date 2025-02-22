@@ -89,6 +89,9 @@ public class EagleEyeIOAll implements EagleEyeIO {
   }
 
   public void set_camera(int camera) {
-    NetworkTableInstance.getDefault().getTable("EagleEye").getEntry("tpu:0_active_camera").setNumber(camera);
+    NetworkTableInstance.getDefault()
+        .getTable("EagleEye")
+        .getEntry("tpu:0_active_camera")
+        .setNumber(camera);
   }
 }

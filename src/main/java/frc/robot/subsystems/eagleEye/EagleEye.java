@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.eagleEye;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -59,5 +60,14 @@ public class EagleEye extends SubsystemBase {
    */
   public void set_camera(int camera) {
     eagleEyeIO.set_camera(camera);
+  }
+
+  /**
+   * Retrieves the global position of the closest game piece.
+   *
+   * @return A Pose2d object representing the global position of the closest game piece.
+   */
+  public Pose2d get_clostest_game_piece() {
+    return gamePieces[0].getGamePieceGlobalPosition();
   }
 }
