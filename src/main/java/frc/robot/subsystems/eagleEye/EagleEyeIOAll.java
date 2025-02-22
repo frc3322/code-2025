@@ -87,4 +87,8 @@ public class EagleEyeIOAll implements EagleEyeIO {
         Double.parseDouble(poseArray[1]),
         Rotation2d.fromDegrees(0));
   }
+
+  public void set_camera(int camera) {
+    NetworkTableInstance.getDefault().getTable("EagleEye").getEntry("tpu:0_active_camera").setNumber(camera);
+  }
 }

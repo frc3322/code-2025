@@ -51,4 +51,13 @@ public class EagleEye extends SubsystemBase {
 
     visualizer.update(inputs.globalPositions);
   }
+
+  /**
+   * Sets the camera to the specified camera index.
+   *
+   * @param camera the index of the camera to be set
+   */
+  public void set_camera(int camera) {
+    eagleEyeIO.set_camera(camera);
+  }
 }

@@ -14,4 +14,6 @@ public interface EagleEyeIO {
   }
 
   public default void updateInputs(EagleEyeIOInputsAutoLogged inputs) {}
+
+  public default void set_camera(int camera) {}
 }
