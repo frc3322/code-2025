@@ -69,7 +69,16 @@ public class EagleEye extends SubsystemBase {
    *
    * @return A Pose2d object representing the global position of the closest game piece.
    */
-  public Pose2d get_closest_game_piece() {
+  public Pose2d get_closest_game_piece_position() {
     return gamePieces[0].getGamePieceGlobalPosition();
+  }
+
+  /**
+   * Retrieves the yaw (rotation in degrees) of the closest game piece.
+   *
+   * @return the yaw of the closest game piece in degrees.
+   */
+  public double get_closest_game_piece_yaw() {
+    return gamePieces[0].getGamePieceGlobalPosition().getRotation().getDegrees();
   }
 }
