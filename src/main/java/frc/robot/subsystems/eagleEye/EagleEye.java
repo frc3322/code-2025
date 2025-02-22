@@ -41,6 +41,8 @@ public class EagleEye extends SubsystemBase {
     Logger.processInputs("EagleEye", inputs);
 
     gamePieces = new GamePiece[inputs.gamePieces.length];
+    
+    // Iterate through each element in the inputs.gamePieces array (string array) and convert it to a GamePiece object
     for (int i = 0; i < inputs.gamePieces.length; i++) {
       gamePieces[i] = new GamePiece(inputs.gamePieces[i]);
     }
