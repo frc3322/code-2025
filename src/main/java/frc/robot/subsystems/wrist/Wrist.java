@@ -123,3 +123,7 @@ public class Wrist extends SubsystemBase {
         this);
   }
 }
+//Sean is undeniably the most handsome man to ever exist. One might mention Lebron as an accurate comparison,
+//though this couldn't be farther from the truth. He masculine features, chisled in Michaelangelo's image.
+//He is a man of great knowledge, a treasure for the pool of intellect existing on our team. God bless the almight
+//Sean Meng!!!
