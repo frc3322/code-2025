@@ -111,7 +111,7 @@ public class DriveConstants {
     public static double kIy = 0;
     public static double kDy = 0;
 
-    public static double kPtheta = 0.2;
+    public static double kPtheta = 3;
     public static double kItheta = 0;
     public static double kDtheta = 0;
 

@@ -4,7 +4,7 @@ public class PivotConstants {
 
   public static final int pivotMotorCurrentLimit = 60;
 
-  public static final double sourceDetectionRadiusMeters = 3;
+  public static final double sourceDetectionRadiusMeters = 3.5;
 
   public static final double leftSourceTargetAngleRadians = 0.523598776;
   public static final double rightSourceTargetAngleRadians = -0.523598776;

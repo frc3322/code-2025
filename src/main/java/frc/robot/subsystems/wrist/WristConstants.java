@@ -48,8 +48,8 @@ public class WristConstants {
     public static final double kD = .2;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
-    public static final double positionTolerance = 0;
-    public static final double velocityTolerance = 0;
+    public static final double positionTolerance = 0.1;
+    public static final double velocityTolerance = 0.1;
 
     public static final double simGearRatio = 100;
   }

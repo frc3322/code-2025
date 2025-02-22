@@ -2,7 +2,12 @@ package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveCommands;
+import java.util.function.Supplier;
 
 public class Simpledrive {
 
@@ -14,15 +19,36 @@ public class Simpledrive {
 
   private Drive drivetrain;
 
-  public Simpledrive(
-      ProfiledPIDController xPidController,
-      ProfiledPIDController yPidController,
-      ProfiledPIDController thetaPidController,
-      Drive drivetrain) {
-    this.xPID = xPidController;
-    this.yPID = yPidController;
-    this.thetaPID = thetaPidController;
+  private boolean enabled = false;
+
+  public Simpledrive(Drive drivetrain) {
     this.drivetrain = drivetrain;
+    xPID =
+        new ProfiledPIDController(
+            DriveConstants.SimpleDriveConstants.kPx,
+            DriveConstants.SimpleDriveConstants.kIx,
+            DriveConstants.SimpleDriveConstants.kDx,
+            new Constraints(
+                DriveConstants.SimpleDriveConstants.kMaxVelocityX,
+                DriveConstants.SimpleDriveConstants.kMaxAccelerationX));
+
+    yPID =
+        new ProfiledPIDController(
+            DriveConstants.SimpleDriveConstants.kPy,
+            DriveConstants.SimpleDriveConstants.kIy,
+            DriveConstants.SimpleDriveConstants.kDy,
+            new Constraints(
+                DriveConstants.SimpleDriveConstants.kMaxVelocityY,
+                DriveConstants.SimpleDriveConstants.kMaxAccelerationY));
+
+    thetaPID =
+        new ProfiledPIDController(
+            DriveConstants.SimpleDriveConstants.kPtheta,
+            DriveConstants.SimpleDriveConstants.kItheta,
+            DriveConstants.SimpleDriveConstants.kDtheta,
+            new Constraints(
+                DriveConstants.SimpleDriveConstants.kMaxVelocityTheta,
+                DriveConstants.SimpleDriveConstants.kMaxAccelerationTheta));
   }
 
   public void setTargetPose(Pose2d targetPose) {
@@ -42,8 +68,18 @@ public class Simpledrive {
         drivetrain.getPose().getRotation().getRadians(), targetPose.getRotation().getRadians());
   }
 
-  public void autoDrive(Pose2d currentPose) {
-    DriveCommands.directDrive(
-        drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed());
+  public Command autoDrive(Supplier<Pose2d> targetPoseSupplier) {
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> setTargetPose(targetPoseSupplier.get())),
+        DriveCommands.directDrive(
+            drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
+  }
+
+  public boolean getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 }

@@ -15,7 +15,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -218,8 +217,7 @@ public final class Constants {
           Translation2d translation = new Translation2d(17.548 / 2, 8.052 / 2);
           return new Pose2d(
               translation.plus(translation.minus(pose.getTranslation())),
-              pose.getRotation().rotateBy(new Rotation2d(Math.PI))
-          );
+              pose.getRotation().rotateBy(new Rotation2d(Math.PI)));
         }
         return pose;
       }
@@ -228,8 +226,10 @@ public final class Constants {
 
     public static final class SourceConstants {
       // TODO: fill in source constants
-      public static final Supplier<Pose2d> leftSource = () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(126)));
-      public static final Supplier<Pose2d> rightSource = () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(-126)));
+      public static final Supplier<Pose2d> leftSource =
+          () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(126)));
+      public static final Supplier<Pose2d> rightSource =
+          () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(-126)));
     }
 
     public static final class PoseMethods {

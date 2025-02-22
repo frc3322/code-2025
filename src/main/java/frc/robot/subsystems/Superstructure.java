@@ -7,16 +7,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants.ReefConstants;
-import frc.robot.Constants.FieldConstants.SourceConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
+import frc.robot.Constants.FieldConstants.SourceConstants;
 import frc.robot.Constants.SuperState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.wrist.Wrist;
 import java.util.function.DoubleSupplier;
@@ -47,6 +46,8 @@ public class Superstructure extends SubsystemBase {
     this.intake = intake;
     this.pivot = pivot;
     this.wrist = wrist;
+
+    setupTriggers();
   }
 
   @Override
@@ -54,6 +55,7 @@ public class Superstructure extends SubsystemBase {
     // This method will be called once per scheduler run
     Logger.recordOutput("SuperStructure/State", superState);
     Logger.recordOutput("SuperStructure/Target Level", targetLevel);
+    Logger.recordOutput("SuperStructure/targetPose", targetReefPose);
 
     Logger.recordOutput("SuperStructure/1", targetReefPose == ReefSides.CENTER.leftPose.get());
     Logger.recordOutput("SuperStructure/12", targetReefPose == ReefSides.CENTER.rightPose.get());
@@ -103,6 +105,24 @@ public class Superstructure extends SubsystemBase {
     return targetReefPose;
   }
 
+  public void setupTriggers() {
+    for (SuperState superState : SuperState.values()) {
+      Trigger trigger = new Trigger(() -> this.superState == superState);
+      if (superState == SuperState.STOW) {
+        trigger
+            .and(() -> wrist.isAtGoal())
+            .onTrue(pivot.setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection));
+        trigger.onTrue(wrist.setStateCommand(superState.WRIST_STATE));
+      } else {
+        trigger.and(() -> pivot.isAtGoal()).onTrue(wrist.setStateCommand(superState.WRIST_STATE));
+        trigger.onTrue(pivot.setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection));
+      }
+      trigger.onTrue(climber.setFlipStateCommand(superState.CLIMBER_STATE));
+      trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
+      trigger.onTrue(elevator.setStateCommand(superState.ELEVATOR_STATE));
+    }
+  }
+
   public ReefSides chooseReefSideFromJoystick(double x, double y) {
     double angle = (Math.atan2(x, y) + Math.PI) * 180 / Math.PI;
     int side = (int) (angle / 60) % 6;
@@ -111,68 +131,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command setSuperStateCommand(SuperState superState) {
-    return new InstantCommand(
-        () -> {
-          this.superState = superState;
-          climber.setFlipState(superState.CLIMBER_STATE);
-          elevator.setState(superState.ELEVATOR_STATE);
-          intake.setState(superState.INTAKE_STATE);
-          pivot.setState(superState.PIVOT_STATE);
-          wrist.setState(superState.WRIST_STATE);
-        },
-        this);
-  }
-
-  public Command setSuperStateCommand(SuperState superState, boolean pivotFlipped) {
-    return new SequentialCommandGroup(
-        new InstantCommand(
-            () -> {
-              this.superState = superState;
-              climber.setFlipState(superState.CLIMBER_STATE);
-              elevator.setState(superState.ELEVATOR_STATE);
-              intake.setState(superState.INTAKE_STATE);
-              pivot.setState(superState.PIVOT_STATE);
-              wrist.setState(superState.WRIST_STATE);
-            },
-            this),
-        pivot.setDirectionBooleanCommand(pivotFlipped));
-  }
-
-  public Command setSuperStateCommand(Supplier<SuperState> superStateSupplier) {
-    return new InstantCommand(
-        () -> {
-          this.superState = superStateSupplier.get();
-          climber.setFlipState(superState.CLIMBER_STATE);
-          elevator.setState(superState.ELEVATOR_STATE);
-          intake.setState(superState.INTAKE_STATE);
-          pivot.setState(superState.PIVOT_STATE);
-          wrist.setState(superState.WRIST_STATE);
-        },
-        this);
-  }
-
-  public Command scoreCommand(SuperState superState) {
-    if (superState == SuperState.REEFL1
-        || superState == SuperState.PROCESSOR
-        || superState == SuperState.BARGE) {
-      return intake.setIntakeStateCommand(IntakeStates.REVERSE);
-    }
-    if (pivot.getDirectionReversed()) {
-      return intake.setIntakeStateCommand(IntakeStates.OUTTAKEBACKWARD);
-    }
-    return intake.setIntakeStateCommand(IntakeStates.OUTTAKEFORWARD);
-  }
-
-  public Command scoreCommand(Supplier<SuperState> superStateSupplier) {
-    if (superStateSupplier.get() == SuperState.REEFL1
-        || superStateSupplier.get() == SuperState.PROCESSOR
-        || superStateSupplier.get() == SuperState.BARGE) {
-      return intake.setIntakeStateCommand(IntakeStates.REVERSE);
-    }
-    if (pivot.getDirectionReversed()) {
-      return intake.setIntakeStateCommand(IntakeStates.OUTTAKEBACKWARD);
-    }
-    return intake.setIntakeStateCommand(IntakeStates.OUTTAKEFORWARD);
+    return new InstantCommand(() -> this.superState = superState);
   }
 
   public Command setTargetLevelCommand(SuperState targetLevel) {

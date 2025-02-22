@@ -38,6 +38,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.drive.Simpledrive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
@@ -67,6 +68,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Simpledrive simpledrive;
+
   private final Elevator elevator;
   private final Intake intake;
   private final Pivot pivot;
@@ -151,20 +154,22 @@ public class RobotContainer {
 
         break;
     }
+    simpledrive = new Simpledrive(drive);
 
     superstructure = new Superstructure(climber, elevator, intake, pivot, wrist);
 
     // Set up named commands
-    NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
-    NamedCommands.registerCommand("L4 SCORE", superstructure.scoreCommand(SuperState.REEFL4));
-    NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
+    // NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
+    // NamedCommands.registerCommand("L4 SCORE", superstructure.scoreCommand(SuperState.REEFL4));
+    // NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
 
-    NamedCommands.registerCommand(
-        "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE, true));
-    NamedCommands.registerCommand(
-        "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
-    NamedCommands.registerCommand(
-        "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
+    // NamedCommands.registerCommand(
+    //     "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE,
+    // true));
+    // NamedCommands.registerCommand(
+    //     "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
+    // NamedCommands.registerCommand(
+    //     "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
@@ -221,6 +226,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // Inter subsystem binfings
+
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -247,31 +254,46 @@ public class RobotContainer {
         .onTrue(superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
+    // L1 thru L4 bindings - all same button
     driverController
         .rightBumper()
-        .onTrue(superstructure.setSuperStateCommand(superstructure::getTargetLevel))
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL1)
+        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL1))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
     driverController
-        .leftBumper()
-        .onTrue(superstructure.scoreCommand(superstructure::getTargetLevel));
+        .rightBumper()
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL2)
+        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL2))
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    driverController
+        .rightBumper()
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL3)
+        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL3))
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    driverController
+        .rightBumper()
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
+        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL4))
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    // Auto align
+    driverController
+        .rightBumper()
+        .and(() -> simpledrive.getEnabled())
+        .whileTrue(simpledrive.autoDrive(superstructure::getTargetReefPose));
+
+    // driverController
+    //     .leftBumper()
+    //     .onTrue(superstructure.scoreCommand(superstructure::getTargetLevel));
 
     // Operator Controls
     operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
     operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
     operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
     operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
-
-    // Manual arm direction
-    operatorController
-        .povRight()
-        .onTrue(pivot.setDirectionBooleanCommand(false))
-        .onFalse(pivot.releaseManualDirectionCommand());
-
-    operatorController
-        .povLeft()
-        .onTrue(pivot.setDirectionBooleanCommand(true))
-        .onFalse(pivot.releaseManualDirectionCommand());
 
     // Reef Selector
     operatorController
@@ -311,9 +333,7 @@ public class RobotContainer {
   }
 
   public Command onTeleopInitCommand() {
-    return new ParallelCommandGroup(
-        pivot.releaseManualDirectionCommand(),
-        superstructure.setSuperStateCommand(SuperState.STOW));
+    return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.STOW));
   }
 
   /**

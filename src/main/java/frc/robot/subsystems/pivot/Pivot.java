@@ -5,40 +5,44 @@
 package frc.robot.subsystems.pivot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
-import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Pivot extends SubsystemBase {
 
-  private final PivotIO pivotIO;
+  // --------------------------- Instance Variables ---------------------------
+  private static Pivot instance; // Static instance of the Pivot (singleton pattern)
+  private static PivotVisualizer pivotVisualizer =
+      new PivotVisualizer(); // Static visualizer for pivot system
 
-  private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
+  // -------------------------- State Variables -----------------------------
+  private PivotStates pivotState = PivotStates.STOW; // Current state of the pivot (initially STOW)
+  private boolean atGoal = false; // Flag indicating whether the pivot has reached the goal
+  private double pivotAngle = 0; // Current angle of the pivot
 
-  private static Pivot instance;
+  // ----------------------- Hardware/Subsystem Instances ---------------------
+  private final PivotIO pivotIO; // Pivot IO interface for communication with the pivot system
+  private final PivotIOInputsAutoLogged inputs =
+      new PivotIOInputsAutoLogged(); // Input handler for automatic logging
 
-  private static PivotVisualizer pivotVisualizer = new PivotVisualizer();
+  // -------------------------- Control/Logic Flags ---------------------------
+  private boolean flipped = false; // Manual control for the flip direction of the pivot
+  boolean manual = false; // Flag for enabling manual control (overrides automatic behavior)
 
-  private PivotStates pivotState = PivotStates.STOW;
-
-  private boolean atGoal = false;
-
-  private double pivotAngle = 0;
-
-  private Elevator elevator = Elevator.getInstance();
-
-  private Supplier<Pose2d> drivetrainPoseSupplier;
-
-  private boolean manualFlipDirection = false;
-  boolean manual = false;
+  // ------------------------ External Dependencies ---------------------------
+  private Supplier<Pose2d>
+      drivetrainPoseSupplier; // Supplier for the drivetrain's pose (position and orientation)
 
   public static Pivot initialize(PivotIO pivotIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     if (instance == null) {
@@ -70,9 +74,7 @@ public class Pivot extends SubsystemBase {
   public void periodic() {
     updateInputs();
 
-    if (elevator != null) {
-      pivotVisualizer.update(getPivotAngleRadians(), elevator.getElevatorHeightMeters());
-    }
+    pivotVisualizer.update(getPivotAngleRadians());
 
     Logger.recordOutput("Pivot/State", getPivotState());
 
@@ -97,9 +99,16 @@ public class Pivot extends SubsystemBase {
     return pivotAngle;
   }
 
-  public boolean reverseArmDirection(boolean intaking, boolean reefScoring) {
+  public boolean reverseArmDirection() {
     Pose2d robotPose = drivetrainPoseSupplier.get();
     // See which direction the arm should go while intaking.
+    boolean intakingFlipped =
+        DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == Alliance.Red;
+
+    boolean intaking = pivotState.stateType == StateType.INTAKING;
+    boolean reefScoring = pivotState.stateType == StateType.REEFSCORING;
+
     if (intaking) {
       // Near left source?
       if (Constants.FieldConstants.PoseMethods.atTranslation(
@@ -110,8 +119,8 @@ public class Pivot extends SubsystemBase {
         if (Math.abs(
                 PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
             < Math.PI / 2) {
-          return true;
-        } else return false;
+          return !intakingFlipped;
+        } else return intakingFlipped;
 
       }
       // Near right source?
@@ -122,8 +131,8 @@ public class Pivot extends SubsystemBase {
         if (Math.abs(
                 PivotConstants.rightSourceTargetAngleRadians - robotPose.getRotation().getRadians())
             < Math.PI / 2) {
-          return false;
-        } else return true;
+          return intakingFlipped;
+        } else return !intakingFlipped;
       }
       // Flip towards reef (if not near source, we are most likely targeting dropped coral)
       else {
@@ -137,25 +146,16 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean getDirectionReversed() {
-    boolean intaking = getPivotState().stateType == StateType.INTAKING;
-    boolean reefScoring = getPivotState().stateType == StateType.REEFSCORING;
-
-    if (manual) {
-      if (pivotState.stateType == StateType.REEFSCORING) {
-        return !manualFlipDirection;
-      } else if (pivotState.stateType == StateType.INTAKING) {
-        return manualFlipDirection;
-      }
-    }
-    return reverseArmDirection(intaking, reefScoring);
+    return flipped;
   }
 
   public PivotStates getPivotState() {
     return pivotState;
   }
 
-  public void setState(PivotStates pivotState) {
+  public void setState(PivotStates pivotState, BooleanSupplier flippedSupplier) {
     this.pivotState = pivotState;
+    this.flipped = flippedSupplier.getAsBoolean();
   }
 
   public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
@@ -164,31 +164,17 @@ public class Pivot extends SubsystemBase {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           double modifiedArmSetpoint;
 
-          modifiedArmSetpoint =
-              getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+          modifiedArmSetpoint = flipped ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);
   }
 
-  public Command setStateCommand(PivotStates pivotState) {
+  public Command setStateCommand(PivotStates pivotState, BooleanSupplier flippedSupplier) {
     return new InstantCommand(
         () -> {
-          setState(pivotState);
-          pivotIO.goToPosition(pivotState.armSetpoint, pivotState.armVelocity);
+          setState(pivotState, flippedSupplier);
         },
         this);
-  }
-
-  public Command setDirectionBooleanCommand(boolean flip) {
-    return new InstantCommand(
-        () -> {
-          this.manualFlipDirection = flip;
-          this.manual = true;
-        });
-  }
-
-  public Command releaseManualDirectionCommand() {
-    return new InstantCommand(() -> this.manual = false);
   }
 }
