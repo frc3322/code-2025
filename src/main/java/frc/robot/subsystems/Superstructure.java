@@ -7,8 +7,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.FieldConstants.SourceConstants;
@@ -16,7 +20,9 @@ import frc.robot.Constants.SuperState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.wrist.Wrist;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -37,6 +43,7 @@ public class Superstructure extends SubsystemBase {
   private Pose2d targetReefPose = new Pose2d();
 
   private Pose2d[] reefPoses;
+  private Pose2d[] autoReefPoses;
 
   /** Creates a new Superstructure. */
   public Superstructure(
@@ -88,6 +95,22 @@ public class Superstructure extends SubsystemBase {
     reefPoses[11] = ReefSides.CENTERRIGHT.rightPose.get();
 
     Logger.recordOutput("FieldConstants/Reef Poses", reefPoses);
+
+    autoReefPoses = new Pose2d[12];
+    autoReefPoses[0] = Constants.FieldConstants.ReefConstants.autoCoralPosition1.get();
+    autoReefPoses[1] = Constants.FieldConstants.ReefConstants.autoCoralPosition2.get();
+    autoReefPoses[2] = Constants.FieldConstants.ReefConstants.autoCoralPosition3.get();
+    autoReefPoses[3] = Constants.FieldConstants.ReefConstants.autoCoralPosition4.get();
+    autoReefPoses[4] = Constants.FieldConstants.ReefConstants.autoCoralPosition5.get();
+    autoReefPoses[5] = Constants.FieldConstants.ReefConstants.autoCoralPosition6.get();
+    autoReefPoses[6] = Constants.FieldConstants.ReefConstants.autoCoralPosition7.get();
+    autoReefPoses[7] = Constants.FieldConstants.ReefConstants.autoCoralPosition8.get();
+    autoReefPoses[8] = Constants.FieldConstants.ReefConstants.autoCoralPosition9.get();
+    autoReefPoses[9] = Constants.FieldConstants.ReefConstants.autoCoralPosition10.get();
+    autoReefPoses[10] = Constants.FieldConstants.ReefConstants.autoCoralPosition11.get();
+    autoReefPoses[11] = Constants.FieldConstants.ReefConstants.autoCoralPosition12.get();
+
+    Logger.recordOutput("FieldConstants/Auto Reef Poses", autoReefPoses);
 
     Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
@@ -149,6 +172,14 @@ public class Superstructure extends SubsystemBase {
 
   public Command setTargetLevelCommand(SuperState targetLevel) {
     return new InstantCommand(() -> this.targetLevel = targetLevel);
+  }
+
+  public Command l4ScoreCommand() {
+    return new SequentialCommandGroup(
+        pivot.setStateCommand(PivotStates.L4SCORE, pivot::reverseArmDirection), 
+        new WaitUntilCommand(pivot::pastL4Score),
+        intake.setIntakeStateCommand(IntakeStates.OUTTAKE)
+        );
   }
 
   public Command setTargetReefPoseCommand(
