@@ -237,8 +237,94 @@ public final class Constants {
           () -> flipPose(new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120)));
       public static final Supplier<Pose2d> coralPosition12 =
           () -> flipPose(new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
+
+      public static final double robotWidth = 40 * 0.0254;
+      public static final double offsetDistance = -robotWidth / 2;
+
+      public static final Supplier<Pose2d> autoCoralPosition1 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition2 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(120)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition3 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(120)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition4 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(60)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition5 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(60)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition6 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition7 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition8 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(-60)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition9 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(-60)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition10 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(-120)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition11 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120)), offsetDistance));
+      public static final Supplier<Pose2d> autoCoralPosition12 =
+          () ->
+              flipPose(
+                  localOffsetPose2d(
+                      new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)), offsetDistance));
     }
 
+    /**
+     * Returns a new Pose2d object that is offset from the given pose by a specified distance. The
+     * offset is applied in the direction of the pose's current rotation.
+     *
+     * @param pose The original Pose2d object to offset.
+     * @param distance The distance to offset the pose.
+     * @return A new Pose2d object that is offset from the original pose by the specified distance.
+     */
+    public static Pose2d localOffsetPose2d(Pose2d pose, double distance) {
+      return new Pose2d(
+          pose.getTranslation().getX() + distance * Math.cos(pose.getRotation().getRadians()),
+          pose.getTranslation().getY() + distance * Math.sin(pose.getRotation().getRadians()),
+          pose.getRotation());
+    }
+
+    /**
+     * Flips the given pose if the robot is on the Red alliance. The pose is flipped around the
+     * center of the field.
+     *
+     * @param pose The original pose to be potentially flipped.
+     * @return The flipped pose if on the Red alliance, otherwise the original pose.
+     */
     public static Pose2d flipPose(Pose2d pose) {
       if (DriverStation.getAlliance().isPresent()) {
         if (DriverStation.getAlliance().get() == Alliance.Red) {
@@ -253,7 +339,6 @@ public final class Constants {
     }
 
     public static final class SourceConstants {
-      // TODO: fill in source constants
       public static final Supplier<Pose2d> leftSource =
           () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(126)));
       public static final Supplier<Pose2d> rightSource =
