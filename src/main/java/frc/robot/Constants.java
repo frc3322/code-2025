@@ -67,13 +67,13 @@ public final class Constants {
         ClimberConstants.stow,
         ElevatorStates.L2,
         IntakeStates.OFF,
-        PivotStates.STOW,
+        PivotStates.L2,
         WristStates.OUTAKE),
     REEFL3(
         ClimberConstants.stow,
         ElevatorStates.L3,
         IntakeStates.OFF,
-        PivotStates.STOW,
+        PivotStates.L3,
         WristStates.OUTAKE),
     REEFL4(
         ClimberConstants.stow,
@@ -109,13 +109,13 @@ public final class Constants {
         ClimberConstants.deploy,
         ElevatorStates.STOW,
         IntakeStates.OFF,
-        PivotStates.STOW,
+        PivotStates.GROUND,
         WristStates.STOW),
     CLIMBED(
         ClimberConstants.climb,
         ElevatorStates.STOW,
         IntakeStates.OFF,
-        PivotStates.STOW,
+        PivotStates.GROUND,
         WristStates.STOW);
 
     public final double CLIMBER_SETPOINT;
@@ -194,12 +194,12 @@ public final class Constants {
 
     public static final class ReefConstants {
       public static enum ReefSides {
-        CENTER(coralPosition1, coralPosition12),
-        CENTERLEFT(coralPosition11, coralPosition10),
-        OUTERLEFT(coralPosition9, coralPosition8),
-        OUTER(coralPosition7, coralPosition6),
-        OUTERRIGHT(coralPosition5, coralPosition4),
-        CENTERRIGHT(coralPosition3, coralPosition2);
+        CENTER(autoCoralPosition1, autoCoralPosition12),
+        CENTERLEFT(autoCoralPosition11, autoCoralPosition10),
+        OUTERLEFT(autoCoralPosition9, autoCoralPosition8),
+        OUTER(autoCoralPosition7, autoCoralPosition6),
+        OUTERRIGHT(autoCoralPosition5, autoCoralPosition4),
+        CENTERRIGHT(autoCoralPosition3, autoCoralPosition2);
 
         public Supplier<Pose2d> leftPose;
         public Supplier<Pose2d> rightPose;
@@ -239,7 +239,7 @@ public final class Constants {
           () -> flipPose(new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
 
       public static final double robotWidth = 40 * 0.0254;
-      public static final double offsetDistance = -robotWidth / 2;
+      public static final double offsetDistance = (-robotWidth / 2) - .2;
 
       public static final Supplier<Pose2d> autoCoralPosition1 =
           () ->

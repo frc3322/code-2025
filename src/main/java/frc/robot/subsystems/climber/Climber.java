@@ -4,9 +4,14 @@
 
 package frc.robot.subsystems.climber;
 
+import static frc.robot.util.SparkUtil.tryUntilOk;
+
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -19,16 +24,24 @@ public class Climber extends SubsystemBase {
       new SparkMax(Constants.CANIDs.winchCANId, MotorType.kBrushless);
   public static RelativeEncoder encoder = climbMotor.getEncoder();
 
+  public SparkMaxConfig climbConfig;
+
   private double setpoint = 0;
 
   /** Creates a new Climber. */
   public Climber() {
-    if (setpoint > encoder.getPosition()) {
-      climbMotor.set(1);
-    }
-    if (setpoint < encoder.getPosition()) {
-      climbMotor.set(-1);
-    }
+    climbConfig = new SparkMaxConfig();
+
+    climbConfig.idleMode(IdleMode.kBrake).voltageCompensation(12).inverted(true);
+
+    tryUntilOk(
+        climbMotor,
+        5,
+        () ->
+            climbMotor.configure(
+                climbConfig,
+                SparkFlex.ResetMode.kResetSafeParameters,
+                SparkFlex.PersistMode.kPersistParameters));
   }
 
   public void setClimberSetpoint(double setpoint) {
@@ -42,12 +55,17 @@ public class Climber extends SubsystemBase {
   public Command climberGoToPositionCommand() {
     return new RunCommand(
         () -> {
-          if (setpoint > encoder.getPosition()) {
-            climbMotor.set(.25);
+          double setSpeed = 0;
+          if (setpoint > (encoder.getPosition())) {
+            setSpeed = 1;
           }
-          if (setpoint < encoder.getPosition()) {
-            climbMotor.set(-.25);
+          if (setpoint < (encoder.getPosition())) {
+            setSpeed = -1;
           }
+          if (encoder.getPosition() <= 0 && setSpeed < 0) {
+            setSpeed = 0;
+          }
+          climbMotor.set(setSpeed);
         },
         this);
   }

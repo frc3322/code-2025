@@ -22,8 +22,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -163,14 +161,15 @@ public class RobotContainer {
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
     NamedCommands.registerCommand("L4 SCORE", superstructure.l4ScoreCommand());
-    //NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
+    // NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
 
     NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE));
     NamedCommands.registerCommand(
         "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1));
+
     NamedCommands.registerCommand(
-        "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4));
+        "AUTO ALIGN", simpledrive.autoDrive(superstructure::getTargetReefPose));
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
@@ -227,9 +226,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    autoScoreTrigger = new Trigger(() -> Constants.FieldConstants.PoseMethods.atPose(drive.getPose(), getTargetReefPose(), .02, 20))
-    .and(elevator::isAtGoal);
-    
+    autoScoreTrigger =
+        new Trigger(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), getTargetReefPose(), .02, 20))
+            .and(elevator::isAtGoal);
+
     // Inter subsystem binfings
 
     // Default command, normal field-relative drive
@@ -282,7 +285,7 @@ public class RobotContainer {
         .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL4))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
-    //Auto align
+    // Auto align
     driverController
         .rightBumper()
         .and(() -> simpledrive.getEnabled())
@@ -295,7 +298,8 @@ public class RobotContainer {
     //         simpledrive.autoDrive(superstructure::getTargetReefPose),
     //         new SequentialCommandGroup(
     //             superstructure.setSuperStateCommand(SuperState.STOW)
-    //             .until(() -> Constants.FieldConstants.PoseMethods.atPose(drive.getPose(), getTargetReefPose(), 2, 20)),
+    //             .until(() -> Constants.FieldConstants.PoseMethods.atPose(drive.getPose(),
+    // getTargetReefPose(), 2, 20)),
     //             //superstructure.setSuperStateCommand(SuperState.REEFL4),
     //             superstructure.l4ScoreCommand()
     //         )
@@ -304,9 +308,22 @@ public class RobotContainer {
     // .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
     driverController
-        .leftBumper().and(() -> !simpledrive.getEnabled())
+        .leftBumper()
         .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
         .onTrue(superstructure.l4ScoreCommand());
+
+    driverController
+        .leftBumper()
+        .and(
+            () ->
+                superstructure.getTargetLevel() == SuperState.REEFL3
+                    || superstructure.getTargetLevel() == SuperState.REEFL2)
+        .onTrue(superstructure.l2and3ScoreCommand());
+
+    driverController
+        .leftBumper()
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL1)
+        .onTrue(superstructure.l1ScoreCommand());
 
     // Operator Controls
     operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));

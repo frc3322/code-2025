@@ -64,6 +64,10 @@ public class Elevator extends SubsystemBase {
     return atGoal;
   }
 
+  public boolean highEnough() {
+    return elevatorHeight > 1.5;
+  }
+
   public double getElevatorHeightMeters() {
     return elevatorHeight;
   }

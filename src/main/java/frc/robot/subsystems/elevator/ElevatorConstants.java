@@ -9,10 +9,10 @@ public class ElevatorConstants {
 
   public static class ControllerConstants {
     public static final double kP = 2;
-    public static final double kI = 0.0;
+    public static final double kI = 0.1;
     public static final double kD = 0.0;
     public static final double velocityConstraint = 3;
-    public static final double accelerationConstraint = 1;
+    public static final double accelerationConstraint = 2;
     public static final double positionTolerance = 0.0;
     public static final double velocityTolerance = 0.0;
 
@@ -28,8 +28,8 @@ public class ElevatorConstants {
     public static final double aGroundPosition = 0.0;
     public static final double sourcePosition = 0.0;
     public static final double l1Position = 0.0;
-    public static final double l2Position = 0.24;
-    public static final double l3Position = 0.72;
+    public static final double l2Position = 0.19;
+    public static final double l3Position = 0.57;
     public static final double l4Position = 1.4;
     public static final double reefAlgaeLowPosition = 0.0;
     public static final double reefAlgaeHighPosition = 0.0;

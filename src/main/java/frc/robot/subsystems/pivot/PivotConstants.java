@@ -21,8 +21,8 @@ public class PivotConstants {
     public static final double kP = 2; // 2
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double velocityConstraint = .1; // 4
-    public static final double accelerationConstraint = .32; // 3.2
+    public static final double velocityConstraint = 1; // 4
+    public static final double accelerationConstraint = 3.2; // 3.2
     public static final double positionTolerance = 0.05;
     public static final double velocityTolerance = 0.05;
 
@@ -42,7 +42,7 @@ public class PivotConstants {
     public static final double l2Position = -.1;
     public static final double l3Position = -.1;
     public static final double l4Position = -.15;
-    public static final double l2and3ScorePosition = 0;
+    public static final double l2and3ScorePosition = -.2;
     public static final double l4ScorePosition = -0.25;
     public static final double reefAlgaePosition = 0;
     public static final double processerPosition = 0;

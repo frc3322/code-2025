@@ -92,11 +92,11 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean isAtGoal() {
-    return Math.abs(pivotAngle) > Math.abs(pivotState.armSetpoint - 0.05);
+    return Math.abs(pivotAngle) > .2;
   }
 
   public boolean pastL4Score() {
-    return Math.abs(pivotAngle) > .2;
+    return Math.abs(pivotAngle) > .3;
   }
 
   public boolean pastL2and3Score() {
@@ -182,7 +182,6 @@ public class Pivot extends SubsystemBase {
     return new InstantCommand(
         () -> {
           setState(pivotState, flippedSupplier);
-        },
-        this);
+        });
   }
 }

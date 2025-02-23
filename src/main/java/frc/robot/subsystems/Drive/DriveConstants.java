@@ -103,26 +103,26 @@ public class DriveConstants {
 
   public static final class SimpleDriveConstants {
     // PID constants for position control
-    public static double kPx = 5;
+    public static double kPx = 2;
     public static double kIx = 0;
     public static double kDx = 0;
 
-    public static double kPy = 5;
+    public static double kPy = 2;
     public static double kIy = 0;
     public static double kDy = 0;
 
-    public static double kPtheta = 3;
+    public static double kPtheta = 1.5;
     public static double kItheta = 0;
-    public static double kDtheta = 0;
+    public static double kDtheta = 0.1;
 
     // Velocity constraints
-    public static double kMaxVelocityX = 0; // Maximum linear velocity in the X direction
-    public static double kMaxVelocityY = 0; // Maximum linear velocity in the Y direction
+    public static double kMaxVelocityX = 2; // Maximum linear velocity in the X direction
+    public static double kMaxVelocityY = 2; // Maximum linear velocity in the Y direction
     public static double kMaxVelocityTheta = 0; // Maximum angular velocity
 
     // Acceleration constraints
-    public static double kMaxAccelerationX = 0; // Maximum linear acceleration in the X direction
-    public static double kMaxAccelerationY = 0; // Maximum linear acceleration in the Y direction
+    public static double kMaxAccelerationX = 1; // Maximum linear acceleration in the X direction
+    public static double kMaxAccelerationY = 1; // Maximum linear acceleration in the Y direction
     public static double kMaxAccelerationTheta = 0; // Maximum angular acceleration
   }
 }

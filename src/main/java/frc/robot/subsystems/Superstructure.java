@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
@@ -142,13 +141,18 @@ public class Superstructure extends SubsystemBase {
                         .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)));
       } else {
         trigger.onTrue(
-            pivot
-                .setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection)
+            elevator
+                .setStateCommand(superState.ELEVATOR_STATE)
                 .andThen(
-                    wrist
-                        .setStateCommand(superState.WRIST_STATE)
-                        .onlyIf(pivot::isAtGoal)
-                        .until(() -> wrist.getWristState() == superState.WRIST_STATE)));
+                    pivot
+                        .setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection)
+                        .onlyIf(elevator::highEnough)
+                        .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)
+                        .andThen(
+                            wrist
+                                .setStateCommand(superState.WRIST_STATE)
+                                .onlyIf(pivot::isAtGoal)
+                                .until(() -> wrist.getWristState() == superState.WRIST_STATE))));
 
         trigger.and(() -> pivot.isAtGoal()).onTrue(wrist.setStateCommand(superState.WRIST_STATE));
         trigger.onTrue(pivot.setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection));
@@ -176,10 +180,22 @@ public class Superstructure extends SubsystemBase {
 
   public Command l4ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L4SCORE, pivot::reverseArmDirection), 
-        new WaitUntilCommand(pivot::pastL4Score),
-        intake.setIntakeStateCommand(IntakeStates.OUTTAKE)
-        );
+        pivot.setStateCommand(PivotStates.L4SCORE, pivot::reverseArmDirection),
+        new WaitCommand(1),
+        intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+  }
+
+  public Command l2and3ScoreCommand() {
+    return new SequentialCommandGroup(
+        pivot.setStateCommand(PivotStates.L2AND3SCORE, pivot::reverseArmDirection),
+        new WaitCommand(1),
+        intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+  }
+
+  public Command l1ScoreCommand() {
+    return new SequentialCommandGroup(
+        pivot.setStateCommand(PivotStates.L1, pivot::reverseArmDirection),
+        intake.setIntakeStateCommand(IntakeStates.REVERSE));
   }
 
   public Command setTargetReefPoseCommand(

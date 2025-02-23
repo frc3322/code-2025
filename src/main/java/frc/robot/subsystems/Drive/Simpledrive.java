@@ -2,12 +2,14 @@ package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveCommands;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class Simpledrive {
 
@@ -19,7 +21,7 @@ public class Simpledrive {
 
   private Drive drivetrain;
 
-  private boolean enabled = false;
+  private boolean enabled = true;
 
   public Simpledrive(Drive drivetrain) {
     this.drivetrain = drivetrain;
@@ -49,6 +51,8 @@ public class Simpledrive {
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityTheta,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationTheta));
+
+    thetaPID.enableContinuousInput(Math.PI, -Math.PI);
   }
 
   public void setTargetPose(Pose2d targetPose) {
@@ -69,8 +73,40 @@ public class Simpledrive {
   }
 
   public Command autoDrive(Supplier<Pose2d> targetPoseSupplier) {
+    // This is elliot and gray's child
     return new SequentialCommandGroup(
-        new InstantCommand(() -> setTargetPose(targetPoseSupplier.get())),
+        new InstantCommand(
+            () -> {
+              double currentYaw = drivetrain.getRotation().getDegrees();
+              double targetYaw = targetPoseSupplier.get().getRotation().getDegrees();
+              Pose2d targetPose = targetPoseSupplier.get();
+
+              if ((currentYaw - (targetYaw + 90) < (currentYaw - (targetYaw - 90)))) {
+                targetPose =
+                    targetPose.rotateAround(
+                        targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
+              } else {
+                targetPose =
+                    targetPose.rotateAround(
+                        targetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
+              }
+
+              double yAdjustDistance = -.1;
+              targetPose =
+                  new Pose2d(
+                      targetPose.getX()
+                          + yAdjustDistance * Math.cos(targetPose.getRotation().getRadians()),
+                      targetPose.getY()
+                          + yAdjustDistance * Math.sin(targetPose.getRotation().getRadians()),
+                      targetPose.getRotation());
+
+              Logger.recordOutput("Simpledrive/Adjusted Pose", targetPose);
+
+              setTargetPose(targetPose);
+              xPID.reset(drivetrain.getPose().getX());
+              yPID.reset(drivetrain.getPose().getY());
+              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
+            }),
         DriveCommands.directDrive(
             drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
   }
