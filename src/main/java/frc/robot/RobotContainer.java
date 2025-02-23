@@ -282,7 +282,7 @@ public class RobotContainer {
         .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL4))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
-    Auto align
+    //Auto align
     driverController
         .rightBumper()
         .and(() -> simpledrive.getEnabled())
