@@ -29,9 +29,6 @@ import frc.robot.Constants.SuperState;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
-import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -106,7 +103,7 @@ public class RobotContainer {
 
         wrist = Wrist.initialize(new WristIOSpark(), drive::getPose, this::getTargetReefPose);
 
-        climber = Climber.initialize(new ClimberIOSpark());
+        climber = new Climber();
 
         break;
 
@@ -128,7 +125,7 @@ public class RobotContainer {
 
         wrist = Wrist.initialize(new WristIOSim(), drive::getPose, this::getTargetReefPose);
 
-        climber = Climber.initialize(new ClimberIOSim());
+        climber = new Climber();
 
         break;
 
@@ -150,7 +147,7 @@ public class RobotContainer {
 
         wrist = Wrist.initialize(new WristIO() {}, drive::getPose, this::getTargetReefPose);
 
-        climber = new Climber(new ClimberIO() {});
+        climber = new Climber();
 
         break;
     }
@@ -242,8 +239,7 @@ public class RobotContainer {
 
     intake.setDefaultCommand(intake.goToStateCommand(intake::getState));
 
-    climber.setDefaultCommand(
-        climber.goToStateCommand(climber::getFlipState, climber::getWinchState));
+    climber.setDefaultCommand(climber.climberGoToPositionCommand());
 
     wrist.setDefaultCommand(
         wrist.goToStateCommand(wrist::getWristState, pivot::getDirectionReversed));
@@ -306,6 +302,10 @@ public class RobotContainer {
         .whileTrue(
             superstructure.setTargetReefPoseCommand(
                 false, operatorController::getLeftX, operatorController::getLeftY));
+
+    operatorController.povUp().onTrue(superstructure.setSuperStateCommand(SuperState.CLIMB));
+
+    operatorController.povDown().onTrue(superstructure.setSuperStateCommand(SuperState.CLIMBED));
 
     // // Lock to 0° when A button is held
     // driverController

@@ -19,7 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.subsystems.climber.ClimberConstants.FlipStates;
+import frc.robot.subsystems.climber.ClimberConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
@@ -34,74 +34,103 @@ import java.util.function.Supplier;
 public final class Constants {
   public static enum SuperState {
     STOW(
-        FlipStates.STOW, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW),
+        ClimberConstants.stow,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW),
     GROUNDINTAKE(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.GROUND,
         IntakeStates.INTAKE,
         PivotStates.GROUND,
         WristStates.INTAKE),
     ALGAEGROUNDINTAKE(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.AGROUND,
         IntakeStates.INTAKE,
         PivotStates.AGROUND,
         WristStates.ALGAEGROUNDINTAKE),
     SOURCEINTAKE(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.SOURCE,
         IntakeStates.INTAKE,
         PivotStates.SOURCE,
         WristStates.INTAKE),
-    REEFL1(FlipStates.STOW, ElevatorStates.L1, IntakeStates.OFF, PivotStates.L1, WristStates.L1OUT),
+    REEFL1(
+        ClimberConstants.stow,
+        ElevatorStates.L1,
+        IntakeStates.OFF,
+        PivotStates.L1,
+        WristStates.L1OUT),
     REEFL2(
-        FlipStates.STOW, ElevatorStates.L2, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
+        ClimberConstants.stow,
+        ElevatorStates.L2,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.OUTAKE),
     REEFL3(
-        FlipStates.STOW, ElevatorStates.L3, IntakeStates.OFF, PivotStates.STOW, WristStates.OUTAKE),
+        ClimberConstants.stow,
+        ElevatorStates.L3,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.OUTAKE),
     REEFL4(
-        FlipStates.STOW, ElevatorStates.L4, IntakeStates.OFF, PivotStates.L4, WristStates.OUTAKE),
+        ClimberConstants.stow,
+        ElevatorStates.L4,
+        IntakeStates.OFF,
+        PivotStates.L4,
+        WristStates.OUTAKE),
     ALGAEINTAKELOW(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.REEFALGAELOW,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.INTAKE),
     ALGAEINTAKEHIGH(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.REEFALGAEHIGH,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.INTAKE),
     PROCESSOR(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.PROCESSER,
         IntakeStates.OFF,
         PivotStates.PROCESSER,
         WristStates.STOW),
     BARGE(
-        FlipStates.STOW,
+        ClimberConstants.stow,
         ElevatorStates.BARGE,
         IntakeStates.OFF,
         PivotStates.BARGE,
         WristStates.STOW),
     CLIMB(
-        FlipStates.DOWN, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW),
+        ClimberConstants.deploy,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW),
     CLIMBED(
-        FlipStates.STOW, ElevatorStates.STOW, IntakeStates.OFF, PivotStates.STOW, WristStates.STOW);
+        ClimberConstants.climb,
+        ElevatorStates.STOW,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.STOW);
 
-    public final FlipStates CLIMBER_STATE;
+    public final double CLIMBER_SETPOINT;
     public final ElevatorStates ELEVATOR_STATE;
     public final IntakeStates INTAKE_STATE;
     public final PivotStates PIVOT_STATE;
     public final WristStates WRIST_STATE;
 
     private SuperState(
-        FlipStates climberState,
+        Double climberSetpoint,
         ElevatorStates elevatorState,
         IntakeStates intakeState,
         PivotStates pivotState,
         WristStates wristState) {
-      CLIMBER_STATE = climberState;
+      CLIMBER_SETPOINT = climberSetpoint;
       ELEVATOR_STATE = elevatorState;
       INTAKE_STATE = intakeState;
       PIVOT_STATE = pivotState;
@@ -155,7 +184,6 @@ public final class Constants {
 
     public static final int wristCANId = 56;
 
-    public static final int flipCANId = 22;
     public static final int winchCANId = 23;
   }
 

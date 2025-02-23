@@ -2,7 +2,7 @@ package frc.robot.subsystems.intake;
 
 public class IntakeConstants {
 
-  public static final int intakeMotorCurrentLimit = 0;
+  public static final int intakeMotorCurrentLimit = 40;
   public static final int adjustMotorCurrentLimit = 0;
 
   public static final class SimConstants {

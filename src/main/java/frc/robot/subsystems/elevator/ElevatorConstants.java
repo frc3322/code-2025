@@ -8,7 +8,7 @@ public class ElevatorConstants {
   public static final double velocityConversionFactor = .0526;
 
   public static class ControllerConstants {
-    public static final double kP = 3;
+    public static final double kP = 2;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double velocityConstraint = 3;
@@ -16,8 +16,8 @@ public class ElevatorConstants {
     public static final double positionTolerance = 0.0;
     public static final double velocityTolerance = 0.0;
 
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;
+    public static final double kS = 0.025;
+    public static final double kG = 0.035; // Upper 0.06 // Lower 0.01
     public static final double kV = 0.0;
     public static final double kA = 0.0;
   }

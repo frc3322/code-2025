@@ -88,6 +88,13 @@ public class PivotIOSpark implements PivotIO {
   public void goToPosition(double positionRotations, double velocityRotPerSec) {
     ffOutput = pivotFeedforward.calculate(positionRotations, velocityRotPerSec);
 
+    if (absoluteEncoder.getPosition() > 0.05) {
+      ffOutput = -ffOutput;
+    } else if (absoluteEncoder.getPosition() < 0.05) {
+    } else {
+      ffOutput = 0;
+    }
+
     pivotPID.setGoal(positionRotations);
     pidOutput = pivotPID.calculate(absoluteEncoder.getPosition());
 

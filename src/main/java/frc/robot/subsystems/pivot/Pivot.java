@@ -92,7 +92,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean isAtGoal() {
-    return atGoal;
+    return Math.abs(pivotAngle) > Math.abs(pivotState.armSetpoint - 0.05);
   }
 
   public double getPivotAngleRadians() {

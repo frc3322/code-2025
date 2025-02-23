@@ -1,85 +1,60 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.climber;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.climber.ClimberConstants.FlipStates;
-import frc.robot.subsystems.climber.ClimberConstants.WinchStates;
-import java.util.function.Supplier;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Climber extends SubsystemBase {
-  public final ClimberIO climberIO;
+  public static SparkMax climbMotor =
+      new SparkMax(Constants.CANIDs.winchCANId, MotorType.kBrushless);
+  public static RelativeEncoder encoder = climbMotor.getEncoder();
 
-  private static Climber instance;
+  private double setpoint = 0;
 
-  private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
-
-  private FlipStates flipState = FlipStates.STOW;
-  private WinchStates winchState = WinchStates.OFF;
-
-  public static Climber getInstance() {
-    return instance;
-  }
-
-  public static Climber initialize(ClimberIO climberIO) {
-    if (instance == null) {
-      instance = new Climber(climberIO);
+  /** Creates a new Climber. */
+  public Climber() {
+    if (setpoint > encoder.getPosition()) {
+      climbMotor.set(1);
     }
-    return instance;
+    if (setpoint < encoder.getPosition()) {
+      climbMotor.set(-1);
+    }
   }
 
-  public Climber(ClimberIO climberIO) {
-    this.climberIO = climberIO;
+  public void setClimberSetpoint(double setpoint) {
+    this.setpoint = setpoint;
   }
 
-  public FlipStates getFlipState() {
-    return flipState;
+  public Command setClimberSetpointCommand(double setpoint) {
+    return new InstantCommand(() -> setClimberSetpoint(setpoint));
   }
 
-  public WinchStates getWinchState() {
-    return winchState;
-  }
-
-  public void setFlipState(FlipStates flipState) {
-    this.flipState = flipState;
-  }
-
-  public Command goToStateCommand(
-      Supplier<FlipStates> flipSupplier, Supplier<WinchStates> winchSupplier) {
+  public Command climberGoToPositionCommand() {
     return new RunCommand(
         () -> {
-          FlipStates flipstate = flipSupplier.get();
-          WinchStates winchState = winchSupplier.get();
-          climberIO.goToPosition(flipstate.setpoint);
-          climberIO.runWinch(winchState.power);
+          if (setpoint > encoder.getPosition()) {
+            climbMotor.set(.25);
+          }
+          if (setpoint < encoder.getPosition()) {
+            climbMotor.set(-.25);
+          }
         },
         this);
   }
 
-  public Command setFlipStateCommand(FlipStates flipState) {
-    return new InstantCommand(
-        () -> {
-          setFlipState(flipState);
-        });
-  }
-
-  public Command setWinchStateCommand(WinchStates winchState) {
-    return new InstantCommand(
-        () -> {
-          this.winchState = winchState;
-        });
-  }
-
-  public void updateInputs() {
-    climberIO.updateInputs(inputs);
-
-    Logger.processInputs("Climber", inputs);
-  }
-
   @Override
   public void periodic() {
-    updateInputs();
+    // This method will be called once per scheduler run
+    Logger.recordOutput("Climber/climbPosition", encoder.getPosition());
   }
 }

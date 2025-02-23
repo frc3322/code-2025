@@ -32,7 +32,7 @@ public class Superstructure extends SubsystemBase {
 
   private SuperState superState = SuperState.STOW;
 
-  private SuperState targetLevel = SuperState.REEFL1;
+  private SuperState targetLevel = SuperState.REEFL4;
 
   private Pose2d targetReefPose = new Pose2d();
 
@@ -109,15 +109,28 @@ public class Superstructure extends SubsystemBase {
     for (SuperState superState : SuperState.values()) {
       Trigger trigger = new Trigger(() -> this.superState == superState);
       if (superState == SuperState.STOW) {
-        trigger
-            .and(() -> wrist.isAtGoal())
-            .onTrue(pivot.setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection));
-        trigger.onTrue(wrist.setStateCommand(superState.WRIST_STATE));
+        trigger.onTrue(
+            wrist
+                .setStateCommand(superState.WRIST_STATE)
+                .andThen(
+                    pivot
+                        .setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection)
+                        .onlyIf(wrist::isAtGoal)
+                        .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)));
       } else {
+        trigger.onTrue(
+            pivot
+                .setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection)
+                .andThen(
+                    wrist
+                        .setStateCommand(superState.WRIST_STATE)
+                        .onlyIf(pivot::isAtGoal)
+                        .until(() -> wrist.getWristState() == superState.WRIST_STATE)));
+
         trigger.and(() -> pivot.isAtGoal()).onTrue(wrist.setStateCommand(superState.WRIST_STATE));
         trigger.onTrue(pivot.setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection));
       }
-      trigger.onTrue(climber.setFlipStateCommand(superState.CLIMBER_STATE));
+      trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
       trigger.onTrue(elevator.setStateCommand(superState.ELEVATOR_STATE));
     }
