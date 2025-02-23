@@ -72,22 +72,7 @@ public class Intake extends SubsystemBase {
         () -> {
           IntakeStates state = stateSupplier.get();
           intakeIO.setIntakeVelocity(state.intakeVelocity);
-          intakeIO.setAdjustVelocity(state.adjustVelocity);
         },
         this);
-  }
-
-  public Command adjustToMiddleCommand() {
-    return new InstantCommand(
-        () -> {
-          if (coralNotInPosition()) {
-            double direction = sensor.leftDetected ? -1 : 1;
-            intakeIO.setAdjustVelocity(direction);
-          }
-        });
-  }
-
-  public boolean coralNotInPosition() {
-    return sensor.leftDetected ^ sensor.rightDetected;
   }
 }

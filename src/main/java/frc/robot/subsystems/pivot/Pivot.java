@@ -95,6 +95,14 @@ public class Pivot extends SubsystemBase {
     return Math.abs(pivotAngle) > Math.abs(pivotState.armSetpoint - 0.05);
   }
 
+  public boolean pastL4Score() {
+    return Math.abs(pivotAngle) > .2;
+  }
+
+  public boolean pastL2and3Score() {
+    return Math.abs(pivotAngle) > .15;
+  }
+
   public double getPivotAngleRadians() {
     return pivotAngle;
   }

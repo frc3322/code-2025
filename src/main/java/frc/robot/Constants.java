@@ -270,7 +270,7 @@ public final class Constants {
       // Js make another one that takes the velocity, and shift the coords of the
       // target by the
       // velocity.
-      public boolean atPose(
+      public static boolean atPose(
           Pose2d currentPose,
           Pose2d targetPose,
           double translationThreshold,

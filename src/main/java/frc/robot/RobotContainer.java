@@ -22,7 +22,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.SuperState;
@@ -81,6 +84,8 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private Trigger autoScoreTrigger;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -156,17 +161,16 @@ public class RobotContainer {
     superstructure = new Superstructure(climber, elevator, intake, pivot, wrist);
 
     // Set up named commands
-    // NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
-    // NamedCommands.registerCommand("L4 SCORE", superstructure.scoreCommand(SuperState.REEFL4));
-    // NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
+    NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
+    NamedCommands.registerCommand("L4 SCORE", superstructure.l4ScoreCommand());
+    //NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
 
-    // NamedCommands.registerCommand(
-    //     "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE,
-    // true));
-    // NamedCommands.registerCommand(
-    //     "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1, false));
-    // NamedCommands.registerCommand(
-    //     "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4, false));
+    NamedCommands.registerCommand(
+        "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE));
+    NamedCommands.registerCommand(
+        "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1));
+    NamedCommands.registerCommand(
+        "LEFT L4", superstructure.setSuperStateCommand(SuperState.REEFL4));
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
@@ -223,6 +227,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    autoScoreTrigger = new Trigger(() -> Constants.FieldConstants.PoseMethods.atPose(drive.getPose(), getTargetReefPose(), .02, 20))
+    .and(elevator::isAtGoal);
+    
     // Inter subsystem binfings
 
     // Default command, normal field-relative drive
@@ -275,15 +282,31 @@ public class RobotContainer {
         .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL4))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
-    // Auto align
+    Auto align
     driverController
         .rightBumper()
         .and(() -> simpledrive.getEnabled())
         .whileTrue(simpledrive.autoDrive(superstructure::getTargetReefPose));
 
-    // driverController
-    //     .leftBumper()
-    //     .onTrue(superstructure.scoreCommand(superstructure::getTargetLevel));
+    // Auto Score
+    // driverController.leftBumper().and(() -> simpledrive.getEnabled())
+    // .whileTrue(
+    //     new ParallelCommandGroup(
+    //         simpledrive.autoDrive(superstructure::getTargetReefPose),
+    //         new SequentialCommandGroup(
+    //             superstructure.setSuperStateCommand(SuperState.STOW)
+    //             .until(() -> Constants.FieldConstants.PoseMethods.atPose(drive.getPose(), getTargetReefPose(), 2, 20)),
+    //             //superstructure.setSuperStateCommand(SuperState.REEFL4),
+    //             superstructure.l4ScoreCommand()
+    //         )
+    //     )
+    // )
+    // .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    driverController
+        .leftBumper().and(() -> !simpledrive.getEnabled())
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
+        .onTrue(superstructure.l4ScoreCommand());
 
     // Operator Controls
     operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));

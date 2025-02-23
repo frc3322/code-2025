@@ -42,6 +42,8 @@ public class PivotConstants {
     public static final double l2Position = -.1;
     public static final double l3Position = -.1;
     public static final double l4Position = -.15;
+    public static final double l2and3ScorePosition = 0;
+    public static final double l4ScorePosition = -0.25;
     public static final double reefAlgaePosition = 0;
     public static final double processerPosition = 0;
     public static final double bargePosition = 0;
@@ -55,6 +57,8 @@ public class PivotConstants {
     public static final double l2Velocity = 0;
     public static final double l3Velocity = 0;
     public static final double l4Velocity = 0;
+    public static final double l2and3ScoreVelocity = 0;
+    public static final double l4ScoreVelocity = 0;
     public static final double reefAlgaeVelocity = 0;
     public static final double processerVelocity = 0;
     public static final double bargeVelocity = 0;
@@ -113,6 +117,11 @@ public class PivotConstants {
         PivotSetpoints.l4Position,
         PivotSetpoints.l4Velocity,
         StateType.REEFSCORING), // L4 coral scoring
+    L2AND3SCORE(
+        PivotSetpoints.l2and3ScorePosition,
+        PivotSetpoints.l2and3ScoreVelocity,
+        StateType.REEFSCORING),
+    L4SCORE(PivotSetpoints.l4ScorePosition, PivotSetpoints.l4ScoreVelocity, StateType.REEFSCORING),
     REEFALGAE(
         PivotSetpoints.reefAlgaePosition,
         PivotSetpoints.reefAlgaeVelocity,

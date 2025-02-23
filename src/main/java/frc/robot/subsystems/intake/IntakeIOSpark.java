@@ -10,43 +10,27 @@ import frc.robot.Constants.CANIDs;
 
 public class IntakeIOSpark implements IntakeIO {
 
-  public SparkMax adjustMotor;
   public SparkMax intakeMotor;
 
   public IntakeIOSpark() {
     intakeMotor = new SparkMax(CANIDs.intakeCANId, MotorType.kBrushless);
-    adjustMotor = new SparkMax(CANIDs.adjustCANId, MotorType.kBrushless);
 
     SparkMaxConfig intakeConfig = new SparkMaxConfig();
-    SparkMaxConfig adjustConfig = new SparkMaxConfig();
 
     intakeConfig
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit)
         .inverted(true);
 
-    adjustConfig
-        .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(IntakeConstants.adjustMotorCurrentLimit)
-        .inverted(false);
-
     intakeMotor.configure(
         intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    adjustMotor.configure(
-        adjustConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void setIntakeVelocity(double velocity) {
     intakeMotor.set(velocity);
   }
 
-  public void setAdjustVelocity(double velocity) {
-    adjustMotor.set(velocity);
-  }
-
   public void updateInputs(IntakeIOInputs inputs) {
     inputs.intakeVelocity = intakeMotor.getEncoder().getVelocity();
-    ;
-    inputs.adjustVelocity = adjustMotor.getEncoder().getVelocity();
   }
 }

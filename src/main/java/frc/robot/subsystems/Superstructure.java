@@ -7,7 +7,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
@@ -16,7 +19,9 @@ import frc.robot.Constants.SuperState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.wrist.Wrist;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -149,6 +154,14 @@ public class Superstructure extends SubsystemBase {
 
   public Command setTargetLevelCommand(SuperState targetLevel) {
     return new InstantCommand(() -> this.targetLevel = targetLevel);
+  }
+
+  public Command l4ScoreCommand() {
+    return new SequentialCommandGroup(
+        pivot.setStateCommand(PivotStates.L4SCORE, pivot::reverseArmDirection), 
+        new WaitUntilCommand(pivot::pastL4Score),
+        intake.setIntakeStateCommand(IntakeStates.OUTTAKE)
+        );
   }
 
   public Command setTargetReefPoseCommand(
