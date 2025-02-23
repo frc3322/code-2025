@@ -39,6 +39,10 @@ public class EagleEyeIOAll implements EagleEyeIO {
             getTableEntry(gamePieceName + "_global_positions").getStringArray(new String[0]);
         String[] gamePieceLocalPositions =
             getTableEntry(gamePieceName + "_local_positions").getStringArray(new String[0]);
+        double[] gamePieceDistances =
+            getTableEntry(gamePieceName + "_distances").getDoubleArray(new double[0]);
+        double[] gamePieceRatios =
+            getTableEntry(gamePieceName + "_ratios").getDoubleArray(new double[0]);
 
         for (int i = 0; i < gamePieceYaws.length; i++) {
           gamePiecesList.add(
@@ -46,7 +50,9 @@ public class EagleEyeIOAll implements EagleEyeIO {
                   gamePieceName,
                   poseFromString(gamePieceLocalPositions[i]),
                   poseFromString(gamePieceGlobalPositions[i]),
-                  gamePieceYaws[i]));
+                  gamePieceYaws[i],
+                  gamePieceDistances[i],
+                  gamePieceRatios[i]));
         }
       }
 
@@ -58,14 +64,6 @@ public class EagleEyeIOAll implements EagleEyeIO {
           globalPositions[i] = gamePieces[i].getGamePieceGlobalPosition();
         }
         inputs.globalPositions = globalPositions;
-      }
-
-      if (gamePieces.length > 0) {
-        Pose2d[] localPositions = new Pose2d[gamePieces.length];
-        for (int i = 0; i < gamePieces.length; i++) {
-          localPositions[i] = gamePieces[i].getGamePieceLocalPosition();
-        }
-        inputs.localPositions = localPositions;
       }
 
       gamePiecesStrings = new String[gamePieces.length];
@@ -88,7 +86,8 @@ public class EagleEyeIOAll implements EagleEyeIO {
         Rotation2d.fromDegrees(0));
   }
 
-  public void set_camera(int camera) {
+  @Override
+  public void setCamera(int camera) {
     NetworkTableInstance.getDefault()
         .getTable("EagleEye")
         .getEntry("tpu:0_active_camera")

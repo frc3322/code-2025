@@ -60,8 +60,8 @@ public class EagleEye extends SubsystemBase {
    *
    * @param camera the index of the camera to be set
    */
-  public void set_camera(int camera) {
-    eagleEyeIO.set_camera(camera);
+  public void setCamera(int camera) {
+    eagleEyeIO.setCamera(camera);
   }
 
   /**
@@ -69,7 +69,7 @@ public class EagleEye extends SubsystemBase {
    *
    * @return A Pose2d object representing the global position of the closest game piece.
    */
-  public Pose2d get_closest_game_piece_position() {
+  public Pose2d getClosestGamePiecePosition() {
     return gamePieces[0].getGamePieceGlobalPosition();
   }
 
@@ -78,7 +78,52 @@ public class EagleEye extends SubsystemBase {
    *
    * @return the yaw of the closest game piece in degrees.
    */
-  public double get_closest_game_piece_yaw() {
+  public double getClosestGamePieceYaw() {
     return gamePieces[0].getGamePieceGlobalPosition().getRotation().getDegrees();
+  }
+
+  /**
+   * Returns the first GamePiece from the list of game pieces that has a width to height ratio
+   * greater than the specified ratio threshold.
+   *
+   * @param ratioThreshold the threshold ratio to compare against
+   * @return the first (closest) GamePiece with a ratio greater than the ratioThreshold,
+   *         or null if no such GamePiece is found
+   */
+  public GamePiece getOptomalGamePiece(double ratioThreshold) {
+    for (GamePiece gamePiece : gamePieces) {
+      if (gamePiece.getRatio() > ratioThreshold) {
+        return gamePiece;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Retrieves the optimal game piece position based on the given width to height ratio threshold.
+   *
+   * @param ratioThreshold the threshold width to height ratio to determine the optimal game piece.
+   * @return the global position of the optimal game piece as a Pose2d object, or null if no game piece meets the criteria.
+   */
+  public Pose2d getOptomalGamePiecePosition(double ratioThreshold) {
+    GamePiece gamePiece = getOptomalGamePiece(ratioThreshold);
+    if (gamePiece != null) {
+      return gamePiece.getGamePieceGlobalPosition();
+    }
+    return null;
+  }
+
+  /**
+   * Retrieves the optimal game piece yaw based on the given width to height ratio threshold.
+   *
+   * @param ratioThreshold the threshold width to height ratio to determine the optimal game piece.
+   * @return the yaw of the optimal game piece in degrees, or !!9999!! if no game piece meets the criteria.
+   */
+  public double getOptomalGamePieceYaw(double ratioThreshold) {
+    GamePiece gamePiece = getOptomalGamePiece(ratioThreshold);
+    if (gamePiece != null) {
+      return gamePiece.getGamePieceGlobalPosition().getRotation().getDegrees();
+    }
+    return 9999;
   }
 }
