@@ -132,7 +132,7 @@ public class DriveCommands {
         drive);
   }
 
-  public static Command stopCommand(Drive drive){
+  public static Command stopCommand(Drive drive) {
     return new InstantCommand(() -> drive.stop(), drive);
   }
 
