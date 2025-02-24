@@ -75,6 +75,24 @@
           "data": {
             "pathName": "R9 return"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to R7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AUTO ALIGN L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
         }
       ]
     }
