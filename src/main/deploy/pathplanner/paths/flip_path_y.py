@@ -1,17 +1,17 @@
 import json
 
-def flip_path_file(file_path, center_x=8.052 / 2):
+def flip_path_file(file_path, center_y=8.052 / 2):
     # Load the .path file (JSON format)
     with open(file_path, 'r') as file:
         data = json.load(file)
 
-    # Flip x-values in waypoints
+    # Flip y-values in waypoints
     for waypoint in data.get("waypoints", []):
-        waypoint["anchor"]["x"] = 2 * center_x - waypoint["anchor"]["x"]
+        waypoint["anchor"]["y"] = 2 * center_y - waypoint["anchor"]["y"]
         if waypoint["prevControl"]:
-            waypoint["prevControl"]["x"] = 2 * center_x - waypoint["prevControl"]["x"]
+            waypoint["prevControl"]["y"] = 2 * center_y - waypoint["prevControl"]["y"]
         if waypoint["nextControl"]:
-            waypoint["nextControl"]["x"] = 2 * center_x - waypoint["nextControl"]["x"]
+            waypoint["nextControl"]["y"] = 2 * center_y - waypoint["nextControl"]["y"]
 
     # Flip rotation values
     if "goalEndState" in data and "rotation" in data["goalEndState"]:
@@ -27,6 +27,6 @@ def flip_path_file(file_path, center_x=8.052 / 2):
     print(f"Processed and saved: {file_path}")
 
 # Set the file path
-file_name = r"C:\Users\graya\Documents\FRC\code-2025\src\main\deploy\pathplanner\paths\R8 return copy.path"  # Replace with the actual file name
+file_name = r"D:\Vs Code Projects\code-2025\src\main\deploy\pathplanner\paths\to R9 copy.path"  # Replace with the actual file name
 
 flip_path_file(file_name)
