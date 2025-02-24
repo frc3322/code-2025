@@ -37,9 +37,9 @@ public class WristConstants {
     public static LoggedNetworkNumber accelerationConstraint =
         new LoggedNetworkNumber("/Tuning/WristAccelerationConstraint", 10);
     public static LoggedNetworkNumber positionTolerance =
-        new LoggedNetworkNumber("/Tuning/WristPositionTolerance", .05);
+        new LoggedNetworkNumber("/Tuning/WristPositionTolerance", .1);
     public static LoggedNetworkNumber velocityTolerance =
-        new LoggedNetworkNumber("/Tuning/WristVelocityTolerance", .05);
+        new LoggedNetworkNumber("/Tuning/WristVelocityTolerance", .1);
   }
 
   public static final class SimConstants {
@@ -48,8 +48,8 @@ public class WristConstants {
     public static final double kD = .2;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
-    public static final double positionTolerance = 0.1;
-    public static final double velocityTolerance = 0.1;
+    public static final double positionTolerance = 0.15;
+    public static final double velocityTolerance = 0.15;
 
     public static final double simGearRatio = 100;
   }
