@@ -104,12 +104,14 @@ public class DriveConstants {
   public static final class SimpleDriveConstants {
     // PID constants for position control
     public static double kPx = 2;
-    public static double kIx = 0;
+    public static double kIx = 1;
     public static double kDx = 0;
+    public static double kIzoneX = .1;
 
     public static double kPy = 2;
-    public static double kIy = 0;
+    public static double kIy = 1;
     public static double kDy = 0;
+    public static double kIzoneY = .2;
 
     public static double kPtheta = 1.5;
     public static double kItheta = 0;

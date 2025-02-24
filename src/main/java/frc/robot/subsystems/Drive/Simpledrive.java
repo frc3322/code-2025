@@ -33,6 +33,8 @@ public class Simpledrive {
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityX,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationX));
+    
+    xPID.setIZone(DriveConstants.SimpleDriveConstants.kIzoneX);
 
     yPID =
         new ProfiledPIDController(
@@ -42,6 +44,8 @@ public class Simpledrive {
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityY,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationY));
+
+    yPID.setIZone(DriveConstants.SimpleDriveConstants.kIzoneY);
 
     thetaPID =
         new ProfiledPIDController(
@@ -77,11 +81,11 @@ public class Simpledrive {
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
-              double currentYaw = drivetrain.getRotation().getDegrees();
+              double currentYaw = drivetrain.getPose().getRotation().getDegrees();
               double targetYaw = targetPoseSupplier.get().getRotation().getDegrees();
               Pose2d targetPose = targetPoseSupplier.get();
 
-              if ((currentYaw - (targetYaw + 90) < (currentYaw - (targetYaw - 90)))) {
+              if (Math.abs(targetYaw - (currentYaw + 90)) > 90) {
                 targetPose =
                     targetPose.rotateAround(
                         targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
