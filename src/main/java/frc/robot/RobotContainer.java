@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -160,41 +161,45 @@ public class RobotContainer {
 
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
-    NamedCommands.registerCommand("L4 SCORE", superstructure.l4ScoreCommand());
+    NamedCommands.registerCommand("L4 SCORE", superstructure.l4ScoreCommand().andThen(new WaitCommand(.25)));
     // NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
 
     NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE));
     NamedCommands.registerCommand(
         "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1));
+    NamedCommands.registerCommand(
+        "AUTO ALIGN L4", 
+        new ParallelCommandGroup(
+            superstructure.setTargetLevelCommand(SuperState.REEFL4),
+        simpledrive.autoDrive(superstructure::getTargetReefPose).withTimeout(.65).andThen(DriveCommands.stopCommand(drive)),
+            superstructure.setSuperStateCommand(SuperState.REEFL4)
+    ));
 
     NamedCommands.registerCommand(
-        "AUTO ALIGN", simpledrive.autoDrive(superstructure::getTargetReefPose));
-
+        "R1", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition1));
     NamedCommands.registerCommand(
-        "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
+        "R2", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition2));
     NamedCommands.registerCommand(
-        "R2", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition2));
+        "R3", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition3));
     NamedCommands.registerCommand(
-        "R3", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition3));
+        "R4", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition4));
     NamedCommands.registerCommand(
-        "R4", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition4));
+        "R5", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition5));
     NamedCommands.registerCommand(
-        "R5", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition5));
+        "R6", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition6));
     NamedCommands.registerCommand(
-        "R6", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition6));
+        "R7", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition7));
     NamedCommands.registerCommand(
-        "R7", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition7));
+        "R8", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition8));
     NamedCommands.registerCommand(
-        "R8", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition8));
+        "R9", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition9));
     NamedCommands.registerCommand(
-        "R9", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition9));
+        "R10", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition10));
     NamedCommands.registerCommand(
-        "R10", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition10));
+        "R11", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition11));
     NamedCommands.registerCommand(
-        "R11", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition11));
-    NamedCommands.registerCommand(
-        "R12", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition12));
+        "R12", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition12));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.733,
-        "y": 5.199
+        "x": 3.524385245901639,
+        "y": 5.205788934426229
       },
       "prevControl": {
-        "x": 3.395339991748663,
-        "y": 5.442743871241457
+        "x": 3.186725237650302,
+        "y": 5.449532805667686
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,17 +32,6 @@
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
-    {
-      "name": "STOW",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "STOW"
-        }
-      }
-    },
     {
       "name": "R8",
       "waypointRelativePos": 0,
@@ -55,13 +44,13 @@
       }
     },
     {
-      "name": "LEFT L4",
-      "waypointRelativePos": 0.7183770883054927,
+      "name": "STOW",
+      "waypointRelativePos": 0.43542260208926414,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "LEFT L4"
+          "name": "STOW"
         }
       }
     }

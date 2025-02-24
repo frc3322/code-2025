@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.313,
-        "y": 5.109
+        "x": 5.311,
+        "y": 5.302
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0423636363636355,
-        "y": 5.440300171526586
+        "x": 5.040363636363636,
+        "y": 5.633300171526586
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
     },
     {
       "name": "LEFT GROUND INTAKE",
-      "waypointRelativePos": 0.4606205250596657,
+      "waypointRelativePos": 0.564577397910731,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

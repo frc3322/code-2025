@@ -7,25 +7,73 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Left start to R11"
+            "pathName": "Left start to R11"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AUTO ALIGN"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "name": "AUTO ALIGN L4"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R11 return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to R8"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AUTO ALIGN L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R8 return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to R9"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AUTO ALIGN L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R9 return"
           }
         }
       ]

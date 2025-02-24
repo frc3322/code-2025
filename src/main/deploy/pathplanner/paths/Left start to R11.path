@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.313,
-        "y": 5.109
+        "x": 5.311,
+        "y": 5.302
       },
       "prevControl": {
-        "x": 5.837767618713773,
-        "y": 5.221148933034722
+        "x": 5.835767618713773,
+        "y": 5.4141489330347214
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,17 +42,6 @@
           "name": "R11"
         }
       }
-    },
-    {
-      "name": "LEFT L4",
-      "waypointRelativePos": 0.6038186157517889,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "LEFT L4"
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -64,7 +53,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": -29.999999999999996
   },
   "reversed": false,
