@@ -33,7 +33,7 @@ public class Simpledrive {
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityX,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationX));
-    
+
     xPID.setIZone(DriveConstants.SimpleDriveConstants.kIzoneX);
 
     yPID =
@@ -81,11 +81,23 @@ public class Simpledrive {
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
-              double currentYaw = drivetrain.getPose().getRotation().getDegrees();
-              double targetYaw = targetPoseSupplier.get().getRotation().getDegrees();
               Pose2d targetPose = targetPoseSupplier.get();
 
-              if (Math.abs(targetYaw - (currentYaw + 90)) > 90) {
+              Pose2d posePlus90 =
+                  targetPose.rotateAround(
+                      targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
+              Pose2d poseMinus90 =
+                  targetPose.rotateAround(
+                      targetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
+
+              double posePlus90Yaw = posePlus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees();
+              double poseMinus90Yaw = poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees();
+
+              Logger.recordOutput("Simpledrive/Pose Based angle + 90", posePlus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
+              Logger.recordOutput("Simpledrive/Pose Based angle - 90", poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
+
+              // if pick lowest rotational distance
+              if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
                 targetPose =
                     targetPose.rotateAround(
                         targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
