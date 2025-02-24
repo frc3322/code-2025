@@ -23,6 +23,8 @@ public class IntakeIOSim implements IntakeIO {
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
+    inputs.intakePower = intakeSim.getInputVoltage() / 12;
     inputs.intakeVelocity = intakeSim.getAngularVelocityRPM();
+    inputs.intakeCurrent = intakeSim.getCurrentDrawAmps();
   }
 }
