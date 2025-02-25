@@ -165,7 +165,7 @@ public class RobotContainer {
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
     NamedCommands.registerCommand(
-        "L4 SCORE", superstructure.l4ScoreCommand().andThen(new WaitCommand(.25)));
+        "L4 SCORE", superstructure.l4ScoreCommand().andThen(new WaitCommand(.1)));
 
     NamedCommands.registerCommand(
         "AUTO ALIGN L1",
@@ -173,7 +173,7 @@ public class RobotContainer {
             superstructure.setTargetLevelCommand(SuperState.REEFL1),
             simpledrive
                 .autoDrive(superstructure::getTargetReefPose)
-                .withTimeout(.65)
+                .withTimeout(.35)
                 .andThen(DriveCommands.stopCommand(drive)),
             superstructure.setSuperStateCommand(SuperState.REEFL1)));
 
@@ -204,7 +204,7 @@ public class RobotContainer {
         "AUTO ALIGN",
         simpledrive
             .autoDrive(superstructure::getTargetReefPose)
-            .withTimeout(.65)
+            .withTimeout(.3)
             .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
