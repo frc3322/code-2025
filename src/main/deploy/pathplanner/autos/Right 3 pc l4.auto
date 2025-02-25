@@ -31,7 +31,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.3
           }
         },
         {
@@ -61,37 +61,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "to R4 right"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AUTO ALIGN"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4 SCORE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R4 return right"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
+            "waitTime": 0.3
           }
         },
         {
