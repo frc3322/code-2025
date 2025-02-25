@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left start to R11"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AUTO ALIGN"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R11 return"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to R8"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AUTO ALIGN"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R8 return"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to R7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AUTO ALIGN"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "End"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
