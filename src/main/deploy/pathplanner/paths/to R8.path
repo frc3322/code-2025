@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.58,
-        "y": 6.569
+        "x": 0.959,
+        "y": 7.304
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8961313589863678,
-        "y": 6.3948233181428735
+        "x": 1.2751313589863678,
+        "y": 7.129823318142874
       },
       "isLocked": false,
       "linkedName": null
@@ -45,12 +45,23 @@
     },
     {
       "name": "STOW",
-      "waypointRelativePos": 0.43542260208926414,
+      "waypointRelativePos": 0.2758784425451093,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "STOW"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 0.39933523266856535,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
         }
       }
     }

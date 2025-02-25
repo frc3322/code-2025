@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AUTO ALIGN L4"
+            "name": "AUTO ALIGN"
           }
         },
         {
@@ -29,6 +29,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "to R8"
@@ -37,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AUTO ALIGN L4"
+            "name": "AUTO ALIGN"
           }
         },
         {
@@ -53,6 +59,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "to R9"
@@ -61,7 +73,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AUTO ALIGN L4"
+            "name": "AUTO ALIGN"
           }
         },
         {
@@ -77,6 +89,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "to R7"
@@ -85,13 +103,19 @@
         {
           "type": "named",
           "data": {
-            "name": "AUTO ALIGN L4"
+            "name": "AUTO ALIGN"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "L4 SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "End"
           }
         }
       ]

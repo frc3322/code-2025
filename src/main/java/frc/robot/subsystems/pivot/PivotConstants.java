@@ -37,7 +37,7 @@ public class PivotConstants {
     public static final double stowPosition = 0;
     public static final double groundPosition = 0.28;
     public static final double aGroundPosition = 0;
-    public static final double sourcePosition = 0;
+    public static final double sourcePosition = 0.07;
     public static final double l1Position = -.1;
     public static final double l2Position = -.1;
     public static final double l3Position = -.1;

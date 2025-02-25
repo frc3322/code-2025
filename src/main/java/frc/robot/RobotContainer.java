@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -43,12 +44,14 @@ import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
 import frc.robot.subsystems.intake.SensorIO;
 import frc.robot.subsystems.intake.SensorIOSim;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.subsystems.pivot.PivotIOSpark;
@@ -166,18 +169,31 @@ public class RobotContainer {
     // NamedCommands.registerCommand("L1 SCORE", superstructure.scoreCommand(SuperState.REEFL1));
 
     NamedCommands.registerCommand(
+        "END COMMAND",
+        new SequentialCommandGroup(
+            intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
+            pivot.setStateCommand(PivotStates.STOW, pivot::reverseArmDirection)));
+
+    NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE));
+
+    NamedCommands.registerCommand(
+        "SOURCE INTAKE", superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE));
+
     NamedCommands.registerCommand(
         "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1));
+
     NamedCommands.registerCommand(
-        "AUTO ALIGN L4",
+        "L4",
         new ParallelCommandGroup(
             superstructure.setTargetLevelCommand(SuperState.REEFL4),
-            simpledrive
-                .autoDrive(superstructure::getTargetReefPose)
-                .withTimeout(.65)
-                .andThen(DriveCommands.stopCommand(drive)),
             superstructure.setSuperStateCommand(SuperState.REEFL4)));
+    NamedCommands.registerCommand(
+        "AUTO ALIGN",
+        simpledrive
+            .autoDrive(superstructure::getTargetReefPose)
+            .withTimeout(.65)
+            .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition1));

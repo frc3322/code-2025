@@ -84,17 +84,22 @@ public class Simpledrive {
               Pose2d targetPose = targetPoseSupplier.get();
 
               Pose2d posePlus90 =
-                  targetPose.rotateAround(
-                      targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
+                  targetPose.rotateAround(targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
               Pose2d poseMinus90 =
                   targetPose.rotateAround(
                       targetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
 
-              double posePlus90Yaw = posePlus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees();
-              double poseMinus90Yaw = poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees();
+              double posePlus90Yaw =
+                  posePlus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees();
+              double poseMinus90Yaw =
+                  poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees();
 
-              Logger.recordOutput("Simpledrive/Pose Based angle + 90", posePlus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
-              Logger.recordOutput("Simpledrive/Pose Based angle - 90", poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
+              Logger.recordOutput(
+                  "Simpledrive/Pose Based angle + 90",
+                  posePlus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
+              Logger.recordOutput(
+                  "Simpledrive/Pose Based angle - 90",
+                  poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
 
               // if pick lowest rotational distance
               if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
