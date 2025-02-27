@@ -75,7 +75,7 @@ public class APACButtonBox {
   }
 
   public Trigger levelOneTrigger() {
-    return triggerArray.get(41); // TODO get l1 button working
+    return triggerArray.get(28); // TODO get l1 button working
   }
 
   public Trigger levelTwoTrigger() {

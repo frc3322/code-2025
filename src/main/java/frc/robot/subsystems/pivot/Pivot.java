@@ -37,7 +37,8 @@ public class Pivot extends SubsystemBase {
 
   // -------------------------- Control/Logic Flags ---------------------------
   private boolean flipped = false; // Manual control for the flip direction of the pivot
-  boolean manual = false; // Flag for enabling manual control (overrides automatic behavior)
+  private boolean trueFlip =
+      false; // Flag for enabling manual control (overrides automatic behavior)
 
   // ------------------------ External Dependencies ---------------------------
   private Supplier<Pose2d>
@@ -107,6 +108,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean reverseArmDirection() {
+    boolean result;
+    
     Pose2d robotPose = drivetrainPoseSupplier.get();
     // See which direction the arm should go while intaking.
     boolean intakingFlipped =
@@ -121,19 +124,20 @@ public class Pivot extends SubsystemBase {
       if (Math.abs(
               PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
           < Math.PI / 2) {
-        return !intakingFlipped;
-      } else return intakingFlipped;
+        result = !intakingFlipped;
+      } else result = intakingFlipped;
 
     } else if (reefScoring) {
-      return Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
+      result = Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
     }
+    else result = false;
 
-    return false;
+    boolean targetSide = flipped ? result : !result;
+    return targetSide;
   }
 
   public boolean getDirectionReversed() {
-    boolean targetSide = flipped ? reverseArmDirection() : !reverseArmDirection();
-    return targetSide;
+    return trueFlip;
   }
 
   public PivotStates getPivotState() {
@@ -144,14 +148,18 @@ public class Pivot extends SubsystemBase {
     this.pivotState = pivotState;
   }
 
+  public void setState(PivotStates pivotState, boolean trueFlip) {
+    this.pivotState = pivotState;
+    this.trueFlip = trueFlip;
+  }
+
   public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
     return new RunCommand(
         () -> {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           double modifiedArmSetpoint;
 
-          modifiedArmSetpoint =
-              getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+          modifiedArmSetpoint = getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);
@@ -160,7 +168,7 @@ public class Pivot extends SubsystemBase {
   public Command setStateCommand(PivotStates pivotState) {
     return new InstantCommand(
         () -> {
-          setState(pivotState);
+          setState(pivotState, reverseArmDirection());
         });
   }
 
