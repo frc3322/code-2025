@@ -246,6 +246,7 @@ public final class Constants {
 
       public static final double robotWidth = 40 * 0.0254;
       public static final double offsetDistance = (-robotWidth / 2) - .2;
+      public static final double unOffsetDistance = offsetDistance + (robotWidth / 2);
 
       public static final Supplier<Pose2d> autoCoralPosition1 =
           () ->
