@@ -22,6 +22,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
+import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -130,13 +131,17 @@ public class Superstructure extends SubsystemBase {
   public void setupTriggers() {
     for (SuperState superState : SuperState.values()) {
       Trigger trigger = new Trigger(() -> this.superState == superState);
+      if (superState.PIVOT_STATE.stateType == StateType.REEFSCORING) {
+        trigger.onTrue(pivot.setFlippedCommand(true));
+      }
+
       if (superState == SuperState.STOW) {
         trigger.onTrue(
             wrist
                 .setStateCommand(superState.WRIST_STATE)
                 .andThen(
                     pivot
-                        .setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection)
+                        .setStateCommand(superState.PIVOT_STATE)
                         .onlyIf(wrist::isAtGoal)
                         .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)));
       } else {
@@ -145,7 +150,7 @@ public class Superstructure extends SubsystemBase {
                 .setStateCommand(superState.ELEVATOR_STATE)
                 .andThen(
                     pivot
-                        .setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection)
+                        .setStateCommand(superState.PIVOT_STATE)
                         .onlyIf(elevator::highEnough)
                         .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)
                         .andThen(
@@ -155,7 +160,7 @@ public class Superstructure extends SubsystemBase {
                                 .until(() -> wrist.getWristState() == superState.WRIST_STATE))));
 
         trigger.and(() -> pivot.isAtGoal()).onTrue(wrist.setStateCommand(superState.WRIST_STATE));
-        trigger.onTrue(pivot.setStateCommand(superState.PIVOT_STATE, pivot::reverseArmDirection));
+        trigger.onTrue(pivot.setStateCommand(superState.PIVOT_STATE));
       }
       trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
@@ -180,22 +185,21 @@ public class Superstructure extends SubsystemBase {
 
   public Command l4ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L4SCORE, pivot::reverseArmDirection),
+        pivot.setStateCommand(PivotStates.L4SCORE),
         new WaitCommand(1),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 
   public Command l2and3ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L2AND3SCORE, pivot::reverseArmDirection),
+        pivot.setStateCommand(PivotStates.L2AND3SCORE),
         new WaitCommand(1),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 
   public Command l1ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L1, pivot::reverseArmDirection),
-        intake.setIntakeStateCommand(IntakeStates.REVERSE));
+        pivot.setStateCommand(PivotStates.L1), intake.setIntakeStateCommand(IntakeStates.REVERSE));
   }
 
   public Command setTargetReefPoseCommand(

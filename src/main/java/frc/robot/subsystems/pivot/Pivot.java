@@ -15,7 +15,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -118,34 +117,13 @@ public class Pivot extends SubsystemBase {
     boolean reefScoring = pivotState.stateType == StateType.REEFSCORING;
 
     if (intaking) {
-      // Near left source?
-      if (Constants.FieldConstants.PoseMethods.atTranslation(
-          robotPose.getTranslation(),
-          Constants.FieldConstants.SourceConstants.leftSource.get().getTranslation(),
-          PivotConstants.sourceDetectionRadiusMeters)) {
-        // Rotation close enough?
-        if (Math.abs(
-                PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
-            < Math.PI / 2) {
-          return !intakingFlipped;
-        } else return intakingFlipped;
 
-      }
-      // Near right source?
-      else if (Constants.FieldConstants.PoseMethods.atTranslation(
-          robotPose.getTranslation(),
-          Constants.FieldConstants.SourceConstants.rightSource.get().getTranslation(),
-          PivotConstants.sourceDetectionRadiusMeters)) {
-        if (Math.abs(
-                PivotConstants.rightSourceTargetAngleRadians - robotPose.getRotation().getRadians())
-            < Math.PI / 2) {
-          return intakingFlipped;
-        } else return !intakingFlipped;
-      }
-      // Flip towards reef (if not near source, we are most likely targeting dropped coral)
-      else {
-        return !Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
-      }
+      if (Math.abs(
+              PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
+          < Math.PI / 2) {
+        return !intakingFlipped;
+      } else return intakingFlipped;
+
     } else if (reefScoring) {
       return Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
     }
@@ -154,16 +132,16 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean getDirectionReversed() {
-    return flipped;
+    boolean targetSide = flipped ? reverseArmDirection() : !reverseArmDirection();
+    return targetSide;
   }
 
   public PivotStates getPivotState() {
     return pivotState;
   }
 
-  public void setState(PivotStates pivotState, BooleanSupplier flippedSupplier) {
+  public void setState(PivotStates pivotState) {
     this.pivotState = pivotState;
-    this.flipped = flippedSupplier.getAsBoolean();
   }
 
   public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
@@ -172,16 +150,24 @@ public class Pivot extends SubsystemBase {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           double modifiedArmSetpoint;
 
-          modifiedArmSetpoint = flipped ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+          modifiedArmSetpoint =
+              getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);
   }
 
-  public Command setStateCommand(PivotStates pivotState, BooleanSupplier flippedSupplier) {
+  public Command setStateCommand(PivotStates pivotState) {
     return new InstantCommand(
         () -> {
-          setState(pivotState, flippedSupplier);
+          setState(pivotState);
+        });
+  }
+
+  public Command setFlippedCommand(boolean flipped) {
+    return new InstantCommand(
+        () -> {
+          this.flipped = flipped;
         });
   }
 }

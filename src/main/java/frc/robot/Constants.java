@@ -45,6 +45,12 @@ public final class Constants {
         IntakeStates.INTAKE,
         PivotStates.GROUND,
         WristStates.INTAKE),
+    GROUNDINTAKEFLIPPED(
+        ClimberConstants.stow,
+        ElevatorStates.GROUND,
+        IntakeStates.INTAKE,
+        PivotStates.GROUND,
+        WristStates.INTAKE),
     ALGAEGROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.AGROUND,

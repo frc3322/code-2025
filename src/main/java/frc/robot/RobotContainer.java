@@ -174,7 +174,7 @@ public class RobotContainer {
         "END COMMAND",
         new SequentialCommandGroup(
             intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
-            pivot.setStateCommand(PivotStates.STOW, pivot::reverseArmDirection)));
+            pivot.setStateCommand(PivotStates.STOW)));
 
     NamedCommands.registerCommand(
         "LEFT GROUND INTAKE", superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE));
@@ -281,9 +281,29 @@ public class RobotContainer {
         wrist.goToStateCommand(wrist::getWristState, pivot::getDirectionReversed));
 
     // Driver Controls
+    operatorController
+        .leftTrigger(0.1)
+        .whileTrue(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -driverController.getLeftY() / 1.5,
+                () -> -driverController.getLeftX() / 1.5,
+                () -> -driverController.getRightX()));
+
     driverController
         .rightTrigger(0.1)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE))
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE)))
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    driverController
+        .leftTrigger(0.1)
+        .onTrue(
+            pivot
+                .setFlippedCommand(true)
+                .andThen(superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE)))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
 
     // L1 thru L4 bindings - all same button

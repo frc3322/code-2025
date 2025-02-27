@@ -125,12 +125,18 @@ public class Wrist extends SubsystemBase {
     return new RunCommand(
         () -> {
           WristStates wristState = wristStateSupplier.get();
+
           Logger.recordOutput("Wrist/Wrist State", wristState);
+          Logger.recordOutput("Wrist/Wrist Flip", pivotFlippedSupplier.getAsBoolean());
+
+          boolean flipWrist = pivotFlippedSupplier.getAsBoolean();
+
+          if (wristState == WristStates.L1OUT) {
+            flipWrist = !flipWrist;
+          }
 
           double trueWristSetpoint =
-              pivotFlippedSupplier.getAsBoolean()
-                  ? (.5 - wristState.wristSetpoint) % .5
-                  : wristState.wristSetpoint;
+              flipWrist ? (.5 - wristState.wristSetpoint) % .5 : wristState.wristSetpoint;
 
           // goToPositionLimited(trueWristSetpoint + getWristOffset(wristState));
           goToPositionLimited(trueWristSetpoint);
