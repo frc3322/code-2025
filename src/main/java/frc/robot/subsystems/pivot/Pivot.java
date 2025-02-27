@@ -37,8 +37,8 @@ public class Pivot extends SubsystemBase {
 
   // -------------------------- Control/Logic Flags ---------------------------
   private boolean flipped = false; // Manual control for the flip direction of the pivot
-  private boolean trueFlip =
-      false; // Flag for enabling manual control (overrides automatic behavior)
+  private boolean directionReversed =
+      false;
 
   // ------------------------ External Dependencies ---------------------------
   private Supplier<Pose2d>
@@ -137,7 +137,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean getDirectionReversed() {
-    return trueFlip;
+    return directionReversed;
   }
 
   public PivotStates getPivotState() {
@@ -146,11 +146,7 @@ public class Pivot extends SubsystemBase {
 
   public void setState(PivotStates pivotState) {
     this.pivotState = pivotState;
-  }
-
-  public void setState(PivotStates pivotState, boolean trueFlip) {
-    this.pivotState = pivotState;
-    this.trueFlip = trueFlip;
+    this.directionReversed = reverseArmDirection();
   }
 
   public Command goToStateCommand(Supplier<PivotStates> pivotStateSupplier) {
@@ -159,6 +155,10 @@ public class Pivot extends SubsystemBase {
           PivotStates pivotSetpoint = pivotStateSupplier.get();
           double modifiedArmSetpoint;
 
+          if (pivotSetpoint == PivotStates.SOURCE) {
+            directionReversed = Constants.FieldConstants.PoseMethods.atPose(drivetrainPoseSupplier.get(), Constants.FieldConstants.SourceConstants.leftSource.get(), 3.5, 0);
+          }
+          
           modifiedArmSetpoint = getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
@@ -168,7 +168,7 @@ public class Pivot extends SubsystemBase {
   public Command setStateCommand(PivotStates pivotState) {
     return new InstantCommand(
         () -> {
-          setState(pivotState, reverseArmDirection());
+          setState(pivotState);
         });
   }
 
