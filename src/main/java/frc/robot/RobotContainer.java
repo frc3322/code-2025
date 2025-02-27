@@ -83,6 +83,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final APACButtonBox apacButtonBox = new APACButtonBox();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -337,22 +338,6 @@ public class RobotContainer {
         .and(() -> simpledrive.getEnabled())
         .whileTrue(simpledrive.autoDrive(superstructure::getTargetReefPose));
 
-    // Auto Score
-    // driverController.leftBumper().and(() -> simpledrive.getEnabled())
-    // .whileTrue(
-    //     new ParallelCommandGroup(
-    //         simpledrive.autoDrive(superstructure::getTargetReefPose),
-    //         new SequentialCommandGroup(
-    //             superstructure.setSuperStateCommand(SuperState.STOW)
-    //             .until(() -> Constants.FieldConstants.PoseMethods.atPose(drive.getPose(),
-    // getTargetReefPose(), 2, 20)),
-    //             //superstructure.setSuperStateCommand(SuperState.REEFL4),
-    //             superstructure.l4ScoreCommand()
-    //         )
-    //     )
-    // )
-    // .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
     driverController
         .leftBumper()
         .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
@@ -392,6 +377,91 @@ public class RobotContainer {
     operatorController.povUp().onTrue(superstructure.setSuperStateCommand(SuperState.CLIMB));
 
     operatorController.povDown().onTrue(superstructure.setSuperStateCommand(SuperState.CLIMBED));
+
+    // APAC (Button Box) controls
+    apacButtonBox
+        .reefOneTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition1));
+
+    apacButtonBox
+        .reefTwoTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition2));
+
+    apacButtonBox
+        .reefThreeTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition3));
+
+    apacButtonBox
+        .reefFourTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition4));
+
+    apacButtonBox
+        .reefFiveTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition5));
+
+    apacButtonBox
+        .reefSixTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition6));
+
+    apacButtonBox
+        .reefSevenTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition7));
+
+    apacButtonBox
+        .reefEightTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition8));
+
+    apacButtonBox
+        .reefNineTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition9));
+
+    apacButtonBox
+        .reefTenTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition10));
+
+    apacButtonBox
+        .reefElevenTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition11));
+
+    apacButtonBox
+        .reefTwelveTrigger()
+        .onTrue(
+            superstructure.setTargetReefPoseCommand(
+                Constants.FieldConstants.ReefConstants.autoCoralPosition12));
+
+    apacButtonBox.levelOneTrigger().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
+
+    apacButtonBox.levelTwoTrigger().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
+
+    apacButtonBox
+        .levelThreeTrigger()
+        .onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
+
+    apacButtonBox
+        .levelFourTrigger()
+        .onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
 
     // // Lock to 0° when A button is held
     // driverController
