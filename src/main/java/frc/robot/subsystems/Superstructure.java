@@ -209,9 +209,19 @@ public class Superstructure extends SubsystemBase {
           ReefSides targetSide =
               chooseReefSideFromJoystick(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           if (left) {
-            targetReefPose = targetSide.leftPose.get();
+            // move robot so bumpers touch the reef if we are in L2 or L3
+            if (getTargetLevel() == SuperState.REEFL3 || getTargetLevel() == SuperState.REEFL2) {
+              targetReefPose = Constants.FieldConstants.localOffsetPose2d(targetSide.leftPose.get(), Constants.FieldConstants.ReefConstants.unOffsetDistance);
+            } else {
+              targetReefPose = targetSide.leftPose.get();
+            }
           } else {
-            targetReefPose = targetSide.rightPose.get();
+            // move robot so bumpers touch the reef if we are in L2 or L3
+            if (getTargetLevel() == SuperState.REEFL3 || getTargetLevel() == SuperState.REEFL2) {
+              targetReefPose = Constants.FieldConstants.localOffsetPose2d(targetSide.rightPose.get(), Constants.FieldConstants.ReefConstants.unOffsetDistance);
+            } else {
+              targetReefPose = targetSide.rightPose.get();
+            }
           }
         });
   }

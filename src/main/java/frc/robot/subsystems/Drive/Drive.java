@@ -180,7 +180,6 @@ public class Drive extends SubsystemBase {
 
       addVisionMeasurement("limelight-right");
       addVisionMeasurement("limelight-left");
-      // TODO add more lime lights here
     }
 
     // Update gyro alert
