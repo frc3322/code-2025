@@ -185,7 +185,7 @@ public class Superstructure extends SubsystemBase {
 
   public Command l4ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L4SCORE, pivot::reverseArmDirection),
+        pivot.setStateCommand(PivotStates.L4SCORE),
         new WaitCommand(.5),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
