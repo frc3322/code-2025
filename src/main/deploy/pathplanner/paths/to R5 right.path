@@ -44,19 +44,8 @@
       }
     },
     {
-      "name": "STOW",
-      "waypointRelativePos": 0.2758784425451093,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "STOW"
-        }
-      }
-    },
-    {
       "name": "L4",
-      "waypointRelativePos": 0.39933523266856535,
+      "waypointRelativePos": 0.28917378917379527,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

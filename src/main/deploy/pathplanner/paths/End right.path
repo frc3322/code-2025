@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.166154996609742,
-        "y": 3.9206402670359237
+        "x": 2.62530737704918,
+        "y": 3.697338114754098
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 3.385657786885246
       },
       "prevControl": {
-        "x": 1.4338438068556016,
-        "y": 3.2569337159156158
+        "x": 2.2057377049180324,
+        "y": 3.565473360655738
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "STOW",
-      "waypointRelativePos": 0.4861580013504388,
+      "waypointRelativePos": 0.513295346628674,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -60,7 +60,7 @@
   "folder": "RIGHT SIDE",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -88.35941904202048
   },
   "useDefaultConstraints": true
 }

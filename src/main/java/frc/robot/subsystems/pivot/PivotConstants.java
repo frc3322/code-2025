@@ -35,7 +35,7 @@ public class PivotConstants {
   public static class PivotSetpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
     public static final double stowPosition = 0;
-    public static final double groundPosition = 0.27;
+    public static final double groundPosition = 0.28;
     public static final double aGroundPosition = 0;
     public static final double sourcePosition = 0.07;
     public static final double l1Position = -.1;
