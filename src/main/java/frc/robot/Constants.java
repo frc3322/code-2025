@@ -91,7 +91,7 @@ public final class Constants {
         ClimberConstants.stow,
         ElevatorStates.L4,
         IntakeStates.OFF,
-        PivotStates.STOW,
+        PivotStates.L4AUTO,
         WristStates.OUTAKE),
     ALGAEINTAKELOW(
         ClimberConstants.stow,
