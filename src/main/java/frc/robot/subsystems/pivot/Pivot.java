@@ -37,8 +37,7 @@ public class Pivot extends SubsystemBase {
 
   // -------------------------- Control/Logic Flags ---------------------------
   private boolean flipped = false; // Manual control for the flip direction of the pivot
-  private boolean directionReversed =
-      false;
+  private boolean directionReversed = false;
 
   // ------------------------ External Dependencies ---------------------------
   private Supplier<Pose2d>
@@ -109,7 +108,7 @@ public class Pivot extends SubsystemBase {
 
   public boolean reverseArmDirection() {
     boolean result;
-    
+
     Pose2d robotPose = drivetrainPoseSupplier.get();
     // See which direction the arm should go while intaking.
     boolean intakingFlipped =
@@ -129,8 +128,7 @@ public class Pivot extends SubsystemBase {
 
     } else if (reefScoring) {
       result = Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
-    }
-    else result = false;
+    } else result = false;
 
     boolean targetSide = flipped ? result : !result;
     return targetSide;
@@ -156,10 +154,16 @@ public class Pivot extends SubsystemBase {
           double modifiedArmSetpoint;
 
           if (pivotSetpoint == PivotStates.SOURCE) {
-            directionReversed = Constants.FieldConstants.PoseMethods.atPose(drivetrainPoseSupplier.get(), Constants.FieldConstants.SourceConstants.leftSource.get(), 3.5, 0);
+            directionReversed =
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drivetrainPoseSupplier.get(),
+                    Constants.FieldConstants.SourceConstants.leftSource.get(),
+                    3.5,
+                    0);
           }
-          
-          modifiedArmSetpoint = getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+
+          modifiedArmSetpoint =
+              getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);

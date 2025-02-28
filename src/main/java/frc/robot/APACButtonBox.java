@@ -89,4 +89,8 @@ public class APACButtonBox {
   public Trigger levelFourTrigger() {
     return triggerArray.get(25);
   }
+
+  public Trigger manualTrigger() {
+    return triggerArray.get(9);
+  }
 }

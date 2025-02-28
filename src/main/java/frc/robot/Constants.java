@@ -87,6 +87,12 @@ public final class Constants {
         IntakeStates.OFF,
         PivotStates.L4,
         WristStates.OUTAKE),
+    AUTOL4(
+        ClimberConstants.stow,
+        ElevatorStates.L4,
+        IntakeStates.OFF,
+        PivotStates.STOW,
+        WristStates.OUTAKE),
     ALGAEINTAKELOW(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAELOW,
@@ -347,9 +353,9 @@ public final class Constants {
 
     public static final class SourceConstants {
       public static final Supplier<Pose2d> leftSource =
-          () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(126)));
+          () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(-35)));
       public static final Supplier<Pose2d> rightSource =
-          () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(-126)));
+          () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(35)));
     }
 
     public static final class PoseMethods {

@@ -166,7 +166,7 @@ public class RobotContainer {
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
     NamedCommands.registerCommand(
-        "L4 SCORE", superstructure.l4ScoreCommand().andThen(new WaitCommand(.25)));
+        "L4 SCORE", superstructure.l4ScoreCommand().andThen(new WaitCommand(.45)));
 
     NamedCommands.registerCommand(
         "L1 SCORE", superstructure.l1ScoreCommand().andThen(new WaitCommand(.25)));
@@ -190,7 +190,7 @@ public class RobotContainer {
         "L4",
         new ParallelCommandGroup(
             superstructure.setTargetLevelCommand(SuperState.REEFL4),
-            superstructure.setSuperStateCommand(SuperState.REEFL4)));
+            superstructure.setSuperStateCommand(SuperState.AUTOL4)));
     NamedCommands.registerCommand(
         "AUTO ALIGN",
         simpledrive
@@ -282,14 +282,6 @@ public class RobotContainer {
         wrist.goToStateCommand(wrist::getWristState, pivot::getDirectionReversed));
 
     // Driver Controls
-    operatorController
-        .leftTrigger(0.1)
-        .whileTrue(
-            DriveCommands.joystickDrive(
-                drive,
-                () -> -driverController.getLeftY() / 1.5,
-                () -> -driverController.getLeftX() / 1.5,
-                () -> -driverController.getRightX()));
 
     driverController
         .rightTrigger(0.1)
@@ -306,6 +298,9 @@ public class RobotContainer {
                 .setFlippedCommand(true)
                 .andThen(superstructure.setSuperStateCommand(SuperState.GROUNDINTAKE)))
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
+
+    driverController.a().onTrue(superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE));
+    driverController.x().onTrue(superstructure.setSuperStateCommand(SuperState.STOW));
 
     // L1 thru L4 bindings - all same button
     driverController
@@ -357,6 +352,15 @@ public class RobotContainer {
         .onTrue(superstructure.l1ScoreCommand());
 
     // Operator Controls
+    operatorController
+        .leftTrigger(0.1)
+        .whileTrue(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -driverController.getLeftY() / 1.5,
+                () -> -driverController.getLeftX() / 1.5,
+                () -> -driverController.getRightX()));
+
     operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
     operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
     operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
@@ -462,6 +466,15 @@ public class RobotContainer {
     apacButtonBox
         .levelFourTrigger()
         .onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
+
+    apacButtonBox
+        .manualTrigger()
+        .whileTrue(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -driverController.getLeftY() / 1.5,
+                () -> -driverController.getLeftX() / 1.5,
+                () -> -driverController.getRightX()));
 
     // // Lock to 0° when A button is held
     // driverController
