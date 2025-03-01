@@ -121,13 +121,13 @@ public final class Constants {
         ClimberConstants.deploy,
         ElevatorStates.STOW,
         IntakeStates.OFF,
-        PivotStates.GROUND,
+        PivotStates.CLIMB,
         WristStates.STOW),
     CLIMBED(
         ClimberConstants.climb,
         ElevatorStates.STOW,
         IntakeStates.OFF,
-        PivotStates.GROUND,
+        PivotStates.CLIMB,
         WristStates.STOW);
 
     public final double CLIMBER_SETPOINT;

@@ -195,7 +195,7 @@ public class RobotContainer {
         "AUTO ALIGN",
         simpledrive
             .autoDrive(superstructure::getTargetReefPose)
-            .withTimeout(.45)
+            .withTimeout(.75)
             .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
@@ -336,7 +336,8 @@ public class RobotContainer {
     driverController
         .leftBumper()
         .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
-        .onTrue(superstructure.l4ScoreCommand());
+        .onTrue(superstructure.l4ScoreCommand())
+        .onFalse(intake.setIntakeStateCommand(IntakeStates.OFF));
 
     driverController
         .leftBumper()
@@ -378,9 +379,19 @@ public class RobotContainer {
             superstructure.setTargetReefPoseCommand(
                 false, operatorController::getLeftX, operatorController::getLeftY));
 
-    operatorController.povUp().onTrue(superstructure.setSuperStateCommand(SuperState.CLIMB));
+    operatorController
+        .povUp()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.CLIMB)));
 
-    operatorController.povDown().onTrue(superstructure.setSuperStateCommand(SuperState.CLIMBED));
+    operatorController
+        .povDown()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.CLIMBED)));
 
     // APAC (Button Box) controls
     apacButtonBox

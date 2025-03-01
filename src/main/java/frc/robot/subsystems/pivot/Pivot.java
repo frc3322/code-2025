@@ -159,7 +159,7 @@ public class Pivot extends SubsystemBase {
                     drivetrainPoseSupplier.get(),
                     Constants.FieldConstants.SourceConstants.leftSource.get(),
                     3.5,
-                    0);
+                    90);
           }
 
           modifiedArmSetpoint =

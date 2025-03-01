@@ -199,7 +199,7 @@ public class Superstructure extends SubsystemBase {
 
   public Command l1ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L1), intake.setIntakeStateCommand(IntakeStates.REVERSE));
+        pivot.setStateCommand(PivotStates.L1), intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 
   public Command setTargetReefPoseCommand(
