@@ -199,29 +199,29 @@ public class RobotContainer {
             .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
-        "R1", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition1));
+        "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
     NamedCommands.registerCommand(
-        "R2", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition2));
+        "R2", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition2));
     NamedCommands.registerCommand(
-        "R3", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition3));
+        "R3", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition3));
     NamedCommands.registerCommand(
-        "R4", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition4));
+        "R4", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition4));
     NamedCommands.registerCommand(
-        "R5", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition5));
+        "R5", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition5));
     NamedCommands.registerCommand(
-        "R6", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition6));
+        "R6", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition6));
     NamedCommands.registerCommand(
-        "R7", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition7));
+        "R7", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition7));
     NamedCommands.registerCommand(
-        "R8", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition8));
+        "R8", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition8));
     NamedCommands.registerCommand(
-        "R9", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition9));
+        "R9", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition9));
     NamedCommands.registerCommand(
-        "R10", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition10));
+        "R10", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition10));
     NamedCommands.registerCommand(
-        "R11", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition11));
+        "R11", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition11));
     NamedCommands.registerCommand(
-        "R12", superstructure.setTargetReefPoseCommand(ReefConstants.autoCoralPosition12));
+        "R12", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition12));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -387,73 +387,73 @@ public class RobotContainer {
         .reefOneTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition1));
+                Constants.FieldConstants.ReefConstants.coralPosition1));
 
     apacButtonBox
         .reefTwoTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition2));
+                Constants.FieldConstants.ReefConstants.coralPosition2));
 
     apacButtonBox
         .reefThreeTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition3));
+                Constants.FieldConstants.ReefConstants.coralPosition3));
 
     apacButtonBox
         .reefFourTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition4));
+                Constants.FieldConstants.ReefConstants.coralPosition4));
 
     apacButtonBox
         .reefFiveTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition5));
+                Constants.FieldConstants.ReefConstants.coralPosition5));
 
     apacButtonBox
         .reefSixTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition6));
+                Constants.FieldConstants.ReefConstants.coralPosition6));
 
     apacButtonBox
         .reefSevenTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition7));
+                Constants.FieldConstants.ReefConstants.coralPosition7));
 
     apacButtonBox
         .reefEightTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition8));
+                Constants.FieldConstants.ReefConstants.coralPosition8));
 
     apacButtonBox
         .reefNineTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition9));
+                Constants.FieldConstants.ReefConstants.coralPosition9));
 
     apacButtonBox
         .reefTenTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition10));
+                Constants.FieldConstants.ReefConstants.coralPosition10));
 
     apacButtonBox
         .reefElevenTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition11));
+                Constants.FieldConstants.ReefConstants.coralPosition11));
 
     apacButtonBox
         .reefTwelveTrigger()
         .onTrue(
             superstructure.setTargetReefPoseCommand(
-                Constants.FieldConstants.ReefConstants.autoCoralPosition12));
+                Constants.FieldConstants.ReefConstants.coralPosition12));
 
     apacButtonBox.levelOneTrigger().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
 
