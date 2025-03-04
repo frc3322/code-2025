@@ -155,7 +155,7 @@ public class Pivot extends SubsystemBase {
 
           if (pivotSetpoint == PivotStates.SOURCE) {
             directionReversed =
-                Constants.FieldConstants.PoseMethods.atPose(
+                !Constants.FieldConstants.PoseMethods.atPose(
                     drivetrainPoseSupplier.get(),
                     Constants.FieldConstants.SourceConstants.leftSource.get(),
                     3.5,

@@ -206,12 +206,12 @@ public final class Constants {
 
     public static final class ReefConstants {
       public static enum ReefSides {
-        CENTER(autoCoralPosition1, autoCoralPosition12),
-        CENTERLEFT(autoCoralPosition11, autoCoralPosition10),
-        OUTERLEFT(autoCoralPosition9, autoCoralPosition8),
-        OUTER(autoCoralPosition7, autoCoralPosition6),
-        OUTERRIGHT(autoCoralPosition5, autoCoralPosition4),
-        CENTERRIGHT(autoCoralPosition3, autoCoralPosition2);
+        CENTER(coralPosition1, coralPosition12),
+        CENTERLEFT(coralPosition11, coralPosition10),
+        OUTERLEFT(coralPosition9, coralPosition8),
+        OUTER(coralPosition7, coralPosition6),
+        OUTERRIGHT(coralPosition5, coralPosition4),
+        CENTERRIGHT(coralPosition3, coralPosition2);
 
         public Supplier<Pose2d> leftPose;
         public Supplier<Pose2d> rightPose;
@@ -251,69 +251,8 @@ public final class Constants {
           () -> flipPose(new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
 
       public static final double robotWidth = 40 * 0.0254;
-      public static final double offsetDistance = (-robotWidth / 2) - .2;
-      public static final double unOffsetDistance = offsetDistance + (robotWidth / 2);
-
-      public static final Supplier<Pose2d> autoCoralPosition1 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition2 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition3 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition4 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition5 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition6 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition7 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition8 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(-60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition9 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(-60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition10 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(-120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition11 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition12 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)), offsetDistance));
+      public static final double offsetDistanceL4 = (-robotWidth / 2) - .2;
+      public static final double offsetDistanceL1To3 = (-robotWidth / 2);
     }
 
     /**
