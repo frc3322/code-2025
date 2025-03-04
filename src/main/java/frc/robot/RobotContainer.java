@@ -195,7 +195,7 @@ public class RobotContainer {
         "AUTO ALIGN",
         simpledrive
             .autoDrive(superstructure::getTargetReefPose)
-            .withTimeout(.75)
+            .withTimeout(1)
             .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
