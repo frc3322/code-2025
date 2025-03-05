@@ -29,10 +29,14 @@ public class ElevatorVisualizer {
     // elevatorStageOne.setLength(elevatorHeight * (2 / 3));
     // elevatorStageTwo.setLength(elevatorHeight);
 
-    Pose3d elevatorOnePose = new Pose3d(0, 0, elevatorHeight * .8333, new Rotation3d(0, 0, 0));
+    Pose3d elevatorOnePose =
+        new Pose3d(0, 0, (elevatorHeight * .8333) / 2, new Rotation3d(0, 0, 0));
     Pose3d elevatorTwoPose =
         new Pose3d(
-            0, 0, (elevatorHeight * .8333) + (elevatorHeight * .9193), new Rotation3d(0, 0, 0));
+            0,
+            0,
+            ((elevatorHeight * .8333) + (elevatorHeight * .9193)) / 2,
+            new Rotation3d(0, 0, 0));
     Logger.recordOutput("ElevatorMechanism3d/ElevatorOne", elevatorOnePose);
     Logger.recordOutput("ElevatorMechanism3d/ElevatorTwo", elevatorTwoPose);
   }

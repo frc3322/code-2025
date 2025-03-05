@@ -21,5 +21,7 @@ public interface PivotIO {
 
   public default void goToPosition(double positionRotations, double velocityRotPerSec) {}
 
+  public default void presetSetpoint(double setpointRotations) {}
+
   public default void updateInputs(PivotIOInputsAutoLogged inputs) {}
 }

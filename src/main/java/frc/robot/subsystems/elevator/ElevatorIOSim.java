@@ -53,6 +53,11 @@ public class ElevatorIOSim implements ElevatorIO {
     elevatorSim.setInputVoltage(combinedOutput * 12); // Apply voltage to the elevator motor
   }
 
+  @Override
+  public void presetSetpoint(double setpointMeters) {
+      elevatorPID.setGoal(setpointMeters);
+  }
+
   public void updateInputs(ElevatorIOInputsAutoLogged inputs) {
     elevatorSim.update(0.020); // Update the elevator simulation with a 20ms timestep
 

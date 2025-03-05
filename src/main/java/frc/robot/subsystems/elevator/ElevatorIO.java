@@ -27,6 +27,8 @@ public interface ElevatorIO {
    */
   public default void goToPosition(double positionMeters, double velocityMetersPerSec) {}
 
+  public default void presetSetpoint(double setpointMeters) {}
+
   /**
    * Method to update the elevator's input values for simulation or logging.
    *

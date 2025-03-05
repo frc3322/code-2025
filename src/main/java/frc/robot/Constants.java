@@ -38,115 +38,132 @@ public final class Constants {
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.STOW,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.RETRACT),
     GROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.GROUND,
         IntakeStates.INTAKE,
         PivotStates.GROUND,
-        WristStates.INTAKE),
-    GROUNDINTAKEFLIPPED(
-        ClimberConstants.stow,
-        ElevatorStates.GROUND,
-        IntakeStates.INTAKE,
-        PivotStates.GROUND,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     ALGAEGROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.AGROUND,
         IntakeStates.INTAKE,
         PivotStates.AGROUND,
-        WristStates.ALGAEGROUNDINTAKE),
+        WristStates.ALGAEGROUNDINTAKE,
+        StateMotion.DEPLOY),
     SOURCEINTAKE(
         ClimberConstants.stow,
         ElevatorStates.SOURCE,
         IntakeStates.INTAKE,
         PivotStates.SOURCE,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     REEFL1(
         ClimberConstants.stow,
         ElevatorStates.L1,
         IntakeStates.OFF,
         PivotStates.L1,
-        WristStates.L1OUT),
+        WristStates.L1OUT,
+        StateMotion.DEPLOY),
     REEFL2(
         ClimberConstants.stow,
         ElevatorStates.L2,
         IntakeStates.OFF,
         PivotStates.L2,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     REEFL3(
         ClimberConstants.stow,
         ElevatorStates.L3,
         IntakeStates.OFF,
         PivotStates.L3,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     REEFL4(
         ClimberConstants.stow,
         ElevatorStates.L4,
         IntakeStates.OFF,
         PivotStates.L4,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     AUTOL4(
         ClimberConstants.stow,
         ElevatorStates.L4,
         IntakeStates.OFF,
         PivotStates.L4AUTO,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     ALGAEINTAKELOW(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAELOW,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     ALGAEINTAKEHIGH(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAEHIGH,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     PROCESSOR(
         ClimberConstants.stow,
         ElevatorStates.PROCESSER,
         IntakeStates.OFF,
         PivotStates.PROCESSER,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.DEPLOY),
     BARGE(
         ClimberConstants.stow,
         ElevatorStates.BARGE,
         IntakeStates.OFF,
         PivotStates.BARGE,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.RETRACT),
     CLIMB(
         ClimberConstants.deploy,
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.CLIMB,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.RETRACT),
     CLIMBED(
         ClimberConstants.climb,
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.CLIMB,
-        WristStates.STOW);
+        WristStates.STOW,
+        StateMotion.RETRACT);
+
+    public static enum StateMotion {
+      DEPLOY,
+      RETRACT
+    }
 
     public final double CLIMBER_SETPOINT;
     public final ElevatorStates ELEVATOR_STATE;
     public final IntakeStates INTAKE_STATE;
     public final PivotStates PIVOT_STATE;
     public final WristStates WRIST_STATE;
+    public final StateMotion stateMotion;
 
     private SuperState(
         Double climberSetpoint,
         ElevatorStates elevatorState,
         IntakeStates intakeState,
         PivotStates pivotState,
-        WristStates wristState) {
+        WristStates wristState,
+        StateMotion stateMotion) {
       CLIMBER_SETPOINT = climberSetpoint;
       ELEVATOR_STATE = elevatorState;
       INTAKE_STATE = intakeState;
       PIVOT_STATE = pivotState;
       WRIST_STATE = wristState;
+      this.stateMotion = stateMotion;
     }
   };
 
