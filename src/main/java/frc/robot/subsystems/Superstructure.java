@@ -204,7 +204,7 @@ public class Superstructure extends SubsystemBase {
             } else {
               targetReefPose =
                   Constants.FieldConstants.localOffsetPose2d(
-                      targetSide.rightPose.get(),
+                      targetSide.leftPose.get(),
                       Constants.FieldConstants.ReefConstants.offsetDistanceL4);
             }
           } else {
