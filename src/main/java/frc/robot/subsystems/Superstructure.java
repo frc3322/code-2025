@@ -96,22 +96,6 @@ public class Superstructure extends SubsystemBase {
 
     Logger.recordOutput("FieldConstants/Reef Poses", reefPoses);
 
-    autoReefPoses = new Pose2d[12];
-    autoReefPoses[0] = Constants.FieldConstants.ReefConstants.autoCoralPosition1.get();
-    autoReefPoses[1] = Constants.FieldConstants.ReefConstants.autoCoralPosition2.get();
-    autoReefPoses[2] = Constants.FieldConstants.ReefConstants.autoCoralPosition3.get();
-    autoReefPoses[3] = Constants.FieldConstants.ReefConstants.autoCoralPosition4.get();
-    autoReefPoses[4] = Constants.FieldConstants.ReefConstants.autoCoralPosition5.get();
-    autoReefPoses[5] = Constants.FieldConstants.ReefConstants.autoCoralPosition6.get();
-    autoReefPoses[6] = Constants.FieldConstants.ReefConstants.autoCoralPosition7.get();
-    autoReefPoses[7] = Constants.FieldConstants.ReefConstants.autoCoralPosition8.get();
-    autoReefPoses[8] = Constants.FieldConstants.ReefConstants.autoCoralPosition9.get();
-    autoReefPoses[9] = Constants.FieldConstants.ReefConstants.autoCoralPosition10.get();
-    autoReefPoses[10] = Constants.FieldConstants.ReefConstants.autoCoralPosition11.get();
-    autoReefPoses[11] = Constants.FieldConstants.ReefConstants.autoCoralPosition12.get();
-
-    Logger.recordOutput("FieldConstants/Auto Reef Poses", autoReefPoses);
-
     Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
   }
@@ -210,23 +194,33 @@ public class Superstructure extends SubsystemBase {
               chooseReefSideFromJoystick(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           if (left) {
             // move robot so bumpers touch the reef if we are in L2 or L3
-            if (getTargetLevel() == SuperState.REEFL3 || getTargetLevel() == SuperState.REEFL2) {
+            if (getTargetLevel() == SuperState.REEFL3
+                || getTargetLevel() == SuperState.REEFL2
+                || getTargetLevel() == SuperState.REEFL1) {
               targetReefPose =
                   Constants.FieldConstants.localOffsetPose2d(
                       targetSide.leftPose.get(),
-                      Constants.FieldConstants.ReefConstants.unOffsetDistance);
+                      Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
             } else {
-              targetReefPose = targetSide.leftPose.get();
-            }
-          } else {
-            // move robot so bumpers touch the reef if we are in L2 or L3
-            if (getTargetLevel() == SuperState.REEFL3 || getTargetLevel() == SuperState.REEFL2) {
               targetReefPose =
                   Constants.FieldConstants.localOffsetPose2d(
                       targetSide.rightPose.get(),
-                      Constants.FieldConstants.ReefConstants.unOffsetDistance);
+                      Constants.FieldConstants.ReefConstants.offsetDistanceL4);
+            }
+          } else {
+            // move robot so bumpers touch the reef if we are in L2 or L3
+            if (getTargetLevel() == SuperState.REEFL3
+                || getTargetLevel() == SuperState.REEFL2
+                || getTargetLevel() == SuperState.REEFL1) {
+              targetReefPose =
+                  Constants.FieldConstants.localOffsetPose2d(
+                      targetSide.rightPose.get(),
+                      Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
             } else {
-              targetReefPose = targetSide.rightPose.get();
+              targetReefPose =
+                  Constants.FieldConstants.localOffsetPose2d(
+                      targetSide.rightPose.get(),
+                      Constants.FieldConstants.ReefConstants.offsetDistanceL4);
             }
           }
         });
