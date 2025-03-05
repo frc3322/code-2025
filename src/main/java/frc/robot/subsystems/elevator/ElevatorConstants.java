@@ -13,8 +13,8 @@ public class ElevatorConstants {
     public static final double kD = 0.0;
     public static final double velocityConstraint = 3;
     public static final double accelerationConstraint = 2;
-    public static final double positionTolerance = 0.0;
-    public static final double velocityTolerance = 0.0;
+    public static final double positionTolerance = 0.05;
+    public static final double velocityTolerance = 0.05;
 
     public static final double kS = 0.025;
     public static final double kG = 0.035; // Upper 0.06 // Lower 0.01

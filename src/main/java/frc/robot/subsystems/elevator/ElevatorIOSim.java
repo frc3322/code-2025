@@ -55,7 +55,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void presetSetpoint(double setpointMeters) {
-      elevatorPID.setGoal(setpointMeters);
+    elevatorPID.setGoal(setpointMeters);
   }
 
   public void updateInputs(ElevatorIOInputsAutoLogged inputs) {

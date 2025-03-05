@@ -112,7 +112,7 @@ public class ElevatorIOSpark implements ElevatorIO {
 
   @Override
   public void presetSetpoint(double setpointMeters) {
-      elevatorPID.setGoal(setpointMeters);
+    elevatorPID.setGoal(setpointMeters);
   }
 
   @Override
