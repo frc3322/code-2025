@@ -91,7 +91,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean isAtGoal() {
-    return Math.abs(pivotAngle) > .2;
+    return atGoal;
   }
 
   public boolean pastL4Score() {
@@ -143,6 +143,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public void setState(PivotStates pivotState) {
+    pivotIO.presetSetpoint(pivotState.armSetpoint);
     this.pivotState = pivotState;
     this.directionReversed = reverseArmDirection();
   }

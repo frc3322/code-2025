@@ -38,8 +38,9 @@ public class PivotVisualizer {
           new Pose3d(
               0,
               0,
-              (elevator.getElevatorHeightMeters() * .8333)
-                  + (elevator.getElevatorHeightMeters() * .9193)
+              ((elevator.getElevatorHeightMeters() * .8333)
+                          + (elevator.getElevatorHeightMeters() * .9193))
+                      / 2
                   + .183,
               new Rotation3d(pivotAngle, 0, 0));
       Logger.recordOutput("pivotMechanism3d/pivot", pivotPose);

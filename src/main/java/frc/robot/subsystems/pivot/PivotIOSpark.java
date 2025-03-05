@@ -104,6 +104,11 @@ public class PivotIOSpark implements PivotIO {
   }
 
   @Override
+  public void presetSetpoint(double setpointRotations) {
+    pivotPID.setGoal(setpointRotations);
+  }
+
+  @Override
   public void updateInputs(PivotIOInputsAutoLogged inputs) {
     inputs.absolutePosition = absoluteEncoder.getPosition();
     inputs.absoluteVelocity = absoluteEncoder.getVelocity();

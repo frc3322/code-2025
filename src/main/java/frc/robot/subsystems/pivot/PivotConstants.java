@@ -82,8 +82,8 @@ public class PivotConstants {
     public static final double kD = 0.25;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
-    public static final double positionTolerance = .1;
-    public static final double velocityTolerance = .1;
+    public static final double positionTolerance = .05;
+    public static final double velocityTolerance = .05;
 
     public static final double kS = 0;
     public static final double kG = 0;

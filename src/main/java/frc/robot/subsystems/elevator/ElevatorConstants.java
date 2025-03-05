@@ -56,16 +56,16 @@ public class ElevatorConstants {
     public static final double drumRadiusMeters = 0.01905; // .75 in
     public static final double startingHeightMeters = 0.0; // Height of elevator
     public static final double minHeightMeters = 0.0;
-    public static final double maxHeightMeters = 0.8636; // guess, 95 in
+    public static final double maxHeightMeters = 1.6; // guess, 95 in
 
     // PID and feedforward constants
-    public static final double kP = 10;
+    public static final double kP = 2;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double velocityConstraint = 0.0;
     public static final double accelerationConstraint = 0.0;
-    public static final double positionTolerance = 0.02;
-    public static final double velocityTolerance = 0.02;
+    public static final double positionTolerance = 0.3;
+    public static final double velocityTolerance = 0.3;
 
     public static final double kS = 0.0;
     public static final double kG = 0.0;

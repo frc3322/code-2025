@@ -16,6 +16,7 @@ import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.FieldConstants.SourceConstants;
 import frc.robot.Constants.SuperState;
+import frc.robot.Constants.SuperState.StateMotion;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
@@ -100,6 +101,32 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
   }
 
+  public Command deployCommand(SuperState superState) {
+    return new SequentialCommandGroup(
+        wrist.setStateCommand(SuperState.STOW.WRIST_STATE),
+        wrist
+            .goToStateCommand(wrist::getWristState, pivot::getDirectionReversed)
+            .until(wrist::isAtGoal),
+        pivot.setStateCommand(SuperState.STOW.PIVOT_STATE),
+        pivot.goToStateCommand(pivot::getPivotState).until(pivot::isAtGoal),
+        elevator.setStateCommand(superState.ELEVATOR_STATE),
+        elevator.goToStateCommand(elevator::getElevatorState).until(elevator::isAtGoal),
+        pivot.setStateCommand(superState.PIVOT_STATE),
+        pivot.goToStateCommand(pivot::getPivotState).until(pivot::isAtGoal),
+        wrist.setStateCommand(superState.WRIST_STATE));
+  }
+
+  public Command retractCommand(SuperState superState) {
+    return new SequentialCommandGroup(
+        wrist.setStateCommand(superState.WRIST_STATE),
+        wrist
+            .goToStateCommand(wrist::getWristState, pivot::getDirectionReversed)
+            .until(wrist::isAtGoal),
+        pivot.setStateCommand(superState.PIVOT_STATE),
+        pivot.goToStateCommand(pivot::getPivotState).until(pivot::isAtGoal),
+        elevator.setStateCommand(superState.ELEVATOR_STATE));
+  }
+
   public SuperState getSuperState() {
     return this.superState;
   }
@@ -119,36 +146,14 @@ public class Superstructure extends SubsystemBase {
         trigger.onTrue(pivot.setFlippedCommand(true));
       }
 
-      if (superState == SuperState.STOW) {
-        trigger.onTrue(
-            wrist
-                .setStateCommand(superState.WRIST_STATE)
-                .andThen(
-                    pivot
-                        .setStateCommand(superState.PIVOT_STATE)
-                        .onlyIf(wrist::isAtGoal)
-                        .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)));
-      } else {
-        trigger.onTrue(
-            elevator
-                .setStateCommand(superState.ELEVATOR_STATE)
-                .andThen(
-                    pivot
-                        .setStateCommand(superState.PIVOT_STATE)
-                        .onlyIf(elevator::highEnough)
-                        .until(() -> pivot.getPivotState() == superState.PIVOT_STATE)
-                        .andThen(
-                            wrist
-                                .setStateCommand(superState.WRIST_STATE)
-                                .onlyIf(pivot::isAtGoal)
-                                .until(() -> wrist.getWristState() == superState.WRIST_STATE))));
-
-        trigger.and(() -> pivot.isAtGoal()).onTrue(wrist.setStateCommand(superState.WRIST_STATE));
-        trigger.onTrue(pivot.setStateCommand(superState.PIVOT_STATE));
+      if (superState.stateMotion == StateMotion.RETRACT) {
+        trigger.onTrue(retractCommand(superState));
+      }
+      if (superState.stateMotion == StateMotion.DEPLOY) {
+        trigger.onTrue(deployCommand(superState));
       }
       trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
-      trigger.onTrue(elevator.setStateCommand(superState.ELEVATOR_STATE));
     }
   }
 

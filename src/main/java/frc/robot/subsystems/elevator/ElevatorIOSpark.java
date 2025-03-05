@@ -111,6 +111,11 @@ public class ElevatorIOSpark implements ElevatorIO {
   }
 
   @Override
+  public void presetSetpoint(double setpointMeters) {
+      elevatorPID.setGoal(setpointMeters);
+  }
+
+  @Override
   public void updateInputs(ElevatorIOInputsAutoLogged inputs) {
     // Update the inputs for logging
     inputs.position = leftEncoder.getPosition();
