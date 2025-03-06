@@ -234,7 +234,20 @@ public class Superstructure extends SubsystemBase {
   public Command setTargetReefPoseCommand(Supplier<Pose2d> targetReefPoseSupplier) {
     return new InstantCommand(
         () -> {
-          this.targetReefPose = targetReefPoseSupplier.get();
+          // move robot so bumpers touch the reef if we are in L2 or L3
+          if (getTargetLevel() == SuperState.REEFL3
+              || getTargetLevel() == SuperState.REEFL2
+              || getTargetLevel() == SuperState.REEFL1) {
+            this.targetReefPose =
+                Constants.FieldConstants.localOffsetPose2d(
+                    targetReefPoseSupplier.get(),
+                    Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
+          } else {
+            this.targetReefPose =
+                Constants.FieldConstants.localOffsetPose2d(
+                    targetReefPoseSupplier.get(),
+                    Constants.FieldConstants.ReefConstants.offsetDistanceL4);
+          }
         });
   }
 }
