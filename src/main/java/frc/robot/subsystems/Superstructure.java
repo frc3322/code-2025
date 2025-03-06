@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.FieldConstants.SourceConstants;
@@ -250,7 +251,7 @@ public class Superstructure extends SubsystemBase {
 
   public Command semiAutoScoreCommand() {
     return new ParallelCommandGroup(
-        simpledrive.autoDrive(this::getTargetReefPose),
+        simpledrive.autoDrive(this::getTargetReefPose, () -> this.getTargetLevel()),
         new SequentialCommandGroup(
             this.setSuperStateCommand(SuperState.STOW),
             new WaitUntilCommand(

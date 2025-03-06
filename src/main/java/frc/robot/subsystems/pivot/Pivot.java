@@ -22,7 +22,8 @@ public class Pivot extends SubsystemBase {
 
   // --------------------------- Instance Variables ---------------------------
   private static Pivot instance; // Static instance of the Pivot (singleton pattern)
-  private static PivotVisualizer pivotVisualizer = new PivotVisualizer(); // Static visualizer for pivot system
+  private static PivotVisualizer pivotVisualizer =
+      new PivotVisualizer(); // Static visualizer for pivot system
 
   // -------------------------- State Variables -----------------------------
   private PivotStates pivotState = PivotStates.STOW; // Current state of the pivot (initially STOW)
@@ -31,14 +32,16 @@ public class Pivot extends SubsystemBase {
 
   // ----------------------- Hardware/Subsystem Instances ---------------------
   private final PivotIO pivotIO; // Pivot IO interface for communication with the pivot system
-  private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged(); // Input handler for automatic logging
+  private final PivotIOInputsAutoLogged inputs =
+      new PivotIOInputsAutoLogged(); // Input handler for automatic logging
 
   // -------------------------- Control/Logic Flags ---------------------------
   private boolean flipped = false; // Manual control for the flip direction of the pivot
   private boolean directionReversed = false;
 
   // ------------------------ External Dependencies ---------------------------
-  private Supplier<Pose2d> drivetrainPoseSupplier; // Supplier for the drivetrain's pose (position and orientation)
+  private Supplier<Pose2d>
+      drivetrainPoseSupplier; // Supplier for the drivetrain's pose (position and orientation)
 
   public static Pivot initialize(PivotIO pivotIO, Supplier<Pose2d> drivetrainPoseSupplier) {
     if (instance == null) {
@@ -81,8 +84,9 @@ public class Pivot extends SubsystemBase {
     Logger.recordOutput(
         "Pivot/atPoseBoolean",
         Math.abs(
-            PivotConstants.rightSourceTargetAngleRadians
-                - drivetrainPoseSupplier.get().getRotation().getRadians()) < Math.PI / 2);
+                PivotConstants.rightSourceTargetAngleRadians
+                    - drivetrainPoseSupplier.get().getRotation().getRadians())
+            < Math.PI / 2);
     Logger.recordOutput("Pivot/drivePose", drivetrainPoseSupplier.get());
   }
 
@@ -107,8 +111,9 @@ public class Pivot extends SubsystemBase {
 
     Pose2d robotPose = drivetrainPoseSupplier.get();
     // See which direction the arm should go while intaking.
-    boolean intakingFlipped = DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Red;
+    boolean intakingFlipped =
+        DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == Alliance.Red;
 
     boolean intaking = pivotState.stateType == StateType.INTAKING;
     boolean reefScoring = pivotState.stateType == StateType.REEFSCORING;
@@ -116,15 +121,14 @@ public class Pivot extends SubsystemBase {
     if (intaking) {
 
       if (Math.abs(
-          PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians()) < Math.PI / 2) {
+              PivotConstants.leftSourceTargetAngleRadians - robotPose.getRotation().getRadians())
+          < Math.PI / 2) {
         result = !intakingFlipped;
-      } else
-        result = intakingFlipped;
+      } else result = intakingFlipped;
 
     } else if (reefScoring) {
       result = Constants.FieldConstants.PoseMethods.reverseSideScoring(robotPose);
-    } else
-      result = false;
+    } else result = false;
 
     boolean targetSide = flipped ? result : !result;
     return targetSide;
@@ -151,24 +155,28 @@ public class Pivot extends SubsystemBase {
           double modifiedArmSetpoint;
 
           if (pivotSetpoint == PivotStates.SOURCE) {
-            directionReversed = !Constants.FieldConstants.PoseMethods.atPose(
-                drivetrainPoseSupplier.get(),
-                Constants.FieldConstants.SourceConstants.leftSource.get(),
-                3.5,
-                0);
-                
+            directionReversed =
+                !Constants.FieldConstants.PoseMethods.atPose(
+                    drivetrainPoseSupplier.get(),
+                    Constants.FieldConstants.SourceConstants.leftSource.get(),
+                    3.5,
+                    0);
+
             // Check which source is closer and use that for the relative to calculation.
             Pose2d robotPose = drivetrainPoseSupplier.get();
             Pose2d leftSource = Constants.FieldConstants.SourceConstants.leftSource.get();
             Pose2d rightSource = Constants.FieldConstants.SourceConstants.rightSource.get();
 
-            Pose2d closerSource = robotPose.getTranslation().getDistance(leftSource.getTranslation()) < robotPose
-                .getTranslation().getDistance(rightSource.getTranslation())
+            Pose2d closerSource =
+                robotPose.getTranslation().getDistance(leftSource.getTranslation())
+                        < robotPose.getTranslation().getDistance(rightSource.getTranslation())
                     ? leftSource
                     : rightSource;
 
             Logger.recordOutput("Pivot/Source", closerSource);
-            Logger.recordOutput("Pivot/RotateToSource", closerSource.relativeTo(robotPose).getRotation().getDegrees());
+            Logger.recordOutput(
+                "Pivot/RotateToSource",
+                closerSource.relativeTo(robotPose).getRotation().getDegrees());
 
             // If robot is rotated towards the closer source, the arm should be reversed.
             if (Math.abs(closerSource.relativeTo(robotPose).getRotation().getDegrees()) < 90) {
@@ -176,7 +184,8 @@ public class Pivot extends SubsystemBase {
             }
           }
 
-          modifiedArmSetpoint = getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
+          modifiedArmSetpoint =
+              getDirectionReversed() ? -pivotSetpoint.armSetpoint : pivotSetpoint.armSetpoint;
           pivotIO.goToPosition(modifiedArmSetpoint, pivotSetpoint.armVelocity);
         },
         this);
