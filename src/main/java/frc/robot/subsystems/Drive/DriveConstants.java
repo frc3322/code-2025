@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = 6; // 4.8
@@ -113,9 +114,11 @@ public class DriveConstants {
     public static double kDy = 0;
     public static double kIzoneY = 0;
 
-    public static double kPtheta = .6;
+    public static LoggedNetworkNumber kPtheta =
+        new LoggedNetworkNumber("/Tuning/SimpleDriveKP", .6);
     public static double kItheta = 0;
-    public static double kDtheta = 0.1;
+    public static LoggedNetworkNumber kDtheta =
+        new LoggedNetworkNumber("/Tuning/SimpleDriveKD", .1);
 
     // Velocity constraints
     public static double kMaxVelocityX = 2.5; // Maximum linear velocity in the X direction

@@ -7,6 +7,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.Constants.SuperState;
 import frc.robot.commands.DriveCommands;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -49,9 +51,9 @@ public class Simpledrive {
 
     thetaPID =
         new ProfiledPIDController(
-            DriveConstants.SimpleDriveConstants.kPtheta,
+            DriveConstants.SimpleDriveConstants.kPtheta.get(),
             DriveConstants.SimpleDriveConstants.kItheta,
-            DriveConstants.SimpleDriveConstants.kDtheta,
+            DriveConstants.SimpleDriveConstants.kDtheta.get(),
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityTheta,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationTheta));
@@ -76,12 +78,26 @@ public class Simpledrive {
         drivetrain.getPose().getRotation().getRadians(), targetPose.getRotation().getRadians());
   }
 
-  public Command autoDrive(Supplier<Pose2d> targetPoseSupplier) {
+  public Command autoDrive(
+      Supplier<Pose2d> targetPoseSupplier, Supplier<SuperState> getTargetLevel) {
     // This is elliot and gray's child
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
               Pose2d targetPose = targetPoseSupplier.get();
+
+              // move robot so bumpers touch the reef if we are in L2 or L3
+              if (getTargetLevel.get() == SuperState.REEFL3
+                  || getTargetLevel.get() == SuperState.REEFL2
+                  || getTargetLevel.get() == SuperState.REEFL1) {
+                targetPose =
+                    Constants.FieldConstants.localOffsetPose2d(
+                        targetPose, Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
+              } else {
+                targetPose =
+                    Constants.FieldConstants.localOffsetPose2d(
+                        targetPose, Constants.FieldConstants.ReefConstants.offsetDistanceL4);
+              }
 
               Pose2d posePlus90 =
                   targetPose.rotateAround(targetPose.getTranslation(), new Rotation2d(Math.PI / 2));
@@ -112,7 +128,7 @@ public class Simpledrive {
                         targetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
               }
 
-              double yAdjustDistance = -.1;
+              double yAdjustDistance = -.125;
               targetPose =
                   new Pose2d(
                       targetPose.getX()

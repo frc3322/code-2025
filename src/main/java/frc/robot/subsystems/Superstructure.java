@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.FieldConstants.SourceConstants;
@@ -198,35 +197,9 @@ public class Superstructure extends SubsystemBase {
           ReefSides targetSide =
               chooseReefSideFromJoystick(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           if (left) {
-            // move robot so bumpers touch the reef if we are in L2 or L3
-            if (getTargetLevel() == SuperState.REEFL3
-                || getTargetLevel() == SuperState.REEFL2
-                || getTargetLevel() == SuperState.REEFL1) {
-              targetReefPose =
-                  Constants.FieldConstants.localOffsetPose2d(
-                      targetSide.leftPose.get(),
-                      Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
-            } else {
-              targetReefPose =
-                  Constants.FieldConstants.localOffsetPose2d(
-                      targetSide.leftPose.get(),
-                      Constants.FieldConstants.ReefConstants.offsetDistanceL4);
-            }
+            targetReefPose = targetSide.leftPose.get();
           } else {
-            // move robot so bumpers touch the reef if we are in L2 or L3
-            if (getTargetLevel() == SuperState.REEFL3
-                || getTargetLevel() == SuperState.REEFL2
-                || getTargetLevel() == SuperState.REEFL1) {
-              targetReefPose =
-                  Constants.FieldConstants.localOffsetPose2d(
-                      targetSide.rightPose.get(),
-                      Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
-            } else {
-              targetReefPose =
-                  Constants.FieldConstants.localOffsetPose2d(
-                      targetSide.rightPose.get(),
-                      Constants.FieldConstants.ReefConstants.offsetDistanceL4);
-            }
+            targetReefPose = targetSide.rightPose.get();
           }
         });
   }
@@ -234,20 +207,7 @@ public class Superstructure extends SubsystemBase {
   public Command setTargetReefPoseCommand(Supplier<Pose2d> targetReefPoseSupplier) {
     return new InstantCommand(
         () -> {
-          // move robot so bumpers touch the reef if we are in L2 or L3
-          if (getTargetLevel() == SuperState.REEFL3
-              || getTargetLevel() == SuperState.REEFL2
-              || getTargetLevel() == SuperState.REEFL1) {
-            this.targetReefPose =
-                Constants.FieldConstants.localOffsetPose2d(
-                    targetReefPoseSupplier.get(),
-                    Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
-          } else {
-            this.targetReefPose =
-                Constants.FieldConstants.localOffsetPose2d(
-                    targetReefPoseSupplier.get(),
-                    Constants.FieldConstants.ReefConstants.offsetDistanceL4);
-          }
+          this.targetReefPose = targetReefPoseSupplier.get();
         });
   }
 }
