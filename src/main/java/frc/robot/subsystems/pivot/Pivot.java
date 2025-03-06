@@ -95,7 +95,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public boolean pastL4Score() {
-    return Math.abs(pivotAngle) > .3;
+    return Math.abs(pivotAngle) > .22;
   }
 
   public boolean pastL2and3Score() {

@@ -6,10 +6,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
@@ -17,6 +21,8 @@ import frc.robot.Constants.FieldConstants.SourceConstants;
 import frc.robot.Constants.SuperState;
 import frc.robot.Constants.SuperState.StateMotion;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Simpledrive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
@@ -24,6 +30,8 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -35,6 +43,8 @@ public class Superstructure extends SubsystemBase {
   private final Intake intake;
   private final Pivot pivot;
   private final Wrist wrist;
+  private final Drive drive;
+  private final Simpledrive simpledrive;
 
   private SuperState superState = SuperState.STOW;
 
@@ -42,19 +52,38 @@ public class Superstructure extends SubsystemBase {
 
   private Pose2d targetReefPose = new Pose2d();
 
+  private boolean semiAutoEnabled = true;
+
   private Pose2d[] reefPoses;
   private Pose2d[] autoReefPoses;
 
+  Map<SuperState, Command> scoringChoices;
+
   /** Creates a new Superstructure. */
   public Superstructure(
-      Climber climber, Elevator elevator, Intake intake, Pivot pivot, Wrist wrist) {
+      Climber climber,
+      Elevator elevator,
+      Intake intake,
+      Pivot pivot,
+      Wrist wrist,
+      Drive drive,
+      Simpledrive simpledrive) {
     this.climber = climber;
     this.elevator = elevator;
     this.intake = intake;
     this.pivot = pivot;
     this.wrist = wrist;
+    this.drive = drive;
+    this.simpledrive = simpledrive;
 
     setupTriggers();
+
+    scoringChoices =
+        Map.of(
+            SuperState.REEFL1, l1ScoreCommand(),
+            SuperState.REEFL2, l2and3ScoreCommand(),
+            SuperState.REEFL3, l2and3ScoreCommand(),
+            SuperState.REEFL4, l4ScoreCommand());
   }
 
   @Override
@@ -163,6 +192,10 @@ public class Superstructure extends SubsystemBase {
     return ReefConstants.ReefSides.values()[side];
   }
 
+  public void setSemiAutoEnabled(boolean enabled) {
+    semiAutoEnabled = enabled;
+  }
+
   public Command setSuperStateCommand(SuperState superState) {
     return new InstantCommand(() -> this.superState = superState);
   }
@@ -174,8 +207,12 @@ public class Superstructure extends SubsystemBase {
   public Command l4ScoreCommand() {
     return new SequentialCommandGroup(
         pivot.setStateCommand(PivotStates.L4SCORE),
-        new WaitCommand(.7),
+        new WaitUntilCommand(pivot::pastL4Score),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+  }
+
+  public Command l4AutoScoreCommand() {
+    return pivot.setStateCommand(PivotStates.L4SCORE);
   }
 
   public Command l2and3ScoreCommand() {
@@ -209,5 +246,34 @@ public class Superstructure extends SubsystemBase {
         () -> {
           this.targetReefPose = targetReefPoseSupplier.get();
         });
+  }
+
+  public Command semiAutoScoreCommand() {
+    return new ParallelCommandGroup(
+        simpledrive.autoDrive(this::getTargetReefPose),
+        new SequentialCommandGroup(
+            this.setSuperStateCommand(SuperState.STOW),
+            new WaitUntilCommand(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), targetReefPose, 2, 0)),
+            new DeferredCommand(() -> goToTargetLevelCommand(), Set.of(this)),
+            new WaitUntilCommand(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), simpledrive.getTargetPose(), .1, 5)),
+            new SelectCommand<>(scoringChoices, () -> getTargetLevel())));
+  }
+
+  public Command goToTargetLevelCommand() {
+    return new InstantCommand(() -> this.superState = this.targetLevel);
+  }
+
+  public Trigger getSemiAutoEnabledTrigger() {
+    return new Trigger(() -> semiAutoEnabled);
+  }
+
+  public Trigger getSemiAutoDisabledTrigger() {
+    return new Trigger(() -> !semiAutoEnabled);
   }
 }
