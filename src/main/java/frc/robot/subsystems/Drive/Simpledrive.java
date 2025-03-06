@@ -63,6 +63,10 @@ public class Simpledrive {
     this.targetPose = targetPose;
   }
 
+  public Pose2d getTargetPose() {
+    return targetPose;
+  }
+
   public double getXSpeed() {
     return xPID.calculate(drivetrain.getPose().getX(), targetPose.getX());
   }

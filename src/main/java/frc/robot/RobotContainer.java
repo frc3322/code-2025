@@ -161,7 +161,8 @@ public class RobotContainer {
     }
     simpledrive = new Simpledrive(drive);
 
-    superstructure = new Superstructure(climber, elevator, intake, pivot, wrist);
+    superstructure =
+        new Superstructure(climber, elevator, intake, pivot, wrist, drive, simpledrive);
 
     // Set up named commands
     NamedCommands.registerCommand("STOW", superstructure.setSuperStateCommand(SuperState.STOW));
@@ -336,6 +337,7 @@ public class RobotContainer {
     driverController
         .leftBumper()
         .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
+        .and(superstructure.getSemiAutoDisabledTrigger())
         .onTrue(superstructure.l4ScoreCommand())
         .onFalse(intake.setIntakeStateCommand(IntakeStates.OFF));
 
@@ -345,12 +347,19 @@ public class RobotContainer {
             () ->
                 superstructure.getTargetLevel() == SuperState.REEFL3
                     || superstructure.getTargetLevel() == SuperState.REEFL2)
+        .and(superstructure.getSemiAutoDisabledTrigger())
         .onTrue(superstructure.l2and3ScoreCommand());
 
     driverController
         .leftBumper()
         .and(() -> superstructure.getTargetLevel() == SuperState.REEFL1)
+        .and(superstructure.getSemiAutoDisabledTrigger())
         .onTrue(superstructure.l1ScoreCommand());
+
+    driverController
+        .leftBumper()
+        .and(superstructure.getSemiAutoEnabledTrigger())
+        .whileTrue(superstructure.semiAutoScoreCommand());
 
     // Operator Controls
     operatorController
