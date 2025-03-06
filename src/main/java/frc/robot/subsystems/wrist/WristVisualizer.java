@@ -33,7 +33,7 @@ public class WristVisualizer {
         new Pose3d(
             0.005,
             -0.0023,
-            (elevatorHeight * .8333) + (elevatorHeight * .9193) + .183,
+            ((elevatorHeight * .8333) + (elevatorHeight * .9193)) / 2 + .183,
             new Rotation3d(
                 pivotAngle,
                 wristAngle * Math.pow(Math.sin(pivotAngle), 2),

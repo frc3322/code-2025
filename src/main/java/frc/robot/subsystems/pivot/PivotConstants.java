@@ -35,10 +35,10 @@ public class PivotConstants {
   public static class PivotSetpoints {
     // ALL SETPOINTS ARE IN ROTATIONS
     public static final double stowPosition = 0;
-    public static final double groundPosition = 0.27;
+    public static final double groundPosition = 0.28;
     public static final double aGroundPosition = 0;
-    public static final double sourcePosition = 0.07;
-    public static final double l1Position = -.1;
+    public static final double sourcePosition = 0.085;
+    public static final double l1Position = -.11;
     public static final double l2Position = -.1;
     public static final double l3Position = -.1;
     public static final double l4Position = -.15;
@@ -48,6 +48,7 @@ public class PivotConstants {
     public static final double reefAlgaePosition = 0;
     public static final double processerPosition = 0;
     public static final double bargePosition = 0;
+    public static final double climbPosition = 0.15;
 
     // ALL VELOCITY SETPOINTS ARE IN ROT/SEC
     public static final double stowVelocity = 0;
@@ -64,6 +65,7 @@ public class PivotConstants {
     public static final double reefAlgaeVelocity = 0;
     public static final double processerVelocity = 0;
     public static final double bargeVelocity = 0;
+    public static final double climbVelocity = 0;
   }
 
   public static final class SimConstants {
@@ -80,8 +82,8 @@ public class PivotConstants {
     public static final double kD = 0.25;
     public static final double velocityConstraint = 0;
     public static final double accelerationConstraint = 0;
-    public static final double positionTolerance = .1;
-    public static final double velocityTolerance = .1;
+    public static final double positionTolerance = .05;
+    public static final double velocityTolerance = .05;
 
     public static final double kS = 0;
     public static final double kG = 0;
@@ -136,7 +138,8 @@ public class PivotConstants {
     BARGE(
         PivotSetpoints.bargeVelocity,
         PivotSetpoints.bargePosition,
-        StateType.BARGESCORING); // Scoring Algae in barge
+        StateType.BARGESCORING), // Scoring Algae in barge
+    CLIMB(PivotSetpoints.climbPosition, PivotSetpoints.climbVelocity, StateType.NONE);
 
     public double armSetpoint;
     public double armVelocity;

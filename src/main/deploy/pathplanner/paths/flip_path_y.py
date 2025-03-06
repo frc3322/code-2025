@@ -49,5 +49,5 @@ def process_folder(folder_path, center_y=8.052/2):
                 print(f"Processed and saved: {new_file_path}")
 
 # Specify the folder path containing the .path files
-folder_path = r"/Users/darkeden/Documents/code-2025/src/main/deploy/pathplanner/paths"
+folder_path = r"C:\Users\graya\Documents\FRC\code-2025\src\main\deploy\pathplanner\paths"
 process_folder(folder_path)

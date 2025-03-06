@@ -77,6 +77,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setState(ElevatorStates elevatorState) {
+    elevatorIO.presetSetpoint(elevatorHeight);
     this.elevatorState = elevatorState;
   }
 

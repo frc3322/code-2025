@@ -38,115 +38,132 @@ public final class Constants {
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.STOW,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.RETRACT),
     GROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.GROUND,
         IntakeStates.INTAKE,
         PivotStates.GROUND,
-        WristStates.INTAKE),
-    GROUNDINTAKEFLIPPED(
-        ClimberConstants.stow,
-        ElevatorStates.GROUND,
-        IntakeStates.INTAKE,
-        PivotStates.GROUND,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     ALGAEGROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.AGROUND,
         IntakeStates.INTAKE,
         PivotStates.AGROUND,
-        WristStates.ALGAEGROUNDINTAKE),
+        WristStates.ALGAEGROUNDINTAKE,
+        StateMotion.DEPLOY),
     SOURCEINTAKE(
         ClimberConstants.stow,
         ElevatorStates.SOURCE,
         IntakeStates.INTAKE,
         PivotStates.SOURCE,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     REEFL1(
         ClimberConstants.stow,
         ElevatorStates.L1,
         IntakeStates.OFF,
         PivotStates.L1,
-        WristStates.L1OUT),
+        WristStates.L1OUT,
+        StateMotion.DEPLOY),
     REEFL2(
         ClimberConstants.stow,
         ElevatorStates.L2,
         IntakeStates.OFF,
         PivotStates.L2,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     REEFL3(
         ClimberConstants.stow,
         ElevatorStates.L3,
         IntakeStates.OFF,
         PivotStates.L3,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     REEFL4(
         ClimberConstants.stow,
         ElevatorStates.L4,
         IntakeStates.OFF,
         PivotStates.L4,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     AUTOL4(
         ClimberConstants.stow,
         ElevatorStates.L4,
         IntakeStates.OFF,
         PivotStates.L4AUTO,
-        WristStates.OUTAKE),
+        WristStates.OUTAKE,
+        StateMotion.DEPLOY),
     ALGAEINTAKELOW(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAELOW,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     ALGAEINTAKEHIGH(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAEHIGH,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
-        WristStates.INTAKE),
+        WristStates.INTAKE,
+        StateMotion.DEPLOY),
     PROCESSOR(
         ClimberConstants.stow,
         ElevatorStates.PROCESSER,
         IntakeStates.OFF,
         PivotStates.PROCESSER,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.DEPLOY),
     BARGE(
         ClimberConstants.stow,
         ElevatorStates.BARGE,
         IntakeStates.OFF,
         PivotStates.BARGE,
-        WristStates.STOW),
+        WristStates.STOW,
+        StateMotion.RETRACT),
     CLIMB(
         ClimberConstants.deploy,
         ElevatorStates.STOW,
         IntakeStates.OFF,
-        PivotStates.GROUND,
-        WristStates.STOW),
+        PivotStates.CLIMB,
+        WristStates.STOW,
+        StateMotion.RETRACT),
     CLIMBED(
         ClimberConstants.climb,
         ElevatorStates.STOW,
         IntakeStates.OFF,
-        PivotStates.GROUND,
-        WristStates.STOW);
+        PivotStates.CLIMB,
+        WristStates.STOW,
+        StateMotion.RETRACT);
+
+    public static enum StateMotion {
+      DEPLOY,
+      RETRACT
+    }
 
     public final double CLIMBER_SETPOINT;
     public final ElevatorStates ELEVATOR_STATE;
     public final IntakeStates INTAKE_STATE;
     public final PivotStates PIVOT_STATE;
     public final WristStates WRIST_STATE;
+    public final StateMotion stateMotion;
 
     private SuperState(
         Double climberSetpoint,
         ElevatorStates elevatorState,
         IntakeStates intakeState,
         PivotStates pivotState,
-        WristStates wristState) {
+        WristStates wristState,
+        StateMotion stateMotion) {
       CLIMBER_SETPOINT = climberSetpoint;
       ELEVATOR_STATE = elevatorState;
       INTAKE_STATE = intakeState;
       PIVOT_STATE = pivotState;
       WRIST_STATE = wristState;
+      this.stateMotion = stateMotion;
     }
   };
 
@@ -206,12 +223,12 @@ public final class Constants {
 
     public static final class ReefConstants {
       public static enum ReefSides {
-        CENTER(autoCoralPosition1, autoCoralPosition12),
-        CENTERLEFT(autoCoralPosition11, autoCoralPosition10),
-        OUTERLEFT(autoCoralPosition9, autoCoralPosition8),
-        OUTER(autoCoralPosition7, autoCoralPosition6),
-        OUTERRIGHT(autoCoralPosition5, autoCoralPosition4),
-        CENTERRIGHT(autoCoralPosition3, autoCoralPosition2);
+        CENTER(coralPosition1, coralPosition12),
+        CENTERLEFT(coralPosition11, coralPosition10),
+        OUTERLEFT(coralPosition9, coralPosition8),
+        OUTER(coralPosition7, coralPosition6),
+        OUTERRIGHT(coralPosition5, coralPosition4),
+        CENTERRIGHT(coralPosition3, coralPosition2);
 
         public Supplier<Pose2d> leftPose;
         public Supplier<Pose2d> rightPose;
@@ -225,95 +242,94 @@ public final class Constants {
       public static final Supplier<Pose2d> reefCenter =
           () -> flipPose(new Pose2d(4.5, 4, new Rotation2d()));
 
+      public static final Pose2d blueCoralPosition1 =
+          new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180));
+      public static final Pose2d blueCoralPosition2 =
+          new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(120));
+      public static final Pose2d blueCoralPosition3 =
+          new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(120));
+      public static final Pose2d blueCoralPosition4 =
+          new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(60));
+      public static final Pose2d blueCoralPosition5 =
+          new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(60));
+      public static final Pose2d blueCoralPosition6 =
+          new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0));
+      public static final Pose2d blueCoralPosition7 =
+          new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0));
+      public static final Pose2d blueCoralPosition8 =
+          new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(-60));
+      public static final Pose2d blueCoralPosition9 =
+          new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(-60));
+      public static final Pose2d blueCoralPosition10 =
+          new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(-120));
+      public static final Pose2d blueCoralPosition11 =
+          new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120));
+      public static final Pose2d blueCoralPosition12 =
+          new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180));
+
+      public static final Pose2d redCoralPosition1 =
+          new Pose2d(12.279, 4.190, Rotation2d.fromDegrees(0));
+      public static final Pose2d redCoralPosition2 =
+          new Pose2d(12.526, 4.620, Rotation2d.fromDegrees(300));
+      public static final Pose2d redCoralPosition3 =
+          new Pose2d(12.811, 4.783, Rotation2d.fromDegrees(300));
+      public static final Pose2d redCoralPosition4 =
+          new Pose2d(13.307, 4.784, Rotation2d.fromDegrees(240));
+      public static final Pose2d redCoralPosition5 =
+          new Pose2d(13.591, 4.619, Rotation2d.fromDegrees(240));
+      public static final Pose2d redCoralPosition6 =
+          new Pose2d(13.839, 4.190, Rotation2d.fromDegrees(180));
+      public static final Pose2d redCoralPosition7 =
+          new Pose2d(13.838, 3.862, Rotation2d.fromDegrees(180));
+      public static final Pose2d redCoralPosition8 =
+          new Pose2d(13.591, 3.432, Rotation2d.fromDegrees(120));
+      public static final Pose2d redCoralPosition9 =
+          new Pose2d(13.306, 3.269, Rotation2d.fromDegrees(120));
+      public static final Pose2d redCoralPosition10 =
+          new Pose2d(12.811, 3.268, Rotation2d.fromDegrees(60));
+      public static final Pose2d redCoralPosition11 =
+          new Pose2d(12.527, 3.433, Rotation2d.fromDegrees(60));
+      public static final Pose2d redCoralPosition12 =
+          new Pose2d(12.278, 3.862, Rotation2d.fromDegrees(0));
+
       public static final Supplier<Pose2d> coralPosition1 =
-          () -> flipPose(new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)));
+          () -> decidePose(blueCoralPosition1, redCoralPosition1);
       public static final Supplier<Pose2d> coralPosition2 =
-          () -> flipPose(new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(120)));
+          () -> decidePose(blueCoralPosition2, redCoralPosition2);
       public static final Supplier<Pose2d> coralPosition3 =
-          () -> flipPose(new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(120)));
+          () -> decidePose(blueCoralPosition3, redCoralPosition3);
       public static final Supplier<Pose2d> coralPosition4 =
-          () -> flipPose(new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(60)));
+          () -> decidePose(blueCoralPosition4, redCoralPosition4);
       public static final Supplier<Pose2d> coralPosition5 =
-          () -> flipPose(new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(60)));
+          () -> decidePose(blueCoralPosition5, redCoralPosition5);
       public static final Supplier<Pose2d> coralPosition6 =
-          () -> flipPose(new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)));
+          () -> decidePose(blueCoralPosition6, redCoralPosition6);
       public static final Supplier<Pose2d> coralPosition7 =
-          () -> flipPose(new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)));
+          () -> decidePose(blueCoralPosition7, redCoralPosition7);
       public static final Supplier<Pose2d> coralPosition8 =
-          () -> flipPose(new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(-60)));
+          () -> decidePose(blueCoralPosition8, redCoralPosition8);
       public static final Supplier<Pose2d> coralPosition9 =
-          () -> flipPose(new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(-60)));
+          () -> decidePose(blueCoralPosition9, redCoralPosition9);
       public static final Supplier<Pose2d> coralPosition10 =
-          () -> flipPose(new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(-120)));
+          () -> decidePose(blueCoralPosition10, redCoralPosition10);
       public static final Supplier<Pose2d> coralPosition11 =
-          () -> flipPose(new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120)));
+          () -> decidePose(blueCoralPosition11, redCoralPosition11);
       public static final Supplier<Pose2d> coralPosition12 =
-          () -> flipPose(new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)));
+          () -> decidePose(blueCoralPosition12, redCoralPosition12);
 
       public static final double robotWidth = 40 * 0.0254;
-      public static final double offsetDistance = (-robotWidth / 2) - .2;
-      public static final double unOffsetDistance = offsetDistance + (robotWidth / 2);
+      public static final double offsetDistanceL4 = (-robotWidth / 2) - .2;
+      public static final double offsetDistanceL1To3 = (-robotWidth / 2);
+    }
 
-      public static final Supplier<Pose2d> autoCoralPosition1 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.269, 3.862, Rotation2d.fromDegrees(180)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition2 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.022, 3.432, Rotation2d.fromDegrees(120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition3 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.737, 3.269, Rotation2d.fromDegrees(120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition4 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.241, 3.268, Rotation2d.fromDegrees(60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition5 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.957, 3.433, Rotation2d.fromDegrees(60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition6 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.709, 3.862, Rotation2d.fromDegrees(0)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition7 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.71, 4.19, Rotation2d.fromDegrees(0)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition8 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(3.957, 4.62, Rotation2d.fromDegrees(-60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition9 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.242, 4.783, Rotation2d.fromDegrees(-60)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition10 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(4.737, 4.784, Rotation2d.fromDegrees(-120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition11 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.021, 4.619, Rotation2d.fromDegrees(-120)), offsetDistance));
-      public static final Supplier<Pose2d> autoCoralPosition12 =
-          () ->
-              flipPose(
-                  localOffsetPose2d(
-                      new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180)), offsetDistance));
+    public static Pose2d decidePose(Pose2d bluePose, Pose2d redPose) {
+      if (DriverStation.getAlliance().isPresent()) {
+        if (DriverStation.getAlliance().get() == Alliance.Red) {
+          return redPose;
+        }
+        return bluePose;
+      }
+      return bluePose;
     }
 
     /**
@@ -440,7 +456,10 @@ public final class Constants {
       public static final boolean reverseSideScoring(Pose2d robotPose) {
         return Math.abs(
                 getAngleToPoseRads(
-                        robotPose, ReefConstants.reefCenter.get(), -Math.PI / 2, true) // Math.PI/2)
+                        robotPose,
+                        FieldConstants.ReefConstants.reefCenter.get(),
+                        -Math.PI / 2,
+                        true) // Math.PI/2)
                     - robotPose.getRotation().getRadians())
             > Math.PI / 2;
       }

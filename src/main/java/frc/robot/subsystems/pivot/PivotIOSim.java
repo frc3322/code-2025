@@ -59,6 +59,11 @@ public class PivotIOSim implements PivotIO {
     pivotSim.setInputVoltage(combinedOut * 12);
   }
 
+  @Override
+  public void presetSetpoint(double setpointRotations) {
+    pivotPID.setGoal(setpointRotations);
+  }
+
   public void updateInputs(PivotIOInputsAutoLogged inputs) {
     pivotSim.update(0.020);
 
