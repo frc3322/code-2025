@@ -353,9 +353,9 @@ public final class Constants {
 
     public static final class SourceConstants {
       public static final Supplier<Pose2d> leftSource =
-          () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(-35)));
+          () -> flipPose(new Pose2d(.8, 7.5, Rotation2d.fromDegrees(35)));
       public static final Supplier<Pose2d> rightSource =
-          () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(35)));
+          () -> flipPose(new Pose2d(0.8, 0.5, Rotation2d.fromDegrees(-35)));
     }
 
     public static final class PoseMethods {
@@ -405,6 +405,18 @@ public final class Constants {
         return Math.abs(rotOffset) < threshold;
       }
 
+      /**
+       * Calculates the angle in radians from the current pose to the target pose, with an optional
+       * offset and reversibility.
+       *
+       * @param currentPose The current pose of the robot.
+       * @param targetPose The target pose to which the angle is calculated.
+       * @param offsetRads An offset in radians to be added to the calculated angle.
+       * @param reversable A boolean indicating if the angle calculation should consider
+       *     reversibility.
+       * @return The angle in radians from the current pose to the target pose, adjusted by the
+       *     offset and considering reversibility.
+       */
       public static final double getAngleToPoseRads(
           Pose2d currentPose, Pose2d targetPose, double offsetRads, boolean reversable) {
         Translation2d targetTranslation = targetPose.getTranslation();
