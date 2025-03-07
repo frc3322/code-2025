@@ -203,8 +203,8 @@ public class Superstructure extends SubsystemBase {
 
   public Command l4ScoreCommand() {
     return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L4SCORE).asProxy(),
-        new WaitUntilCommand(pivot::pastL4Score),
+        pivot.setStateCommand(PivotStates.L4SCORE),
+        new WaitCommand(1),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 
@@ -255,10 +255,12 @@ public class Superstructure extends SubsystemBase {
                     Constants.FieldConstants.PoseMethods.atPose(
                         drive.getPose(), targetReefPose, 2.5, 0)),
             new DeferredCommand(() -> goToTargetLevelCommand(), Set.of(this)),
+            new WaitUntilCommand(elevator::isAtGoal),
+            new WaitUntilCommand(pivot::isAtGoal),
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), simpledrive.getTargetPose(), .01, 5)),
+                        drive.getPose(), simpledrive.getTargetPose(), .08, 5)),
             new SelectCommand<>(scoringChoices, () -> getTargetLevel())));
   }
 

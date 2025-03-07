@@ -104,21 +104,22 @@ public class DriveConstants {
 
   public static final class SimpleDriveConstants {
     // PID constants for position control
-    public static double kPx = 2;
-    public static double kIx = 0;
-    public static double kDx = 0;
+    public static LoggedNetworkNumber kPx = new LoggedNetworkNumber("/Tuning/SimpleDriveXKP", 1);
+    public static LoggedNetworkNumber kIx = new LoggedNetworkNumber("/Tuning/SimpleDriveXKI", 0);
+    public static LoggedNetworkNumber kDx = new LoggedNetworkNumber("/Tuning/SimpleDriveXKD", 0.1);
     public static double kIzoneX = 0;
 
-    public static double kPy = 2;
-    public static double kIy = 0;
-    public static double kDy = 0;
+    public static LoggedNetworkNumber kPy = new LoggedNetworkNumber("/Tuning/SimpleDriveYKP", 1);
+    public static LoggedNetworkNumber kIy = new LoggedNetworkNumber("/Tuning/SimpleDriveYKI", 0);
+    public static LoggedNetworkNumber kDy = new LoggedNetworkNumber("/Tuning/SimpleDriveYKD", 0.1);
     public static double kIzoneY = 0;
 
     public static LoggedNetworkNumber kPtheta =
-        new LoggedNetworkNumber("/Tuning/SimpleDriveKP", .6);
-    public static double kItheta = 0;
+        new LoggedNetworkNumber("/Tuning/SimpleDriveThetaKP", .1);
+    public static LoggedNetworkNumber kItheta =
+        new LoggedNetworkNumber("/Tuning/SimpleDriveThetaKI", 0);
     public static LoggedNetworkNumber kDtheta =
-        new LoggedNetworkNumber("/Tuning/SimpleDriveKD", .1);
+        new LoggedNetworkNumber("/Tuning/SimpleDriveThetaKD", .02);
 
     // Velocity constraints
     public static double kMaxVelocityX = 2.5; // Maximum linear velocity in the X direction
