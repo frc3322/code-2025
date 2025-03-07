@@ -251,7 +251,7 @@ public class Superstructure extends SubsystemBase {
 
   public Command semiAutoScoreCommand() {
     return new ParallelCommandGroup(
-        simpledrive.autoDrive(this::getTargetReefPose, () -> this.getTargetLevel()),
+        simpledrive.autoDrive(this::getTargetReefPose, this::getTargetLevel),
         new SequentialCommandGroup(
             this.setSuperStateCommand(SuperState.STOW),
             new WaitUntilCommand(
