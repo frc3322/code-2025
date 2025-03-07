@@ -132,28 +132,24 @@ public class Superstructure extends SubsystemBase {
 
   public Command deployCommand(SuperState superState) {
     return new SequentialCommandGroup(
-        wrist.setStateCommand(SuperState.STOW.WRIST_STATE),
-        wrist
-            .goToStateCommand(wrist::getWristState, pivot::getDirectionReversed)
-            .until(wrist::isAtGoal),
-        pivot.setStateCommand(SuperState.STOW.PIVOT_STATE),
-        pivot.goToStateCommand(pivot::getPivotState).until(pivot::isAtGoal),
-        elevator.setStateCommand(superState.ELEVATOR_STATE),
-        elevator.goToStateCommand(elevator::getElevatorState).until(elevator::isAtGoal),
-        pivot.setStateCommand(superState.PIVOT_STATE),
-        pivot.goToStateCommand(pivot::getPivotState).until(pivot::isAtGoal),
-        wrist.setStateCommand(superState.WRIST_STATE));
+        wrist.setStateCommand(SuperState.STOW.WRIST_STATE).asProxy(),
+        new WaitUntilCommand(wrist::isAtGoal),
+        pivot.setStateCommand(SuperState.STOW.PIVOT_STATE).asProxy(),
+        new WaitUntilCommand(pivot::isAtGoal),
+        elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy(),
+        new WaitUntilCommand(elevator::isAtGoal),
+        pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
+        new WaitUntilCommand(pivot::isAtGoal),
+        wrist.setStateCommand(superState.WRIST_STATE).asProxy());
   }
 
   public Command retractCommand(SuperState superState) {
     return new SequentialCommandGroup(
-        wrist.setStateCommand(superState.WRIST_STATE),
-        wrist
-            .goToStateCommand(wrist::getWristState, pivot::getDirectionReversed)
-            .until(wrist::isAtGoal),
-        pivot.setStateCommand(superState.PIVOT_STATE),
-        pivot.goToStateCommand(pivot::getPivotState).until(pivot::isAtGoal),
-        elevator.setStateCommand(superState.ELEVATOR_STATE));
+        wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
+        new WaitUntilCommand(wrist::isAtGoal),
+        pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
+        new WaitUntilCommand(pivot::isAtGoal),
+        elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
   }
 
   public SuperState getSuperState() {
@@ -208,7 +204,7 @@ public class Superstructure extends SubsystemBase {
   public Command l4ScoreCommand() {
     return new SequentialCommandGroup(
         pivot.setStateCommand(PivotStates.L4SCORE),
-        new WaitUntilCommand(pivot::pastL4Score),
+        new WaitCommand(1),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 
@@ -253,16 +249,18 @@ public class Superstructure extends SubsystemBase {
     return new ParallelCommandGroup(
         simpledrive.autoDrive(this::getTargetReefPose, this::getTargetLevel),
         new SequentialCommandGroup(
-            this.setSuperStateCommand(SuperState.STOW),
+            this.setSuperStateCommand(SuperState.STOW).asProxy(),
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), targetReefPose, 2, 0)),
+                        drive.getPose(), targetReefPose, 2.5, 0)),
             new DeferredCommand(() -> goToTargetLevelCommand(), Set.of(this)),
+            new WaitUntilCommand(elevator::isAtGoal),
+            new WaitUntilCommand(pivot::isAtGoal),
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), simpledrive.getTargetPose(), .1, 5)),
+                        drive.getPose(), simpledrive.getTargetPose(), .08, 5)),
             new SelectCommand<>(scoringChoices, () -> getTargetLevel())));
   }
 

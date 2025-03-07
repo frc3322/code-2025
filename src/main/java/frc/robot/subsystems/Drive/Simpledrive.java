@@ -29,9 +29,9 @@ public class Simpledrive {
     this.drivetrain = drivetrain;
     xPID =
         new ProfiledPIDController(
-            DriveConstants.SimpleDriveConstants.kPx,
-            DriveConstants.SimpleDriveConstants.kIx,
-            DriveConstants.SimpleDriveConstants.kDx,
+            DriveConstants.SimpleDriveConstants.kPx.get(),
+            DriveConstants.SimpleDriveConstants.kIx.get(),
+            DriveConstants.SimpleDriveConstants.kDx.get(),
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityX,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationX));
@@ -40,9 +40,9 @@ public class Simpledrive {
 
     yPID =
         new ProfiledPIDController(
-            DriveConstants.SimpleDriveConstants.kPy,
-            DriveConstants.SimpleDriveConstants.kIy,
-            DriveConstants.SimpleDriveConstants.kDy,
+            DriveConstants.SimpleDriveConstants.kPy.get(),
+            DriveConstants.SimpleDriveConstants.kIy.get(),
+            DriveConstants.SimpleDriveConstants.kDy.get(),
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityY,
                 DriveConstants.SimpleDriveConstants.kMaxAccelerationY));
@@ -52,7 +52,7 @@ public class Simpledrive {
     thetaPID =
         new ProfiledPIDController(
             DriveConstants.SimpleDriveConstants.kPtheta.get(),
-            DriveConstants.SimpleDriveConstants.kItheta,
+            DriveConstants.SimpleDriveConstants.kItheta.get(),
             DriveConstants.SimpleDriveConstants.kDtheta.get(),
             new Constraints(
                 DriveConstants.SimpleDriveConstants.kMaxVelocityTheta,
@@ -89,6 +89,18 @@ public class Simpledrive {
         new InstantCommand(
             () -> {
               Pose2d targetPose = targetPoseSupplier.get();
+
+              xPID.setP(DriveConstants.SimpleDriveConstants.kPx.get());
+              xPID.setI(DriveConstants.SimpleDriveConstants.kIx.get());
+              xPID.setD(DriveConstants.SimpleDriveConstants.kDx.get());
+
+              yPID.setP(DriveConstants.SimpleDriveConstants.kPy.get());
+              yPID.setI(DriveConstants.SimpleDriveConstants.kIy.get());
+              yPID.setD(DriveConstants.SimpleDriveConstants.kDy.get());
+
+              thetaPID.setP(DriveConstants.SimpleDriveConstants.kPtheta.get());
+              thetaPID.setI(DriveConstants.SimpleDriveConstants.kItheta.get());
+              thetaPID.setD(DriveConstants.SimpleDriveConstants.kDtheta.get());
 
               // move robot so bumpers touch the reef if we are in L2 or L3
               if (getTargetLevel.get() == SuperState.REEFL3
