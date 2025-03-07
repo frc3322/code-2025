@@ -160,7 +160,28 @@ public class Pivot extends SubsystemBase {
                     drivetrainPoseSupplier.get(),
                     Constants.FieldConstants.SourceConstants.leftSource.get(),
                     3.5,
-                    90);
+                    0);
+
+            // Check which source is closer and use that for the relative to calculation.
+            Pose2d robotPose = drivetrainPoseSupplier.get();
+            Pose2d leftSource = Constants.FieldConstants.SourceConstants.leftSource.get();
+            Pose2d rightSource = Constants.FieldConstants.SourceConstants.rightSource.get();
+
+            Pose2d closerSource =
+                robotPose.getTranslation().getDistance(leftSource.getTranslation())
+                        < robotPose.getTranslation().getDistance(rightSource.getTranslation())
+                    ? leftSource
+                    : rightSource;
+
+            Logger.recordOutput("Pivot/Source", closerSource);
+            Logger.recordOutput(
+                "Pivot/RotateToSource",
+                closerSource.relativeTo(robotPose).getRotation().getDegrees());
+
+            // If robot is rotated towards the closer source, the arm should be reversed.
+            if (Math.abs(closerSource.relativeTo(robotPose).getRotation().getDegrees()) < 90) {
+              directionReversed = !directionReversed;
+            }
           }
 
           modifiedArmSetpoint =

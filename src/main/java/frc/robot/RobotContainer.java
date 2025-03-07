@@ -195,7 +195,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "AUTO ALIGN",
         simpledrive
-            .autoDrive(superstructure::getTargetReefPose)
+            .autoDrive(superstructure::getTargetReefPose, superstructure::getTargetLevel)
             .withTimeout(1)
             .andThen(DriveCommands.stopCommand(drive)));
 
@@ -332,7 +332,9 @@ public class RobotContainer {
     driverController
         .rightBumper()
         .and(() -> simpledrive.getEnabled())
-        .whileTrue(simpledrive.autoDrive(superstructure::getTargetReefPose));
+        .whileTrue(
+            simpledrive.autoDrive(
+                superstructure::getTargetReefPose, superstructure::getTargetLevel));
 
     driverController
         .leftBumper()
