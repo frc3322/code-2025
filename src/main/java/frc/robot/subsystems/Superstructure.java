@@ -89,7 +89,7 @@ public class Superstructure extends SubsystemBase {
             SuperState.REEFL1, l1ScoreCommand(),
             SuperState.REEFL2, l2and3ScoreCommand(),
             SuperState.REEFL3, l2and3ScoreCommand(),
-            SuperState.REEFL4, l4AutoScoreCommand());
+            SuperState.REEFL4, l4ScoreCommand());
   }
 
   @Override
@@ -157,19 +157,13 @@ public class Superstructure extends SubsystemBase {
     Command command =
         new SequentialCommandGroup(
             wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
-            new WaitUntilCommand(wrist::isAtGoal),
+            //new WaitUntilCommand(wrist::isAtGoal),
             pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-            new WaitUntilCommand(pivot::isAtGoal),
+            //new WaitUntilCommand(pivot::isAtGoal),
             elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
 
     command.addRequirements(this);
     return command;
-    return new SequentialCommandGroup(
-        wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
-        // new WaitUntilCommand(wrist::isAtGoal),
-        pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-        // new WaitUntilCommand(pivot::isAtGoal),
-        elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
   }
 
   public SuperState getSuperState() {
