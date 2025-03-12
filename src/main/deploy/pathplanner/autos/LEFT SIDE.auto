@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AUTO ALIGN L1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L1 SCORE"
+            "pathName": "Left Start to R10"
           }
         }
       ]
