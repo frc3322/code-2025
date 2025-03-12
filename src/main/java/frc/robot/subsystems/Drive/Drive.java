@@ -40,14 +40,20 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
+
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -73,6 +79,8 @@ public class Drive extends SubsystemBase {
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   private boolean doRejectUpdate = false;
+
+  private Pose2d targetPose2d = new Pose2d(5, 5, new Rotation2d());
 
   public Drive(
       GyroIO gyroIO,
@@ -177,7 +185,12 @@ public class Drive extends SubsystemBase {
         rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
       }
 
-      Logger.recordOutput("VelocityPose", getFieldRelativeVelocityPose().plus(new Transform2d(getPose().getTranslation(), new Rotation2d())));
+      Logger.recordOutput(
+          "VelocityPose",
+          getFieldRelativeVelocityPose()
+              .plus(new Transform2d(getPose().getTranslation(), new Rotation2d())));
+
+      Logger.recordOutput("Target Drivetrain Pose", targetPose2d);
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
@@ -310,6 +323,10 @@ public class Drive extends SubsystemBase {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
   }
 
+  public Pose2d getTargetReefPose() {
+    return targetPose2d;
+  }
+
   /** Adds a new timestamped vision measurement. */
   public void addVisionMeasurement(String limeLightName) {
     doRejectUpdate = false;
@@ -356,7 +373,27 @@ public class Drive extends SubsystemBase {
 
   public Pose2d getFieldRelativeVelocityPose() {
     ChassisSpeeds currentSpeeds = getChassisSpeeds();
-    Translation2d fieldRelativeTranslation = new Translation2d(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond).rotateBy(getRotation());
-    return new Pose2d(fieldRelativeTranslation.getX(), fieldRelativeTranslation.getY(), new Rotation2d(currentSpeeds.omegaRadiansPerSecond));
+    Translation2d fieldRelativeTranslation =
+        new Translation2d(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond)
+            .rotateBy(getRotation());
+    return new Pose2d(
+        fieldRelativeTranslation.getX(),
+        fieldRelativeTranslation.getY(),
+        new Rotation2d(currentSpeeds.omegaRadiansPerSecond));
+  }
+
+  public Command driveToPoseCommand(Supplier<Pose2d> targetPoseSupplier) {
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> targetPose2d = targetPoseSupplier.get()),
+      new DeferredCommand(this::getPathfindingCommand, Set.of(this))
+    );
+  }
+
+  public Command getPathfindingCommand(){
+    return AutoBuilder.pathfindToPose(
+      targetPose2d,
+      DriveConstants.pathfindingConstraints,
+      0.0 // Goal end velocity in meters/sec
+    );
   }
 }

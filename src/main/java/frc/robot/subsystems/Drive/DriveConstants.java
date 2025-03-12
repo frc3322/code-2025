@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -101,6 +102,9 @@ public class DriveConstants {
               driveMotorCurrentLimit,
               1),
           moduleTranslations);
+
+  public static final PathConstraints pathfindingConstraints =
+      new PathConstraints(3.5, 2.8, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   public static final class SimpleDriveConstants {
     // PID constants for position control

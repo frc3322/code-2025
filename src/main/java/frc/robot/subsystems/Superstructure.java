@@ -94,6 +94,7 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     // This method will be called once per scheduler run
     Logger.recordOutput("SuperStructure/State", superState);
     Logger.recordOutput("SuperStructure/Target Level", targetLevel);
@@ -271,13 +272,19 @@ public class Superstructure extends SubsystemBase {
 
   public Command semiAutoScoreCommand() {
     return new ParallelCommandGroup(
-        simpledrive.autoDriveToReef(this::getTargetReefPose, this::getTargetLevel),
-        new SequentialCommandGroup(
+        drive.driveToPoseCommand(
+            () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel)),
+            autoScoreSequence()
+        );
+  }
+
+  public Command autoScoreSequence() {
+    return new SequentialCommandGroup(
             setSuperStateCommand(SuperState.STOW).asProxy(),
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), simpledrive.getTargetPose(), 2, 0)),
+                        drive.getPose(), drive.getTargetReefPose(), 2, 0)),
             new SelectCommand<>(levelChoices, this::getTargetLevel).asProxy(),
             new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
             new WaitUntilCommand(elevator::isAtGoal),
@@ -287,25 +294,8 @@ public class Superstructure extends SubsystemBase {
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), simpledrive.getTargetPose(), .1, 5)),
-            new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy()));
-    // return new ParallelCommandGroup(
-    //     simpledrive.autoDrive(this::getTargetReefPose, this::getTargetLevel),
-    //     new SequentialCommandGroup(
-    //         this.setSuperStateCommand(SuperState.STOW).asProxy(),
-    //         new WaitUntilCommand(
-    //             () ->
-    //                 Constants.FieldConstants.PoseMethods.atPose(
-    //                     drive.getPose(), targetReefPose, 2.5, 0)),
-    //         new DeferredCommand(() -> goToTargetLevelCommand(), Set.of(this)),
-    //         new WaitUntilCommand(() -> superState == targetLevel),
-    //         new WaitUntilCommand(elevator::isAtGoal),
-    //         new WaitUntilCommand(pivot::isAtGoal),
-    //         new WaitUntilCommand(
-    //             () ->
-    //                 Constants.FieldConstants.PoseMethods.atPose(
-    //                     drive.getPose(), simpledrive.getTargetPose(), .08, 5)),
-    //         new SelectCommand<>(scoringChoices, () -> getTargetLevel())));
+                        drive.getPose(), drive.getTargetReefPose(), .1, 5)),
+            new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy());
   }
 
   public Command goToTargetLevelCommand() {
