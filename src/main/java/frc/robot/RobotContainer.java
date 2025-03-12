@@ -59,6 +59,9 @@ import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOSim;
 import frc.robot.subsystems.wrist.WristIOSpark;
+
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -187,17 +190,9 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "LEFT L1", superstructure.setSuperStateCommand(SuperState.REEFL1));
 
-    NamedCommands.registerCommand(
-        "L4",
-        new ParallelCommandGroup(
-            superstructure.setTargetLevelCommand(SuperState.REEFL4),
-            superstructure.setSuperStateCommand(SuperState.AUTOL4)));
-    NamedCommands.registerCommand(
-        "AUTO ALIGN",
-        simpledrive
-            .autoDriveToReef(superstructure::getTargetReefPose, superstructure::getTargetLevel)
-            .withTimeout(1)
-            .andThen(DriveCommands.stopCommand(drive)));
+    NamedCommands.registerCommand("L4", superstructure.setTargetLevelCommand(SuperState.REEFL4));
+
+    NamedCommands.registerCommand("AUTON L4", superstructure.autonL4Sequence());
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
@@ -525,6 +520,10 @@ public class RobotContainer {
 
   public Command onTeleopInitCommand() {
     return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.STOW));
+  }
+
+  public Command manualAdjustDrivePoseCommand(Supplier<Pose2d> poseSupplier){
+    return drive.setTargetPoseCommand(simpledrive.getTargetReefPose(poseSupplier, superstructure::getTargetLevel));
   }
 
   /**

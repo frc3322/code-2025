@@ -39,7 +39,7 @@ public class Robot extends LoggedRobot {
 
   public Robot() {
     Pathfinding.setPathfinder(new LocalADStarAK());
-    
+
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);

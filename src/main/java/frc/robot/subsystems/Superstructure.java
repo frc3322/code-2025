@@ -274,28 +274,47 @@ public class Superstructure extends SubsystemBase {
     return new ParallelCommandGroup(
         drive.driveToPoseCommand(
             () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel)),
-            autoScoreSequence()
-        );
+        autoScoreSequence());
   }
 
   public Command autoScoreSequence() {
     return new SequentialCommandGroup(
-            setSuperStateCommand(SuperState.STOW).asProxy(),
-            new WaitUntilCommand(
-                () ->
-                    Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), drive.getTargetReefPose(), 2, 0)),
-            new SelectCommand<>(levelChoices, this::getTargetLevel).asProxy(),
-            new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
-            new WaitUntilCommand(elevator::isAtGoal),
-            new WaitUntilCommand(pivot::isAtGoal),
-            new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
-            new WaitUntilCommand(wrist::isAtGoal),
-            new WaitUntilCommand(
-                () ->
-                    Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), drive.getTargetReefPose(), .1, 5)),
-            new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy());
+        setSuperStateCommand(SuperState.STOW).asProxy(),
+        new WaitUntilCommand(
+            () ->
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drive.getPose(), drive.getTargetReefPose(), 2, 0)),
+        new SelectCommand<>(levelChoices, this::getTargetLevel).asProxy(),
+        new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
+        new WaitUntilCommand(elevator::isAtGoal),
+        new WaitUntilCommand(pivot::isAtGoal),
+        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        new WaitUntilCommand(wrist::isAtGoal),
+        new WaitUntilCommand(
+            () ->
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drive.getPose(), drive.getTargetReefPose(), .1, 5)),
+        new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy());
+  }
+
+  public Command autonL4Sequence() {
+    return new SequentialCommandGroup(
+        setSuperStateCommand(SuperState.STOW).asProxy(),
+        new WaitUntilCommand(
+            () ->
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drive.getPose(), drive.getTargetReefPose(), 2, 0)),
+        setSuperStateCommand(SuperState.REEFL4).asProxy(),
+        new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
+        new WaitUntilCommand(elevator::isAtGoal),
+        new WaitUntilCommand(pivot::isAtGoal),
+        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        new WaitUntilCommand(wrist::isAtGoal),
+        new WaitUntilCommand(
+            () ->
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drive.getPose(), drive.getTargetReefPose(), .1, 5)),
+        l4ScoreCommand().asProxy());
   }
 
   public Command goToTargetLevelCommand() {

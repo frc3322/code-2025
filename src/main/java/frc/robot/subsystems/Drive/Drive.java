@@ -49,7 +49,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
-
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -327,6 +326,10 @@ public class Drive extends SubsystemBase {
     return targetPose2d;
   }
 
+  public void setTargetPose(Pose2d pose){
+    targetPose2d = pose;
+  }
+
   /** Adds a new timestamped vision measurement. */
   public void addVisionMeasurement(String limeLightName) {
     doRejectUpdate = false;
@@ -382,18 +385,19 @@ public class Drive extends SubsystemBase {
         new Rotation2d(currentSpeeds.omegaRadiansPerSecond));
   }
 
-  public Command driveToPoseCommand(Supplier<Pose2d> targetPoseSupplier) {
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> targetPose2d = targetPoseSupplier.get()),
-      new DeferredCommand(this::getPathfindingCommand, Set.of(this))
-    );
+  public Command setTargetPoseCommand(Pose2d pose){
+    return new InstantCommand(() -> setTargetPose(pose));
   }
 
-  public Command getPathfindingCommand(){
+  public Command driveToPoseCommand(Supplier<Pose2d> targetPoseSupplier) {
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> targetPose2d = targetPoseSupplier.get()),
+        new DeferredCommand(this::getPathfindingCommand, Set.of(this)));
+  }
+
+  public Command getPathfindingCommand() {
     return AutoBuilder.pathfindToPose(
-      targetPose2d,
-      DriveConstants.pathfindingConstraints,
-      0.0 // Goal end velocity in meters/sec
-    );
+        targetPose2d, DriveConstants.pathfindingConstraints, 0.0 // Goal end velocity in meters/sec
+        );
   }
 }
