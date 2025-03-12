@@ -82,7 +82,7 @@ public class Simpledrive {
         drivetrain.getPose().getRotation().getRadians(), targetPose.getRotation().getRadians());
   }
 
-  public Command autoDrive(
+  public Command autoDriveToReef(
       Supplier<Pose2d> targetPoseSupplier, Supplier<SuperState> getTargetLevel) {
     // This is elliot and gray's child
     return new SequentialCommandGroup(
@@ -160,6 +160,7 @@ public class Simpledrive {
               yPID.reset(drivetrain.getPose().getY());
               thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
             }),
+        new InstantCommand(() -> resetPIDs(drivetrain.getPose(), drivetrain.getFieldRelativeVelocityPose())),
         DriveCommands.directDrive(
             drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
   }
@@ -170,5 +171,11 @@ public class Simpledrive {
 
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
+  }
+
+  public void resetPIDs(Pose2d position, Pose2d velocity) {
+    xPID.reset(position.getX(), velocity.getX());
+    yPID.reset(position.getY(), velocity.getX());
+    thetaPID.reset(position.getRotation().getRadians(), velocity.getRotation().getRadians());
   }
 }

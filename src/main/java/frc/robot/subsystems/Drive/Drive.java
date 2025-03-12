@@ -28,6 +28,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -174,6 +176,8 @@ public class Drive extends SubsystemBase {
         Twist2d twist = kinematics.toTwist2d(moduleDeltas);
         rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
       }
+
+      Logger.recordOutput("VelocityPose", getFieldRelativeVelocityPose().plus(new Transform2d(getPose().getTranslation(), new Rotation2d())));
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
@@ -348,5 +352,11 @@ public class Drive extends SubsystemBase {
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
     return maxSpeedMetersPerSec / driveBaseRadius;
+  }
+
+  public Pose2d getFieldRelativeVelocityPose() {
+    ChassisSpeeds currentSpeeds = getChassisSpeeds();
+    Translation2d fieldRelativeTranslation = new Translation2d(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond).rotateBy(getRotation());
+    return new Pose2d(fieldRelativeTranslation.getX(), fieldRelativeTranslation.getY(), new Rotation2d(currentSpeeds.omegaRadiansPerSecond));
   }
 }

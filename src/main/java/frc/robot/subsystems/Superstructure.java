@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
@@ -32,7 +31,6 @@ import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -59,6 +57,7 @@ public class Superstructure extends SubsystemBase {
   private Pose2d[] autoReefPoses;
 
   Map<SuperState, Command> scoringChoices;
+  Map<SuperState, Command> levelChoices;
 
   /** Creates a new Superstructure. */
   public Superstructure(
@@ -79,6 +78,12 @@ public class Superstructure extends SubsystemBase {
 
     setupTriggers();
 
+    levelChoices =
+        Map.of(
+            SuperState.REEFL1, setSuperStateCommand(SuperState.REEFL1),
+            SuperState.REEFL2, setSuperStateCommand(SuperState.REEFL2),
+            SuperState.REEFL3, setSuperStateCommand(SuperState.REEFL3),
+            SuperState.REEFL4, setSuperStateCommand(SuperState.REEFL4));
     scoringChoices =
         Map.of(
             SuperState.REEFL1, l1ScoreCommand(),
@@ -131,25 +136,33 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command deployCommand(SuperState superState) {
-    return new SequentialCommandGroup(
-        wrist.setStateCommand(SuperState.STOW.WRIST_STATE).asProxy(),
-        new WaitUntilCommand(wrist::isAtGoal),
-        pivot.setStateCommand(SuperState.STOW.PIVOT_STATE).asProxy(),
-        new WaitUntilCommand(pivot::isAtGoal),
-        elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy(),
-        new WaitUntilCommand(elevator::isAtGoal),
-        pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-        new WaitUntilCommand(pivot::isAtGoal),
-        wrist.setStateCommand(superState.WRIST_STATE).asProxy());
+    Command command =
+        new SequentialCommandGroup(
+            wrist.setStateCommand(SuperState.STOW.WRIST_STATE).asProxy(),
+            new WaitUntilCommand(wrist::isAtGoal),
+            pivot.setStateCommand(SuperState.STOW.PIVOT_STATE).asProxy(),
+            new WaitUntilCommand(pivot::isAtGoal),
+            elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy(),
+            new WaitUntilCommand(elevator::isAtGoal),
+            pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
+            new WaitUntilCommand(pivot::isAtGoal),
+            wrist.setStateCommand(superState.WRIST_STATE).asProxy());
+
+    command.addRequirements(this);
+    return command;
   }
 
   public Command retractCommand(SuperState superState) {
-    return new SequentialCommandGroup(
-        wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
-        new WaitUntilCommand(wrist::isAtGoal),
-        pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-        new WaitUntilCommand(pivot::isAtGoal),
-        elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
+    Command command =
+        new SequentialCommandGroup(
+            wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
+            new WaitUntilCommand(wrist::isAtGoal),
+            pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
+            new WaitUntilCommand(pivot::isAtGoal),
+            elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
+
+    command.addRequirements(this);
+    return command;
   }
 
   public SuperState getSuperState() {
@@ -172,10 +185,12 @@ public class Superstructure extends SubsystemBase {
       }
 
       if (superState.stateMotion == StateMotion.RETRACT) {
-        trigger.onTrue(retractCommand(superState));
+        Command currentCommand = retractCommand(superState);
+        trigger.onTrue(currentCommand);
       }
       if (superState.stateMotion == StateMotion.DEPLOY) {
-        trigger.onTrue(deployCommand(superState));
+        Command currentCommand = deployCommand(superState);
+        trigger.onTrue(currentCommand);
       }
       trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
@@ -202,26 +217,35 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command l4ScoreCommand() {
-    return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L4SCORE),
-        new WaitCommand(1),
-        intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
-  }
+    Command command =
+        new SequentialCommandGroup(
+                pivot.setStateCommand(PivotStates.L4SCORE).asProxy(),
+                new WaitCommand(1),
+                intake.setIntakeStateCommand(IntakeStates.OUTTAKE))
+            .asProxy();
 
-  public Command l4AutoScoreCommand() {
-    return pivot.setStateCommand(PivotStates.L4SCORE);
+    command.addRequirements(this);
+    return command;
   }
 
   public Command l2and3ScoreCommand() {
-    return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L2AND3SCORE),
-        new WaitCommand(.5),
-        intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+    Command command =
+        new SequentialCommandGroup(
+            pivot.setStateCommand(PivotStates.L2AND3SCORE).asProxy(),
+            new WaitCommand(.5),
+            intake.setIntakeStateCommand(IntakeStates.OUTTAKE).asProxy());
+
+    command.addRequirements(this);
+    return command;
   }
 
   public Command l1ScoreCommand() {
-    return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L1), intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+    Command command =
+        new SequentialCommandGroup(
+            pivot.setStateCommand(PivotStates.L1),
+            intake.setIntakeStateCommand(IntakeStates.OUTTAKE).asProxy());
+    command.addRequirements(this);
+    return command;
   }
 
   public Command setTargetReefPoseCommand(
@@ -247,21 +271,41 @@ public class Superstructure extends SubsystemBase {
 
   public Command semiAutoScoreCommand() {
     return new ParallelCommandGroup(
-        simpledrive.autoDrive(this::getTargetReefPose, this::getTargetLevel),
+        simpledrive.autoDriveToReef(this::getTargetReefPose, this::getTargetLevel),
         new SequentialCommandGroup(
-            this.setSuperStateCommand(SuperState.STOW).asProxy(),
+            setSuperStateCommand(SuperState.STOW).asProxy(),
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), targetReefPose, 2.5, 0)),
-            new DeferredCommand(() -> goToTargetLevelCommand(), Set.of(this)),
+                        drive.getPose(), simpledrive.getTargetPose(), 2, 0)),
+            new SelectCommand<>(levelChoices, this::getTargetLevel).asProxy(),
+            new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
             new WaitUntilCommand(elevator::isAtGoal),
             new WaitUntilCommand(pivot::isAtGoal),
+            new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+            new WaitUntilCommand(wrist::isAtGoal),
             new WaitUntilCommand(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), simpledrive.getTargetPose(), .08, 5)),
-            new SelectCommand<>(scoringChoices, () -> getTargetLevel())));
+                        drive.getPose(), simpledrive.getTargetPose(), .1, 5)),
+            new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy()));
+    // return new ParallelCommandGroup(
+    //     simpledrive.autoDrive(this::getTargetReefPose, this::getTargetLevel),
+    //     new SequentialCommandGroup(
+    //         this.setSuperStateCommand(SuperState.STOW).asProxy(),
+    //         new WaitUntilCommand(
+    //             () ->
+    //                 Constants.FieldConstants.PoseMethods.atPose(
+    //                     drive.getPose(), targetReefPose, 2.5, 0)),
+    //         new DeferredCommand(() -> goToTargetLevelCommand(), Set.of(this)),
+    //         new WaitUntilCommand(() -> superState == targetLevel),
+    //         new WaitUntilCommand(elevator::isAtGoal),
+    //         new WaitUntilCommand(pivot::isAtGoal),
+    //         new WaitUntilCommand(
+    //             () ->
+    //                 Constants.FieldConstants.PoseMethods.atPose(
+    //                     drive.getPose(), simpledrive.getTargetPose(), .08, 5)),
+    //         new SelectCommand<>(scoringChoices, () -> getTargetLevel())));
   }
 
   public Command goToTargetLevelCommand() {
