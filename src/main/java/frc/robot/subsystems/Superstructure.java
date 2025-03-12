@@ -84,7 +84,7 @@ public class Superstructure extends SubsystemBase {
             SuperState.REEFL1, l1ScoreCommand(),
             SuperState.REEFL2, l2and3ScoreCommand(),
             SuperState.REEFL3, l2and3ScoreCommand(),
-            SuperState.REEFL4, l4ScoreCommand());
+            SuperState.REEFL4, l4AutoScoreCommand());
   }
 
   @Override
@@ -146,9 +146,9 @@ public class Superstructure extends SubsystemBase {
   public Command retractCommand(SuperState superState) {
     return new SequentialCommandGroup(
         wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
-        new WaitUntilCommand(wrist::isAtGoal),
+        // new WaitUntilCommand(wrist::isAtGoal),
         pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-        new WaitUntilCommand(pivot::isAtGoal),
+        // new WaitUntilCommand(pivot::isAtGoal),
         elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
   }
 
@@ -209,7 +209,12 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command l4AutoScoreCommand() {
-    return pivot.setStateCommand(PivotStates.L4SCORE);
+    return new WaitUntilCommand(() -> pivot.getPivotState() == PivotStates.L4 && pivot.isAtGoal())
+        .andThen(
+            new SequentialCommandGroup(
+                pivot.setStateCommand(PivotStates.L4SCORE),
+                new WaitCommand(1),
+                intake.setIntakeStateCommand(IntakeStates.OUTTAKE)));
   }
 
   public Command l2and3ScoreCommand() {
@@ -219,9 +224,24 @@ public class Superstructure extends SubsystemBase {
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 
+  public Command l2and3AutoScoreCommand() {
+    return new WaitUntilCommand(
+            () ->
+                (pivot.getPivotState() == PivotStates.L2 || pivot.getPivotState() == PivotStates.L3)
+                    && pivot.isAtGoal())
+        .andThen(
+            new SequentialCommandGroup(
+                pivot.setStateCommand(PivotStates.L2AND3SCORE),
+                new WaitCommand(.5),
+                intake.setIntakeStateCommand(IntakeStates.OUTTAKE)));
+  }
+
   public Command l1ScoreCommand() {
-    return new SequentialCommandGroup(
-        pivot.setStateCommand(PivotStates.L1), intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+    return new WaitUntilCommand(() -> pivot.getPivotState() == PivotStates.L1 && pivot.isAtGoal())
+        .andThen(
+            new SequentialCommandGroup(
+                pivot.setStateCommand(PivotStates.L1),
+                intake.setIntakeStateCommand(IntakeStates.OUTTAKE)));
   }
 
   public Command setTargetReefPoseCommand(

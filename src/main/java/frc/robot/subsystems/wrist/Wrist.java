@@ -100,11 +100,20 @@ public class Wrist extends SubsystemBase {
               .getTranslation()
               .getDistance(drivetrainPoseSupplier.get().getTranslation())
           < WristConstants.minDistanceAutoAdjust) {
+
         Logger.recordOutput("Wrist/Within Distance", true);
         Logger.recordOutput(
             "Wrist/Wrist Offset", Math.atan(localYDistance / WristConstants.placementHeight));
-        return WristConstants.radiansToRotations(
-            Math.atan(localYDistance / WristConstants.placementHeight));
+
+        double adjustment =
+            WristConstants.radiansToRotations(
+                Math.atan(localYDistance / WristConstants.placementHeight));
+
+        if (Math.abs(drivetrainPoseSupplier.get().getRotation().getDegrees()) > 90) {
+          adjustment = -adjustment;
+        }
+
+        return adjustment;
       } else {
         Logger.recordOutput("Wrist/Within Distance", false);
       }
@@ -138,7 +147,7 @@ public class Wrist extends SubsystemBase {
           double trueWristSetpoint =
               flipWrist ? (.5 - wristState.wristSetpoint) % .5 : wristState.wristSetpoint;
 
-          goToPositionLimited(trueWristSetpoint + (getWristOffset(wristState) * 0.3));
+          goToPositionLimited(trueWristSetpoint + (getWristOffset(wristState) * 0.2));
           // goToPositionLimited(trueWristSetpoint);
         },
         this);

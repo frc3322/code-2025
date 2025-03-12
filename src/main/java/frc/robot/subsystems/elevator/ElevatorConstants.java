@@ -31,8 +31,8 @@ public class ElevatorConstants {
     public static final double l2Position = 0.19;
     public static final double l3Position = 0.57;
     public static final double l4Position = 1.4;
-    public static final double reefAlgaeLowPosition = 0.0;
-    public static final double reefAlgaeHighPosition = 0.0;
+    public static final double reefAlgaeLowPosition = 0.725;
+    public static final double reefAlgaeHighPosition = 1.102;
     public static final double processerPosition = 0.0;
     public static final double bargePosition = 2.5;
 
