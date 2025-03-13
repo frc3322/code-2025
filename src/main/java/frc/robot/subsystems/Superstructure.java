@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.FieldConstants.SourceConstants;
@@ -275,6 +276,24 @@ public class Superstructure extends SubsystemBase {
         drive.driveToPoseCommand(
             () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel)),
         autoScoreSequence());
+  }
+
+  public Command driveToLeftSourceCommand() {
+    return new SequentialCommandGroup(
+        drive.driveToPoseCommand(
+            () ->
+                FieldConstants.sideOffsetPose2d(
+                    SourceConstants.leftSource.get(), -ReefConstants.robotWidth / 2)),
+        setSuperStateCommand(SuperState.SOURCEINTAKE).asProxy());
+  }
+
+  public Command driveToRightSourceCommand() {
+    return new SequentialCommandGroup(
+        drive.driveToPoseCommand(
+            () ->
+                FieldConstants.sideOffsetPose2d(
+                    SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)),
+        setSuperStateCommand(SuperState.SOURCEINTAKE).asProxy());
   }
 
   public Command autoScoreSequence() {
