@@ -93,4 +93,20 @@ public class APACButtonBox {
   public Trigger manualTrigger() {
     return triggerArray.get(9);
   }
+
+  public Trigger algaeHighTrigger() {
+    return new Trigger(() -> buttonBoxTwo.getRawAxis(0) > .5);
+  }
+
+  public Trigger algaeLowTrigger() {
+    return new Trigger(() -> buttonBoxTwo.getRawAxis(0) < -.5);
+  }
+
+  public Trigger climberDownTrigger() {
+    return new Trigger(() -> buttonBoxOne.getRawAxis(0) > .5);
+  }
+
+  public Trigger climberUpTrigger() {
+    return new Trigger(() -> buttonBoxOne.getRawAxis(0) < -.5);
+  }
 }

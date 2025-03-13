@@ -358,6 +358,8 @@ public class RobotContainer {
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
 
+    driverController.y().onTrue(superstructure.setSuperStateCommand(SuperState.PROCESSOR));
+
     // Operator Controls
     operatorController
         .leftTrigger(0.1)
@@ -493,15 +495,37 @@ public class RobotContainer {
                 () -> -driverController.getLeftX() / 1.5,
                 () -> -driverController.getRightX()));
 
+    apacButtonBox
+        .climberUpTrigger()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.CLIMB)));
+
+    apacButtonBox
+        .climberDownTrigger()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.CLIMBED)));
+
+    apacButtonBox
+        .algaeHighTrigger()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKHIGH));
+
+    apacButtonBox
+        .algaeLowTrigger()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKLOW));
+
     // // Lock to 0° when A button is held
     // driverController
-    //     .a()
-    //     .whileTrue(
-    //         DriveCommands.joystickDriveAtAngle(
-    //             drive,
-    //             () -> -driverController.getLeftY(),
-    //             () -> -driverController.getLeftX(),
-    //             () -> new Rotation2d()));
+    // .a()
+    // .whileTrue(
+    // DriveCommands.joystickDriveAtAngle(
+    // drive,
+    // () -> -driverController.getLeftY(),
+    // () -> -driverController.getLeftX(),
+    // () -> new Rotation2d()));
 
     // // Switch to X pattern when X button is pressed
     // driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

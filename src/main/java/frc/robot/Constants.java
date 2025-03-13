@@ -60,7 +60,7 @@ public final class Constants {
         IntakeStates.INTAKE,
         PivotStates.SOURCE,
         WristStates.INTAKE,
-        StateMotion.DEPLOY),
+        StateMotion.RETRACT),
     REEFL1(
         ClimberConstants.stow,
         ElevatorStates.L1,
@@ -96,26 +96,26 @@ public final class Constants {
         PivotStates.L4AUTO,
         WristStates.OUTAKE,
         StateMotion.DEPLOY),
-    ALGAEINTAKELOW(
+    ALGAEPLUCKLOW(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAELOW,
-        IntakeStates.INTAKE,
+        IntakeStates.REVERSE,
         PivotStates.REEFALGAE,
-        WristStates.INTAKE,
+        WristStates.OUTAKE,
         StateMotion.DEPLOY),
-    ALGAEINTAKEHIGH(
+    ALGAEPLUCKHIGH(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAEHIGH,
-        IntakeStates.INTAKE,
+        IntakeStates.REVERSE,
         PivotStates.REEFALGAE,
-        WristStates.INTAKE,
+        WristStates.OUTAKE,
         StateMotion.DEPLOY),
     PROCESSOR(
         ClimberConstants.stow,
-        ElevatorStates.PROCESSER,
-        IntakeStates.OFF,
-        PivotStates.PROCESSER,
-        WristStates.STOW,
+        ElevatorStates.GROUND,
+        IntakeStates.REVERSE,
+        PivotStates.GROUND,
+        WristStates.INTAKE,
         StateMotion.DEPLOY),
     BARGE(
         ClimberConstants.stow,
