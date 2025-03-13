@@ -326,7 +326,7 @@ public class Drive extends SubsystemBase {
     return targetPose2d;
   }
 
-  public void setTargetPose(Pose2d pose){
+  public void setTargetPose(Pose2d pose) {
     targetPose2d = pose;
   }
 
@@ -385,7 +385,7 @@ public class Drive extends SubsystemBase {
         new Rotation2d(currentSpeeds.omegaRadiansPerSecond));
   }
 
-  public Command setTargetPoseCommand(Pose2d pose){
+  public Command setTargetPoseCommand(Pose2d pose) {
     return new InstantCommand(() -> setTargetPose(pose));
   }
 

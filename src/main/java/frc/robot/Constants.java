@@ -347,6 +347,13 @@ public final class Constants {
           pose.getRotation());
     }
 
+    public static Pose2d sideOffsetPose2d(Pose2d pose, double distance) {
+      return new Pose2d(
+          pose.getTranslation().getX() + distance * Math.cos(pose.getRotation().getRadians() + Math.PI/2),
+          pose.getTranslation().getY() + distance * Math.sin(pose.getRotation().getRadians() + Math.PI/2),
+          pose.getRotation());
+    }
+
     /**
      * Flips the given pose if the robot is on the Red alliance. The pose is flipped around the
      * center of the field.
