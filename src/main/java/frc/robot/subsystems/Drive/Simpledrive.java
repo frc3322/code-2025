@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.SuperState;
 import frc.robot.commands.DriveCommands;
+import java.util.Arrays;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,6 +23,8 @@ public class Simpledrive {
   private ProfiledPIDController thetaPID;
 
   private Pose2d targetPose;
+
+  private Rotation2d targetRotation;
 
   private Drive drivetrain;
 
@@ -65,8 +70,16 @@ public class Simpledrive {
     this.targetPose = targetPose;
   }
 
+  public void setTargetRotation(Rotation2d targeRotation) {
+    this.targetRotation = targeRotation;
+  }
+
   public Pose2d getTargetPose() {
     return targetPose;
+  }
+
+  public Rotation2d getTargetRotation() {
+    return targetRotation;
   }
 
   public double getXSpeed() {
@@ -79,7 +92,7 @@ public class Simpledrive {
 
   public double getThetaSpeed() {
     return thetaPID.calculate(
-        drivetrain.getPose().getRotation().getRadians(), targetPose.getRotation().getRadians());
+        drivetrain.getPose().getRotation().getRadians(), targetRotation.getRadians());
   }
 
   public Pose2d getTargetReefPose(Pose2d targetPose, Supplier<SuperState> getTargetLevel) {
@@ -157,6 +170,32 @@ public class Simpledrive {
     return modifiedTargetPose;
   }
 
+  public Pose2d getClosestCoralPose() {
+    return drivetrain
+        .getPose()
+        .nearest(
+            Arrays.asList(
+                ReefConstants.coralPosition1.get(),
+                ReefConstants.coralPosition2.get(),
+                ReefConstants.coralPosition3.get(),
+                ReefConstants.coralPosition4.get(),
+                ReefConstants.coralPosition5.get(),
+                ReefConstants.coralPosition6.get(),
+                ReefConstants.coralPosition7.get(),
+                ReefConstants.coralPosition8.get(),
+                ReefConstants.coralPosition9.get(),
+                ReefConstants.coralPosition10.get(),
+                ReefConstants.coralPosition11.get(),
+                ReefConstants.coralPosition12.get()));
+  }
+
+  public Rotation2d rotationToClosestCoral() {
+    return getClosestCoralPose()
+        .getTranslation()
+        .minus(drivetrain.getPose().getTranslation())
+        .getAngle();
+  }
+
   public Command autoDriveToReef(
       Supplier<Pose2d> targetPoseSupplier, Supplier<SuperState> getTargetLevel) {
     // This is elliot and gray's child
@@ -164,12 +203,35 @@ public class Simpledrive {
         new InstantCommand(
             () -> {
               setTargetPose(getTargetReefPose(targetPoseSupplier, getTargetLevel));
+              setTargetRotation(targetPose.getRotation());
               xPID.reset(drivetrain.getPose().getX());
               yPID.reset(drivetrain.getPose().getY());
               thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
             }),
         DriveCommands.directDrive(
             drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
+  }
+
+  public Command turnToAngleCommand(
+      DoubleSupplier xSpeed, DoubleSupplier ySpeed, Supplier<Rotation2d> targetRotationSupplier) {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              setTargetRotation(targetRotationSupplier.get());
+              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
+            }),
+        DriveCommands.directDrive(drivetrain, xSpeed, ySpeed, () -> getThetaSpeed()));
+  }
+
+  public Command autoTurnToReef(
+      DoubleSupplier xSpeed, DoubleSupplier ySpeed, Supplier<Rotation2d> targetRotationSupplier) {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              setTargetRotation(rotationToClosestCoral());
+              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
+            }),
+        DriveCommands.directDrive(drivetrain, xSpeed, ySpeed, () -> getThetaSpeed()));
   }
 
   public boolean getEnabled() {
