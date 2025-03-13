@@ -79,7 +79,7 @@ public class Drive extends SubsystemBase {
 
   private boolean doRejectUpdate = false;
 
-  private Pose2d targetPose2d = new Pose2d(5, 5, new Rotation2d());
+  private Pose2d targetPose2d = new Pose2d();
 
   public Drive(
       GyroIO gyroIO,
@@ -189,14 +189,14 @@ public class Drive extends SubsystemBase {
           getFieldRelativeVelocityPose()
               .plus(new Transform2d(getPose().getTranslation(), new Rotation2d())));
 
-      Logger.recordOutput("Target Drivetrain Pose", targetPose2d);
-
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
 
       addVisionMeasurement("limelight-right");
       addVisionMeasurement("limelight-left");
     }
+
+    Logger.recordOutput("Target Drivetrain Pose", targetPose2d);
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
@@ -326,7 +326,7 @@ public class Drive extends SubsystemBase {
     return targetPose2d;
   }
 
-  public void setTargetPose(Pose2d pose){
+  public void setTargetPose(Pose2d pose) {
     targetPose2d = pose;
   }
 
@@ -385,8 +385,12 @@ public class Drive extends SubsystemBase {
         new Rotation2d(currentSpeeds.omegaRadiansPerSecond));
   }
 
-  public Command setTargetPoseCommand(Pose2d pose){
+  public Command setTargetPoseCommand(Pose2d pose) {
     return new InstantCommand(() -> setTargetPose(pose));
+  }
+
+  public Command setTargetPoseSupplierCommand(Supplier<Pose2d> poseSupplier) {
+    return new InstantCommand(() -> setTargetPose(poseSupplier.get()));
   }
 
   public Command driveToPoseCommand(Supplier<Pose2d> targetPoseSupplier) {
