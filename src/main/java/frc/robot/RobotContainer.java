@@ -193,6 +193,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("AUTON L4", superstructure.autonL4Sequence());
 
     NamedCommands.registerCommand(
+        "AUTO ALIGN L4",
+        simpledrive
+            .autoDriveToPose(superstructure::getTargetReefPose)
+            .until(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), drive.getTargetReefPose(), .1, 5))
+            .andThen(new WaitCommand(1)));
+
+    NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
     NamedCommands.registerCommand(
         "R2", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition2));
@@ -483,7 +493,7 @@ public class RobotContainer {
     apacButtonBox
         .levelFourTrigger()
         .onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
-
+/* 
     apacButtonBox
         .manualTrigger()
         .whileTrue(
@@ -492,7 +502,11 @@ public class RobotContainer {
                 () -> -driverController.getLeftY() / 1.5,
                 () -> -driverController.getLeftX() / 1.5,
                 () -> -driverController.getRightX()));
-
+*/
+apacButtonBox
+        .manualTrigger()
+        .onTrue(superstructure.driveToRightSourceCommand()
+            );
     apacButtonBox
         .climberUpTrigger()
         .onTrue(
