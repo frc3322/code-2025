@@ -280,7 +280,7 @@ public final class Constants {
       public static final Pose2d redCoralPosition6 =
           new Pose2d(13.839, 4.190, Rotation2d.fromDegrees(180));
       public static final Pose2d redCoralPosition7 =
-          new Pose2d(13.838, 3.862, Rotation2d.fromDegrees(180));
+          new Pose2d(13.838, 3.812, Rotation2d.fromDegrees(180));
       public static final Pose2d redCoralPosition8 =
           new Pose2d(13.591, 3.432, Rotation2d.fromDegrees(120));
       public static final Pose2d redCoralPosition9 =
