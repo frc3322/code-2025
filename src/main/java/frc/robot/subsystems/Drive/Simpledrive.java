@@ -95,6 +95,10 @@ public class Simpledrive {
         drivetrain.getPose().getRotation().getRadians(), targetRotation.getRadians());
   }
 
+  public Pose2d getTargetReefPose(Pose2d targetPose, Supplier<SuperState> getTargetLevel) {
+    return getTargetReefPose(() -> targetPose, getTargetLevel);
+  }
+
   public Pose2d getTargetReefPose(
       Supplier<Pose2d> targetPoseSupplier, Supplier<SuperState> getTargetLevel) {
     Pose2d modifiedTargetPose = targetPoseSupplier.get();
@@ -141,18 +145,24 @@ public class Simpledrive {
         "Simpledrive/Pose Based angle - 90",
         poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
 
+    double whatTheHellDistance = 0;
+
     // if pick lowest rotational distance
     if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
       modifiedTargetPose =
           modifiedTargetPose.rotateAround(
               modifiedTargetPose.getTranslation(), new Rotation2d(Math.PI / 2));
+      whatTheHellDistance = .06;
     } else {
       modifiedTargetPose =
           modifiedTargetPose.rotateAround(
               modifiedTargetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
     }
 
-    double yAdjustDistance = -.125;
+    double yAdjustDistance = -.0762;
+
+    yAdjustDistance -= whatTheHellDistance;
+
     modifiedTargetPose =
         new Pose2d(
             modifiedTargetPose.getX()
@@ -199,6 +209,21 @@ public class Simpledrive {
         new InstantCommand(
             () -> {
               setTargetPose(getTargetReefPose(targetPoseSupplier, getTargetLevel));
+              setTargetRotation(targetPose.getRotation());
+              xPID.reset(drivetrain.getPose().getX());
+              yPID.reset(drivetrain.getPose().getY());
+              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
+            }),
+        DriveCommands.directDrive(
+            drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
+  }
+
+  public Command autoDriveToPose(Supplier<Pose2d> targetPoseSupplier) {
+    // This is elliot and gray's child
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              setTargetPose(targetPoseSupplier.get());
               setTargetRotation(targetPose.getRotation());
               xPID.reset(drivetrain.getPose().getX());
               yPID.reset(drivetrain.getPose().getY());

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5483606557377048,
-        "y": 5.193801229508197
+        "x": 3.67,
+        "y": 5.27
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3581376151812057,
-        "y": 5.3560208178489415
+        "x": 3.0071612453124574,
+        "y": 5.9948636658112004
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.959,
-        "y": 7.304
+        "x": 1.684,
+        "y": 7.402
       },
       "prevControl": {
-        "x": 1.8145114668234354,
-        "y": 6.745540345833293
+        "x": 2.163991226033706,
+        "y": 6.8790120279433715
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,42 +29,17 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.9216524216524207,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "STOW",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "STOW"
-        }
-      }
-    },
-    {
       "name": "SOURCE INTAKE",
-      "waypointRelativePos": 0.3898385565052232,
+      "waypointRelativePos": 0.20238095238095222,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "SOURCE INTAKE"
+          "name": "R8"
         }
       }
     }
@@ -79,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 35.0
+    "rotation": -145.0
   },
   "reversed": false,
-  "folder": "LEFT SIDE",
+  "folder": "LEFT SIDE v2",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": -150.0
   },
   "useDefaultConstraints": true
 }

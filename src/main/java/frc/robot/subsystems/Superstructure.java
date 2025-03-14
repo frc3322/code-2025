@@ -158,9 +158,9 @@ public class Superstructure extends SubsystemBase {
     Command command =
         new SequentialCommandGroup(
             wrist.setStateCommand(superState.WRIST_STATE).asProxy(),
-            //new WaitUntilCommand(wrist::isAtGoal),
+            // new WaitUntilCommand(wrist::isAtGoal),
             pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-            //new WaitUntilCommand(pivot::isAtGoal),
+            // new WaitUntilCommand(pivot::isAtGoal),
             elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy());
 
     command.addRequirements(this);
@@ -264,17 +264,23 @@ public class Superstructure extends SubsystemBase {
         });
   }
 
+  public void setTargetReefPose(Pose2d targetReefPose) {
+    this.targetReefPose = simpledrive.getTargetReefPose(targetReefPose, this::getTargetLevel);
+  }
+
   public Command setTargetReefPoseCommand(Supplier<Pose2d> targetReefPoseSupplier) {
     return new InstantCommand(
         () -> {
-          this.targetReefPose = targetReefPoseSupplier.get();
+          setTargetReefPose(targetReefPoseSupplier.get());
         });
   }
 
   public Command semiAutoScoreCommand() {
     return new ParallelCommandGroup(
-        drive.driveToPoseCommand(
-            () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel)),
+        drive
+            .driveToPoseCommand(
+                () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel))
+            .andThen(simpledrive.autoDriveToReef(this::getTargetReefPose, this::getTargetLevel)),
         autoScoreSequence());
   }
 
@@ -319,6 +325,7 @@ public class Superstructure extends SubsystemBase {
   public Command autonL4Sequence() {
     return new SequentialCommandGroup(
         setSuperStateCommand(SuperState.STOW).asProxy(),
+        drive.setTargetPoseSupplierCommand(this::getTargetReefPose),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(

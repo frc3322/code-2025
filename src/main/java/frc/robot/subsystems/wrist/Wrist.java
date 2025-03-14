@@ -147,8 +147,8 @@ public class Wrist extends SubsystemBase {
           double trueWristSetpoint =
               flipWrist ? (.5 - wristState.wristSetpoint) % .5 : wristState.wristSetpoint;
 
-          goToPositionLimited(trueWristSetpoint + (getWristOffset(wristState) * 0.2));
-          // goToPositionLimited(trueWristSetpoint);
+          // goToPositionLimited(trueWristSetpoint + (getWristOffset(wristState) * 0.2));
+          goToPositionLimited(trueWristSetpoint);
         },
         this);
   }
