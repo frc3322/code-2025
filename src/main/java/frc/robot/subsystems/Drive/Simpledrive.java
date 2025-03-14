@@ -141,18 +141,24 @@ public class Simpledrive {
         "Simpledrive/Pose Based angle - 90",
         poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
 
+    double whatTheHellDistance = 0;
+
     // if pick lowest rotational distance
     if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
       modifiedTargetPose =
           modifiedTargetPose.rotateAround(
               modifiedTargetPose.getTranslation(), new Rotation2d(Math.PI / 2));
+      whatTheHellDistance = .06;
     } else {
       modifiedTargetPose =
           modifiedTargetPose.rotateAround(
               modifiedTargetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
     }
 
-    double yAdjustDistance = -.125;
+    double yAdjustDistance = -.0762;
+
+    yAdjustDistance -= whatTheHellDistance;
+
     modifiedTargetPose =
         new Pose2d(
             modifiedTargetPose.getX()

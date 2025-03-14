@@ -273,8 +273,10 @@ public class Superstructure extends SubsystemBase {
 
   public Command semiAutoScoreCommand() {
     return new ParallelCommandGroup(
-        drive.driveToPoseCommand(
-            () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel)),
+        drive
+            .driveToPoseCommand(
+                () -> simpledrive.getTargetReefPose(this::getTargetReefPose, this::getTargetLevel))
+            .andThen(simpledrive.autoDriveToReef(this::getTargetReefPose, this::getTargetLevel)),
         autoScoreSequence());
   }
 

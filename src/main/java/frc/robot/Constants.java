@@ -349,8 +349,10 @@ public final class Constants {
 
     public static Pose2d sideOffsetPose2d(Pose2d pose, double distance) {
       return new Pose2d(
-          pose.getTranslation().getX() + distance * Math.cos(pose.getRotation().getRadians() + Math.PI/2),
-          pose.getTranslation().getY() + distance * Math.sin(pose.getRotation().getRadians() + Math.PI/2),
+          pose.getTranslation().getX()
+              + distance * Math.cos(pose.getRotation().getRadians() + Math.PI / 2),
+          pose.getTranslation().getY()
+              + distance * Math.sin(pose.getRotation().getRadians() + Math.PI / 2),
           pose.getRotation());
     }
 
