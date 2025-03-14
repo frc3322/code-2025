@@ -193,6 +193,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("AUTON L4", superstructure.autonL4Sequence());
 
     NamedCommands.registerCommand(
+        "AUTO ALIGN L4",
+        simpledrive
+            .autoDriveToPose(superstructure::getTargetReefPose)
+            .until(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), drive.getTargetReefPose(), .1, 5))
+            .andThen(new WaitCommand(1)));
+
+    NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
     NamedCommands.registerCommand(
         "R2", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition2));
