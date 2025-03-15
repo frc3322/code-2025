@@ -300,7 +300,7 @@ public class Superstructure extends SubsystemBase {
             .nearest(
                 Arrays.asList(
                     FieldConstants.sideOffsetPose2d(
-                        SourceConstants.leftSource.get(), -ReefConstants.robotWidth / 2),
+                        SourceConstants.leftSource.get(), ReefConstants.robotWidth / 2),
                     FieldConstants.sideOffsetPose2d(
                         SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)));
     return rotationOptimizedPose(nearest);
