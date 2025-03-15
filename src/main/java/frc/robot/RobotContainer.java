@@ -503,7 +503,7 @@ public class RobotContainer {
                     () -> -driverController.getLeftX() / 1.5,
                     () -> -driverController.getRightX()));
     */
-    apacButtonBox.manualTrigger().onTrue(superstructure.driveToRightSourceCommand());
+    apacButtonBox.manualTrigger().whileTrue(superstructure.driveToRightSourceCommand());
     apacButtonBox
         .climberUpTrigger()
         .onTrue(

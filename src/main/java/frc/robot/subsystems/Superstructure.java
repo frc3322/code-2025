@@ -265,7 +265,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void setTargetReefPose(Pose2d targetReefPose) {
-    this.targetReefPose = simpledrive.getTargetReefPose(targetReefPose, this::getTargetLevel);
+    this.targetReefPose = targetReefPose;
   }
 
   public Command setTargetReefPoseCommand(Supplier<Pose2d> targetReefPoseSupplier) {
