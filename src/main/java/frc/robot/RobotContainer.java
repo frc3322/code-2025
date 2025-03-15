@@ -195,7 +195,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "AUTO ALIGN L4",
         simpledrive
-            .autoDriveToPose(superstructure::getTargetReefPose)
+            .autoDriveToReef(superstructure::getTargetReefPose, () -> SuperState.REEFL4)
             .until(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
