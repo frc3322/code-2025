@@ -8,10 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.Constants.FieldConstants.ReefConstants;
 import frc.robot.Constants.SuperState;
 import frc.robot.commands.DriveCommands;
+import frc.robot.Constants.FieldConstants.ReefConstants;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -128,6 +131,8 @@ public class Simpledrive {
               modifiedTargetPose, Constants.FieldConstants.ReefConstants.offsetDistanceL4);
     }
 
+
+
     Pose2d posePlus90 =
         modifiedTargetPose.rotateAround(
             modifiedTargetPose.getTranslation(), new Rotation2d(Math.PI / 2));
@@ -145,24 +150,18 @@ public class Simpledrive {
         "Simpledrive/Pose Based angle - 90",
         poseMinus90.relativeTo(drivetrain.getPose()).getRotation().getDegrees());
 
-    double whatTheHellDistance = 0;
-
     // if pick lowest rotational distance
     if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
       modifiedTargetPose =
           modifiedTargetPose.rotateAround(
               modifiedTargetPose.getTranslation(), new Rotation2d(Math.PI / 2));
-      whatTheHellDistance = .06;
     } else {
       modifiedTargetPose =
           modifiedTargetPose.rotateAround(
               modifiedTargetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
     }
 
-    double yAdjustDistance = -.0762;
-
-    yAdjustDistance -= whatTheHellDistance;
-
+    double yAdjustDistance = -.125;
     modifiedTargetPose =
         new Pose2d(
             modifiedTargetPose.getX()
@@ -176,31 +175,23 @@ public class Simpledrive {
     return modifiedTargetPose;
   }
 
-  public Pose2d getClosestCoralPose() {
-    return drivetrain
-        .getPose()
-        .nearest(
-            Arrays.asList(
-                ReefConstants.coralPosition1.get(),
-                ReefConstants.coralPosition2.get(),
-                ReefConstants.coralPosition3.get(),
-                ReefConstants.coralPosition4.get(),
-                ReefConstants.coralPosition5.get(),
-                ReefConstants.coralPosition6.get(),
-                ReefConstants.coralPosition7.get(),
-                ReefConstants.coralPosition8.get(),
-                ReefConstants.coralPosition9.get(),
-                ReefConstants.coralPosition10.get(),
-                ReefConstants.coralPosition11.get(),
-                ReefConstants.coralPosition12.get()));
+  public Pose2d getClosestCoralPose(){
+    return drivetrain.getPose().nearest(
+      Arrays.asList(ReefConstants.coralPosition1.get(),
+      ReefConstants.coralPosition2.get(),
+      ReefConstants.coralPosition3.get(),
+      ReefConstants.coralPosition4.get(),
+      ReefConstants.coralPosition5.get(),
+      ReefConstants.coralPosition6.get(),
+      ReefConstants.coralPosition7.get(),
+      ReefConstants.coralPosition8.get(),
+      ReefConstants.coralPosition9.get(),
+      ReefConstants.coralPosition10.get(),
+      ReefConstants.coralPosition11.get(),
+      ReefConstants.coralPosition12.get()));
   }
 
-  public Rotation2d rotationToClosestCoral() {
-    return getClosestCoralPose()
-        .getTranslation()
-        .minus(drivetrain.getPose().getTranslation())
-        .getAngle();
-  }
+  
 
   public Command autoDriveToReef(
       Supplier<Pose2d> targetPoseSupplier, Supplier<SuperState> getTargetLevel) {
@@ -233,27 +224,16 @@ public class Simpledrive {
             drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
   }
 
-  public Command turnToAngleCommand(
-      DoubleSupplier xSpeed, DoubleSupplier ySpeed, Supplier<Rotation2d> targetRotationSupplier) {
-    return new SequentialCommandGroup(
-        new InstantCommand(
-            () -> {
-              setTargetRotation(targetRotationSupplier.get());
-              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
-            }),
-        DriveCommands.directDrive(drivetrain, xSpeed, ySpeed, () -> getThetaSpeed()));
+  public Command turnToAngleCommand(DoubleSupplier xSpeed, DoubleSupplier ySpeed, Supplier<Rotation2d> targetRotationSupplier) {
+    return new SequentialCommandGroup( new InstantCommand(
+        () -> {
+          setTargetRotation(targetRotationSupplier.get());
+          thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
+        }),
+        DriveCommands.directDrive(
+          drivetrain, xSpeed, ySpeed, () -> getThetaSpeed()));
   }
 
-  public Command autoTurnToReef(
-      DoubleSupplier xSpeed, DoubleSupplier ySpeed, Supplier<Rotation2d> targetRotationSupplier) {
-    return new SequentialCommandGroup(
-        new InstantCommand(
-            () -> {
-              setTargetRotation(rotationToClosestCoral());
-              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
-            }),
-        DriveCommands.directDrive(drivetrain, xSpeed, ySpeed, () -> getThetaSpeed()));
-  }
 
   public boolean getEnabled() {
     return enabled;
