@@ -47,6 +47,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.Constants.SuperState;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
 import java.util.Set;
@@ -391,6 +392,10 @@ public class Drive extends SubsystemBase {
 
   public Command setTargetPoseSupplierCommand(Supplier<Pose2d> poseSupplier) {
     return new InstantCommand(() -> setTargetPose(poseSupplier.get()));
+  }
+
+  public Command setAutonTargetPoseSupplierCommand(Supplier<Pose2d> poseSupplier, Supplier<SuperState> levelSupplier, Simpledrive Simpledrive) {
+    return new InstantCommand(() -> setTargetPose(Simpledrive.getTargetReefPose(poseSupplier, levelSupplier)));
   }
 
   public Command driveToPoseCommand(Supplier<Pose2d> targetPoseSupplier) {

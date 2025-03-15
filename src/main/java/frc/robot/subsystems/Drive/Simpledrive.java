@@ -95,6 +95,10 @@ public class Simpledrive {
         drivetrain.getPose().getRotation().getRadians(), targetRotation.getRadians());
   }
 
+  public Pose2d getTargetReefPose(Pose2d targetPose, SuperState getTargetLevel) {
+    return getTargetReefPose(() -> targetPose, () -> getTargetLevel);
+  }
+
   public Pose2d getTargetReefPose(Pose2d targetPose, Supplier<SuperState> getTargetLevel) {
     return getTargetReefPose(() -> targetPose, getTargetLevel);
   }
