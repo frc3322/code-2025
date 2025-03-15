@@ -366,7 +366,7 @@ public class RobotContainer {
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
 
-    driverController.y().onTrue(superstructure.driveToSourceCommand());
+    driverController.y().whileTrue(superstructure.driveToSourceCommand());
 
     // Operator Controls
     operatorController
@@ -493,17 +493,16 @@ public class RobotContainer {
     apacButtonBox
         .levelFourTrigger()
         .onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
-    
-        apacButtonBox
-            .manualTrigger()
-            .whileTrue(
-                DriveCommands.joystickDrive(
-                    drive,
-                    () -> -driverController.getLeftY() / 1.5,
-                    () -> -driverController.getLeftX() / 1.5,
-                    () -> -driverController.getRightX()));
-    
- 
+
+    apacButtonBox
+        .manualTrigger()
+        .whileTrue(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -driverController.getLeftY() / 1.5,
+                () -> -driverController.getLeftX() / 1.5,
+                () -> -driverController.getRightX()));
+
     apacButtonBox
         .climberUpTrigger()
         .onTrue(

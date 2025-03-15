@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -32,8 +31,6 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
@@ -288,29 +285,23 @@ public class Superstructure extends SubsystemBase {
         autoScoreSequence());
   }
 
-
-
   public Command driveToSourceCommand() {
     return new ParallelCommandGroup(
-        drive.driveToPoseCommand(
-            () ->
-                nearestSource()),
+        drive.driveToPoseCommand(() -> nearestSource()),
         setSuperStateCommand(SuperState.SOURCEINTAKE).asProxy());
   }
 
-  public Pose2d nearestSource(){
-  
-      return drive.getPose().nearest(
-        Arrays.asList(
-          FieldConstants.sideOffsetPose2d(
-            SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2), 
-          FieldConstants.sideOffsetPose2d(
-            SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)));
-    
-    }
-  
+  public Pose2d nearestSource() {
 
-
+    return drive
+        .getPose()
+        .nearest(
+            Arrays.asList(
+                FieldConstants.sideOffsetPose2d(
+                    SourceConstants.leftSource.get(), ReefConstants.robotWidth / 2),
+                FieldConstants.sideOffsetPose2d(
+                    SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)));
+  }
 
   public Command autoScoreSequence() {
     return new SequentialCommandGroup(
@@ -351,21 +342,19 @@ public class Superstructure extends SubsystemBase {
                 Constants.FieldConstants.PoseMethods.atPose(
                     drive.getPose(), drive.getTargetReefPose(), .1, 5)),
         l4ScoreCommand().asProxy());
-  }/* 
+  } /*
 
-  if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
-    modifiedTargetPose =
-        modifiedTargetPose.rotateAround(
-            modifiedTargetPose.getTranslation(), new Rotation2d(Math.PI / 2));
-    whatTheHellDistance = .06;
-  } else {
-    modifiedTargetPose =
-        modifiedTargetPose.rotateAround(
-            modifiedTargetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
-  }
-*/
-
-  
+      if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
+        modifiedTargetPose =
+            modifiedTargetPose.rotateAround(
+                modifiedTargetPose.getTranslation(), new Rotation2d(Math.PI / 2));
+        whatTheHellDistance = .06;
+      } else {
+        modifiedTargetPose =
+            modifiedTargetPose.rotateAround(
+                modifiedTargetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
+      }
+    */
 
   public Command goToTargetLevelCommand() {
     return new InstantCommand(() -> this.superState = this.targetLevel);
