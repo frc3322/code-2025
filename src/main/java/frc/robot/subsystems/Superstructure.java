@@ -307,21 +307,18 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Pose2d rotationOptimizedPose(Pose2d unoptimized) {
-    Pose2d posePlus90 =
-        unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(Math.PI / 2));
+    Pose2d posePlus90 = unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d());
     Pose2d poseMinus90 =
-        unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(-Math.PI / 2));
+        unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(Math.PI));
 
     double posePlus90Yaw = posePlus90.relativeTo(drive.getPose()).getRotation().getDegrees();
     double poseMinus90Yaw = poseMinus90.relativeTo(drive.getPose()).getRotation().getDegrees();
 
     // if pick lowest rotational distance
     if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
-      unoptimized =
-          unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(Math.PI / 2));
+      unoptimized = unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d());
     } else {
-      unoptimized =
-          unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(-Math.PI / 2));
+      unoptimized = unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(Math.PI));
     }
 
     double yAdjustDistance = -.125;
