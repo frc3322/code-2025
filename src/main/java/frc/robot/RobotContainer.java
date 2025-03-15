@@ -366,7 +366,7 @@ public class RobotContainer {
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
 
-    driverController.y().onTrue(superstructure.driveToSourceCommand());
+    driverController.y().whileTrue(superstructure.driveToSourceCommand());
 
     // Operator Controls
     operatorController

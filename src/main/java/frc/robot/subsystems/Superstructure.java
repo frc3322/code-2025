@@ -370,18 +370,20 @@ public class Superstructure extends SubsystemBase {
                     drive.getPose(), drive.getTargetReefPose(), .1, 5)),
         l4ScoreCommand().asProxy());
   } /*
-     *
-     * if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
-     * nearest =
-     * nearest.rotateAround(
-     * nearest.getTranslation(), new Rotation2d(Math.PI / 2));
-     * whatTheHellDistance = .06;
-     * } else {
-     * nearest =
-     * nearest.rotateAround(
-     * nearest.getTranslation(), new Rotation2d(-Math.PI / 2));
-     * }
-     */
+
+  if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
+    nearest =
+        nearest.rotateAround(
+            nearest.getTranslation(), new Rotation2d(Math.PI / 2));
+    whatTheHellDistance = .06;
+  } else {
+    nearest =
+        nearest.rotateAround(
+            nearest.getTranslation(), new Rotation2d(-Math.PI / 2));
+  }
+*/
+
+  
 
   public Command goToTargetLevelCommand() {
     return new InstantCommand(() -> this.superState = this.targetLevel);
