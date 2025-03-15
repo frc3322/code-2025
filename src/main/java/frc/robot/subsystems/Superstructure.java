@@ -22,7 +22,6 @@ import frc.robot.Constants.FieldConstants.ReefConstants.ReefSides;
 import frc.robot.Constants.FieldConstants.SourceConstants;
 import frc.robot.Constants.SuperState;
 import frc.robot.Constants.SuperState.StateMotion;
-import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Simpledrive;
@@ -33,8 +32,6 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
@@ -266,7 +263,6 @@ public class Superstructure extends SubsystemBase {
           } else {
             targetReefPose = targetSide.rightPose.get();
           }
-          
         });
   }
 
@@ -290,63 +286,49 @@ public class Superstructure extends SubsystemBase {
         autoScoreSequence());
   }
 
-
-
   public Command driveToSourceCommand() {
     return new ParallelCommandGroup(
-        drive.driveToPoseCommand(
-            () ->
-                nearestSource()),
+        drive.driveToPoseCommand(() -> nearestSource()),
         setSuperStateCommand(SuperState.SOURCEINTAKE).asProxy());
   }
 
-  public Pose2d nearestSource(){
-    
-      Pose2d nearest = drive.getPose().nearest(
-        Arrays.asList(
-          FieldConstants.sideOffsetPose2d(
-            SourceConstants.leftSource.get(), -ReefConstants.robotWidth / 2), 
-          FieldConstants.sideOffsetPose2d(
-            SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)));
-      return rotationOptimizedPose(nearest);
-          
-    
-    }
-  
+  public Pose2d nearestSource() {
 
-    public Pose2d rotationOptimizedPose(Pose2d unoptimized){
-      Pose2d posePlus90 =
-      unoptimized.rotateAround(
-          unoptimized.getTranslation(), new Rotation2d(Math.PI / 2));
-  Pose2d poseMinus90 =
-      unoptimized.rotateAround(
-          unoptimized.getTranslation(), new Rotation2d(-Math.PI / 2));
-
-  double posePlus90Yaw = posePlus90.relativeTo(drive.getPose()).getRotation().getDegrees();
-  double poseMinus90Yaw = poseMinus90.relativeTo(drive.getPose()).getRotation().getDegrees();
-
-
-  // if pick lowest rotational distance
-  if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
-    unoptimized =
-        unoptimized.rotateAround(
-            unoptimized.getTranslation(), new Rotation2d(Math.PI / 2));
-  } else {
-    unoptimized =
-        unoptimized.rotateAround(
-            unoptimized.getTranslation(), new Rotation2d(-Math.PI / 2));
+    Pose2d nearest =
+        drive
+            .getPose()
+            .nearest(
+                Arrays.asList(
+                    FieldConstants.sideOffsetPose2d(
+                        SourceConstants.leftSource.get(), -ReefConstants.robotWidth / 2),
+                    FieldConstants.sideOffsetPose2d(
+                        SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)));
+    return rotationOptimizedPose(nearest);
   }
 
-  double yAdjustDistance = -.125;
-  unoptimized =
-      new Pose2d(
-          unoptimized.getX()
-              + yAdjustDistance * Math.cos(unoptimized.getRotation().getRadians()),
-          unoptimized.getY()
-              + yAdjustDistance * Math.sin(unoptimized.getRotation().getRadians()),
-          unoptimized.getRotation());
-  return unoptimized;
+  public Pose2d rotationOptimizedPose(Pose2d unoptimized) {
+    Pose2d posePlus90 = unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d());
+    Pose2d poseMinus90 =
+        unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(Math.PI));
+
+    double posePlus90Yaw = posePlus90.relativeTo(drive.getPose()).getRotation().getDegrees();
+    double poseMinus90Yaw = poseMinus90.relativeTo(drive.getPose()).getRotation().getDegrees();
+
+    // if pick lowest rotational distance
+    if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
+      unoptimized = unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d());
+    } else {
+      unoptimized = unoptimized.rotateAround(unoptimized.getTranslation(), new Rotation2d(Math.PI));
     }
+
+    double yAdjustDistance = -.125;
+    unoptimized =
+        new Pose2d(
+            unoptimized.getX() + yAdjustDistance * Math.cos(unoptimized.getRotation().getRadians()),
+            unoptimized.getY() + yAdjustDistance * Math.sin(unoptimized.getRotation().getRadians()),
+            unoptimized.getRotation());
+    return unoptimized;
+  }
 
   public Command autoScoreSequence() {
     return new SequentialCommandGroup(
@@ -387,21 +369,19 @@ public class Superstructure extends SubsystemBase {
                 Constants.FieldConstants.PoseMethods.atPose(
                     drive.getPose(), drive.getTargetReefPose(), .1, 5)),
         l4ScoreCommand().asProxy());
-  }/* 
-
-  if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
-    nearest =
-        nearest.rotateAround(
-            nearest.getTranslation(), new Rotation2d(Math.PI / 2));
-    whatTheHellDistance = .06;
-  } else {
-    nearest =
-        nearest.rotateAround(
-            nearest.getTranslation(), new Rotation2d(-Math.PI / 2));
-  }
-*/
-
-  
+  } /*
+     *
+     * if (Math.abs(posePlus90Yaw) < Math.abs(poseMinus90Yaw)) {
+     * nearest =
+     * nearest.rotateAround(
+     * nearest.getTranslation(), new Rotation2d(Math.PI / 2));
+     * whatTheHellDistance = .06;
+     * } else {
+     * nearest =
+     * nearest.rotateAround(
+     * nearest.getTranslation(), new Rotation2d(-Math.PI / 2));
+     * }
+     */
 
   public Command goToTargetLevelCommand() {
     return new InstantCommand(() -> this.superState = this.targetLevel);

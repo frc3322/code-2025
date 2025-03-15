@@ -493,17 +493,16 @@ public class RobotContainer {
     apacButtonBox
         .levelFourTrigger()
         .onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
-    
-        apacButtonBox
-            .manualTrigger()
-            .whileTrue(
-                DriveCommands.joystickDrive(
-                    drive,
-                    () -> -driverController.getLeftY() / 1.5,
-                    () -> -driverController.getLeftX() / 1.5,
-                    () -> -driverController.getRightX()));
-    
- 
+
+    apacButtonBox
+        .manualTrigger()
+        .whileTrue(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -driverController.getLeftY() / 1.5,
+                () -> -driverController.getLeftX() / 1.5,
+                () -> -driverController.getRightX()));
+
     apacButtonBox
         .climberUpTrigger()
         .onTrue(
