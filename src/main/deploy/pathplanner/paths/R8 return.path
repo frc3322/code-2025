@@ -20,8 +20,8 @@
         "y": 7.402
       },
       "prevControl": {
-        "x": 2.163991226033706,
-        "y": 6.8790120279433715
+        "x": 2.1639885930775677,
+        "y": 6.879009611464357
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,12 +34,12 @@
   "eventMarkers": [
     {
       "name": "SOURCE INTAKE",
-      "waypointRelativePos": 0.20238095238095222,
+      "waypointRelativePos": 0.1976190476190476,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "R8"
+          "name": "SOURCE INTAKE"
         }
       }
     }
