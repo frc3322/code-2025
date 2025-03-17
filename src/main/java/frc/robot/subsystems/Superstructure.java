@@ -360,7 +360,8 @@ public class Superstructure extends SubsystemBase {
   public Command autonL4Sequence() {
     return new SequentialCommandGroup(
         setSuperStateCommand(SuperState.STOW).asProxy(),
-        drive.setTargetPoseSupplierCommand(this::getTargetReefPose),
+        drive.setAutonTargetPoseSupplierCommand(
+            this::getTargetReefPose, this::getTargetLevel, simpledrive),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
