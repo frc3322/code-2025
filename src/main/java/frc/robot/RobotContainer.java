@@ -525,6 +525,26 @@ public class RobotContainer {
         .algaeLowTrigger()
         .onTrue(superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKLOW));
 
+    apacButtonBox
+        .algaeGroundLeftTrigger()
+        .onTrue(
+            pivot
+                .setFlippedCommand(true)
+                .andThen(superstructure.setSuperStateCommand(SuperState.ALGAEGROUNDINTAKE)));
+
+    apacButtonBox
+        .algaeGroundRightTrigger()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.ALGAEGROUNDINTAKE)));
+
+    apacButtonBox
+        .algaeHoldTrigger()
+        .whileTrue(superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
+
+    apacButtonBox.bargeTrigger().onTrue(superstructure.bargeScoreCommand());
+
     // // Lock to 0° when A button is held
     // driverController
     // .a()

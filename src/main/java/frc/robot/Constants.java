@@ -40,6 +40,13 @@ public final class Constants {
         PivotStates.STOW,
         WristStates.STOW,
         StateMotion.RETRACT),
+    ALGAESTOW(
+        ClimberConstants.stow,
+        ElevatorStates.STOW,
+        IntakeStates.SOFTINTAKE,
+        PivotStates.STOW,
+        WristStates.STOW,
+        StateMotion.RETRACT),
     GROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.GROUND,
@@ -120,7 +127,7 @@ public final class Constants {
     BARGE(
         ClimberConstants.stow,
         ElevatorStates.BARGE,
-        IntakeStates.OFF,
+        IntakeStates.SOFTINTAKE,
         PivotStates.BARGE,
         WristStates.STOW,
         StateMotion.RETRACT),
@@ -268,7 +275,7 @@ public final class Constants {
           new Pose2d(5.27, 4.19, Rotation2d.fromDegrees(180));
 
       public static final Pose2d redCoralPosition1 =
-          new Pose2d(12.279, 4.190, Rotation2d.fromDegrees(0));
+          new Pose2d(12.279, 4.240, Rotation2d.fromDegrees(0));
       public static final Pose2d redCoralPosition2 =
           new Pose2d(12.526, 4.620, Rotation2d.fromDegrees(300));
       public static final Pose2d redCoralPosition3 =
@@ -290,7 +297,7 @@ public final class Constants {
       public static final Pose2d redCoralPosition11 =
           new Pose2d(12.527, 3.433, Rotation2d.fromDegrees(60));
       public static final Pose2d redCoralPosition12 =
-          new Pose2d(12.278, 3.912, Rotation2d.fromDegrees(0));
+          new Pose2d(12.278, 3.862, Rotation2d.fromDegrees(0));
 
       public static final Supplier<Pose2d> coralPosition1 =
           () -> decidePose(blueCoralPosition1, redCoralPosition1);
@@ -318,7 +325,7 @@ public final class Constants {
           () -> decidePose(blueCoralPosition12, redCoralPosition12);
 
       public static final double robotWidth = 40 * 0.0254;
-      public static final double offsetDistanceL4 = (-robotWidth / 2) - .2;
+      public static final double offsetDistanceL4 = (-robotWidth / 2) - .21;
       public static final double offsetDistanceL1To3 = (-robotWidth / 2) - .05;
     }
 

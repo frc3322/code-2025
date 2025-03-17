@@ -109,4 +109,20 @@ public class APACButtonBox {
   public Trigger climberUpTrigger() {
     return new Trigger(() -> buttonBoxOne.getRawAxis(0) < -.5);
   }
+
+  public Trigger algaeGroundLeftTrigger() {
+    return triggerArray.get(30);
+  }
+
+  public Trigger algaeGroundRightTrigger() {
+    return triggerArray.get(29);
+  }
+
+  public Trigger algaeHoldTrigger() {
+    return new Trigger(() -> buttonBoxTwo.getRawAxis(1) > .5);
+  }
+
+  public Trigger bargeTrigger() {
+    return triggerArray.get(10);
+  }
 }
