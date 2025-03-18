@@ -254,8 +254,6 @@ public class Superstructure extends SubsystemBase {
 
   public Command bargeScoreCommand() {
     return new SequentialCommandGroup(
-        this.setSuperStateCommand(SuperState.BARGE),
-        new WaitCommand(1.5),
         intake.setIntakeStateCommand(IntakeStates.OFF));
   }
 

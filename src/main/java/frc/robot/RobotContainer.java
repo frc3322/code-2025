@@ -543,7 +543,7 @@ public class RobotContainer {
         .algaeHoldTrigger()
         .whileTrue(superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
 
-    apacButtonBox.bargeTrigger().onTrue(superstructure.bargeScoreCommand());
+    apacButtonBox.bargeTrigger().onTrue(superstructure.setSuperStateCommand(SuperState.BARGE)).onFalse(superstructure.bargeScoreCommand());
 
     // // Lock to 0° when A button is held
     // driverController

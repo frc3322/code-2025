@@ -106,14 +106,14 @@ public final class Constants {
     ALGAEPLUCKLOW(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAELOW,
-        IntakeStates.REVERSE,
+        IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.OUTAKE,
         StateMotion.DEPLOY),
     ALGAEPLUCKHIGH(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAEHIGH,
-        IntakeStates.REVERSE,
+        IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.OUTAKE,
         StateMotion.DEPLOY),
