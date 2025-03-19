@@ -199,8 +199,8 @@ public class RobotContainer {
             .until(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), drive.getTargetReefPose(), .1, 5))
-            .andThen(new WaitCommand(1)));
+                        drive.getPose(), drive.getTargetReefPose(), .05, 4))
+            .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
@@ -543,7 +543,10 @@ public class RobotContainer {
         .algaeHoldTrigger()
         .whileTrue(superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
 
-    apacButtonBox.bargeTrigger().onTrue(superstructure.setSuperStateCommand(SuperState.BARGE)).onFalse(superstructure.bargeScoreCommand());
+    apacButtonBox
+        .bargeTrigger()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.BARGE))
+        .onFalse(superstructure.bargeScoreCommand());
 
     // // Lock to 0° when A button is held
     // driverController

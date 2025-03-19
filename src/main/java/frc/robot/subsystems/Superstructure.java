@@ -224,7 +224,7 @@ public class Superstructure extends SubsystemBase {
     Command command =
         new SequentialCommandGroup(
                 pivot.setStateCommand(PivotStates.L4SCORE).asProxy(),
-                new WaitCommand(1),
+                new WaitCommand(0.5),
                 intake.setIntakeStateCommand(IntakeStates.OUTTAKE))
             .asProxy();
 
@@ -253,8 +253,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command bargeScoreCommand() {
-    return new SequentialCommandGroup(
-        intake.setIntakeStateCommand(IntakeStates.OFF));
+    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.OFF));
   }
 
   public Command setTargetReefPoseCommand(
@@ -373,7 +372,7 @@ public class Superstructure extends SubsystemBase {
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
-                    drive.getPose(), drive.getTargetReefPose(), .1, 5)),
+                    drive.getPose(), drive.getTargetReefPose(), .1, 7)),
         l4ScoreCommand().asProxy());
   } /*
 
