@@ -60,6 +60,8 @@ import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOSim;
 import frc.robot.subsystems.wrist.WristIOSpark;
 import java.util.function.Supplier;
+import java.util.jar.Attributes.Name;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -190,6 +192,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("L4", superstructure.setTargetLevelCommand(SuperState.REEFL4));
 
+    NamedCommands.registerCommand("L3", superstructure.setTargetLevelCommand(SuperState.REEFL3));
+
     NamedCommands.registerCommand("AUTON L4", superstructure.autonL4Sequence());
 
     NamedCommands.registerCommand(
@@ -201,6 +205,16 @@ public class RobotContainer {
                     Constants.FieldConstants.PoseMethods.atPose(
                         drive.getPose(), drive.getTargetReefPose(), .05, 4))
             .andThen(DriveCommands.stopCommand(drive)));
+
+    NamedCommands.registerCommand(
+        "AUTO ALIGN L3",
+        simpledrive
+            .autoDriveToReef(superstructure::getTargetReefPose, () -> SuperState.REEFL3)
+            .until(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), drive.getTargetReefPose(), .1, 5))
+            .andThen(new WaitCommand(1)));
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
