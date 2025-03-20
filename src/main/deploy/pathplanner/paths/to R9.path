@@ -28,7 +28,16 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3582089552238842,
+      "rotationDegrees": -124.0002770092173
+    },
+    {
+      "waypointRelativePos": 0.8038379530916658,
+      "rotationDegrees": -124.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
