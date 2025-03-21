@@ -60,8 +60,6 @@ import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOSim;
 import frc.robot.subsystems.wrist.WristIOSpark;
 import java.util.function.Supplier;
-import java.util.jar.Attributes.Name;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -203,8 +201,8 @@ public class RobotContainer {
             .until(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
-                        drive.getPose(), drive.getTargetReefPose(), .1, 5))
-            .andThen(new WaitCommand(1)));
+                        drive.getPose(), drive.getTargetReefPose(), .05, 4))
+            .andThen(DriveCommands.stopCommand(drive)));
 
     NamedCommands.registerCommand(
         "AUTO ALIGN L3",
