@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.152,
-        "y": 5.121875
+        "x": 7.602996575342465,
+        "y": 5.677825342465753
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.902006435451909,
-        "y": 5.123668790550606
+        "x": 6.948991455743485,
+        "y": 5.903185860342985
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.115453767123288,
-        "y": 5.4674657534246585
+        "x": 5.814036885245901,
+        "y": 5.9130635245901635
       },
       "prevControl": {
-        "x": 6.352842356891437,
-        "y": 5.389065131948235
+        "x": 6.269089462210313,
+        "y": 6.255616756417363
       },
       "nextControl": {
-        "x": 5.878065177355139,
-        "y": 5.545866374901082
+        "x": 5.232788538868549,
+        "y": 5.475512987300602
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.16,
-        "y": 5.36
+        "x": 5.201764322916667,
+        "y": 5.110212673611111
       },
       "prevControl": {
-        "x": 5.408975706710997,
-        "y": 5.382607464868043
+        "x": 5.379094988904405,
+        "y": 5.286433656755415
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,17 +47,17 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 150.0
+      "rotationDegrees": -32.005383208083316
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.2424037812289057,
+      "minWaypointRelativePos": 0.8426738690074294,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -68,13 +68,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "R10",
+      "name": "R11",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "R10"
+          "name": "R11"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 0.15,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
         }
       }
     }
@@ -88,14 +99,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 150.0
+    "velocity": 0.0,
+    "rotation": -29.999999999999996
   },
   "reversed": false,
-  "folder": "LEFT SIDE v2",
+  "folder": "LEFT SIDE",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

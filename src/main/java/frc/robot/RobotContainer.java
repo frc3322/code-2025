@@ -60,6 +60,8 @@ import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOSim;
 import frc.robot.subsystems.wrist.WristIOSpark;
 import java.util.function.Supplier;
+import java.util.jar.Attributes.Name;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -190,12 +192,24 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("L4", superstructure.setTargetLevelCommand(SuperState.REEFL4));
 
+    NamedCommands.registerCommand("L3", superstructure.setTargetLevelCommand(SuperState.REEFL3));
+
     NamedCommands.registerCommand("AUTON L4", superstructure.autonL4Sequence());
 
     NamedCommands.registerCommand(
         "AUTO ALIGN L4",
         simpledrive
             .autoDriveToReef(superstructure::getTargetReefPose, () -> SuperState.REEFL4)
+            .until(
+                () ->
+                    Constants.FieldConstants.PoseMethods.atPose(
+                        drive.getPose(), drive.getTargetReefPose(), .05, 4))
+            .andThen(DriveCommands.stopCommand(drive)));
+
+    NamedCommands.registerCommand(
+        "AUTO ALIGN L3",
+        simpledrive
+            .autoDriveToReef(superstructure::getTargetReefPose, () -> SuperState.REEFL3)
             .until(
                 () ->
                     Constants.FieldConstants.PoseMethods.atPose(
@@ -524,6 +538,29 @@ public class RobotContainer {
     apacButtonBox
         .algaeLowTrigger()
         .onTrue(superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKLOW));
+
+    apacButtonBox
+        .algaeGroundLeftTrigger()
+        .onTrue(
+            pivot
+                .setFlippedCommand(true)
+                .andThen(superstructure.setSuperStateCommand(SuperState.ALGAEGROUNDINTAKE)));
+
+    apacButtonBox
+        .algaeGroundRightTrigger()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.ALGAEGROUNDINTAKE)));
+
+    apacButtonBox
+        .algaeHoldTrigger()
+        .whileTrue(superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
+
+    apacButtonBox
+        .bargeTrigger()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.BARGE))
+        .onFalse(superstructure.bargeScoreCommand());
 
     // // Lock to 0° when A button is held
     // driverController
