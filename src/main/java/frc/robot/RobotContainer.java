@@ -60,8 +60,6 @@ import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOSim;
 import frc.robot.subsystems.wrist.WristIOSpark;
 import java.util.function.Supplier;
-import java.util.jar.Attributes.Name;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
