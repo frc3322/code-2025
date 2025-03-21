@@ -125,11 +125,11 @@ public class Simpledrive {
         || getTargetLevel.get() == SuperState.REEFL1) {
       modifiedTargetPose =
           Constants.FieldConstants.localOffsetPose2d(
-              modifiedTargetPose, Constants.FieldConstants.ReefConstants.offsetDistanceL1To3);
+              modifiedTargetPose, Constants.FieldConstants.getOffsetL1To3());
     } else {
       modifiedTargetPose =
           Constants.FieldConstants.localOffsetPose2d(
-              modifiedTargetPose, Constants.FieldConstants.ReefConstants.offsetDistanceL4);
+              modifiedTargetPose, Constants.FieldConstants.getOffsetL4());
     }
 
     Pose2d posePlus90 =

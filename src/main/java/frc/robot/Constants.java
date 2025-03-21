@@ -26,6 +26,8 @@ import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
  * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
@@ -139,7 +141,7 @@ public final class Constants {
         WristStates.STOW,
         StateMotion.RETRACT),
     CLIMBED(
-        ClimberConstants.climb,
+        ClimberConstants.getClimbSetpointMethod(),
         ElevatorStates.STOW,
         IntakeStates.OFF,
         PivotStates.CLIMB,
@@ -151,7 +153,7 @@ public final class Constants {
       RETRACT
     }
 
-    public final double CLIMBER_SETPOINT;
+    public final Supplier<Double> CLIMBER_SETPOINT;
     public final ElevatorStates ELEVATOR_STATE;
     public final IntakeStates INTAKE_STATE;
     public final PivotStates PIVOT_STATE;
@@ -159,7 +161,7 @@ public final class Constants {
     public final StateMotion stateMotion;
 
     private SuperState(
-        Double climberSetpoint,
+        Supplier<Double> climberSetpoint,
         ElevatorStates elevatorState,
         IntakeStates intakeState,
         PivotStates pivotState,
@@ -325,8 +327,18 @@ public final class Constants {
           () -> decidePose(blueCoralPosition12, redCoralPosition12);
 
       public static final double robotWidth = 40 * 0.0254;
-      public static final double offsetDistanceL4 = (-robotWidth / 2) - .21;
-      public static final double offsetDistanceL1To3 = (-robotWidth / 2) - .05;
+
+      public static final LoggedNetworkNumber robotL4Offset = new LoggedNetworkNumber("/Tuning/L4Offset", .21);
+      public static final LoggedNetworkNumber robotL1To3Offset =
+        new LoggedNetworkNumber("/Tuning/L1To3Offset", .05);
+    }
+
+    public static double getOffsetL4() {
+      return (-FieldConstants.ReefConstants.robotWidth / 2) - FieldConstants.ReefConstants.robotL4Offset.get();
+    }
+
+    public static double getOffsetL1To3() {
+      return (-FieldConstants.ReefConstants.robotWidth / 2) - FieldConstants.ReefConstants.robotL1To3Offset.get();
     }
 
     public static Pose2d decidePose(Pose2d bluePose, Pose2d redPose) {
