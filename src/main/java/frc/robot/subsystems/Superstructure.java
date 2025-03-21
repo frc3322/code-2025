@@ -57,7 +57,7 @@ public class Superstructure extends SubsystemBase {
   private boolean semiAutoEnabled = true;
 
   private Pose2d[] reefPoses;
-  private Pose2d[] autoReefPoses;
+  private Pose2d[] offsetReefPoses;
 
   Map<SuperState, Command> scoringChoices;
   Map<SuperState, Command> levelChoices;
@@ -134,6 +134,23 @@ public class Superstructure extends SubsystemBase {
     reefPoses[11] = ReefSides.CENTERRIGHT.rightPose.get();
 
     Logger.recordOutput("FieldConstants/Reef Poses", reefPoses);
+
+    // make offset reef pose list
+    offsetReefPoses = new Pose2d[12];
+    offsetReefPoses[0] = simpledrive.getTargetReefPose(reefPoses[0], this::getTargetLevel);
+    offsetReefPoses[1] = simpledrive.getTargetReefPose(reefPoses[1], this::getTargetLevel);
+    offsetReefPoses[2] = simpledrive.getTargetReefPose(reefPoses[2], this::getTargetLevel);
+    offsetReefPoses[3] = simpledrive.getTargetReefPose(reefPoses[3], this::getTargetLevel);
+    offsetReefPoses[4] = simpledrive.getTargetReefPose(reefPoses[4], this::getTargetLevel);
+    offsetReefPoses[5] = simpledrive.getTargetReefPose(reefPoses[5], this::getTargetLevel);
+    offsetReefPoses[6] = simpledrive.getTargetReefPose(reefPoses[6], this::getTargetLevel);
+    offsetReefPoses[7] = simpledrive.getTargetReefPose(reefPoses[7], this::getTargetLevel);
+    offsetReefPoses[8] = simpledrive.getTargetReefPose(reefPoses[8], this::getTargetLevel);
+    offsetReefPoses[9] = simpledrive.getTargetReefPose(reefPoses[9], this::getTargetLevel);
+    offsetReefPoses[10] = simpledrive.getTargetReefPose(reefPoses[10], this::getTargetLevel);
+    offsetReefPoses[11] = simpledrive.getTargetReefPose(reefPoses[11], this::getTargetLevel);
+
+    Logger.recordOutput("FieldConstants/Offset Reef Poses", offsetReefPoses);
 
     Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
@@ -353,7 +370,8 @@ public class Superstructure extends SubsystemBase {
   public Command autonL4Sequence() {
     return new SequentialCommandGroup(
         setSuperStateCommand(SuperState.STOW).asProxy(),
-        drive.setAutonTargetPoseSupplierCommand(this::getTargetReefPose, this::getTargetLevel, simpledrive),
+        drive.setAutonTargetPoseSupplierCommand(
+            this::getTargetReefPose, this::getTargetLevel, simpledrive),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(

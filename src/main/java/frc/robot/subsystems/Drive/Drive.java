@@ -394,8 +394,10 @@ public class Drive extends SubsystemBase {
     return new InstantCommand(() -> setTargetPose(poseSupplier.get()));
   }
 
-  public Command setAutonTargetPoseSupplierCommand(Supplier<Pose2d> poseSupplier, Supplier<SuperState> levelSupplier, Simpledrive Simpledrive) {
-    return new InstantCommand(() -> setTargetPose(Simpledrive.getTargetReefPose(poseSupplier, levelSupplier)));
+  public Command setAutonTargetPoseSupplierCommand(
+      Supplier<Pose2d> poseSupplier, Supplier<SuperState> levelSupplier, Simpledrive Simpledrive) {
+    return new InstantCommand(
+        () -> setTargetPose(Simpledrive.getTargetReefPose(poseSupplier, levelSupplier)));
   }
 
   public Command driveToPoseCommand(Supplier<Pose2d> targetPoseSupplier) {
