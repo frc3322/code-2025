@@ -25,7 +25,6 @@ import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 /**
@@ -328,17 +327,23 @@ public final class Constants {
 
       public static final double robotWidth = 40 * 0.0254;
 
-      public static final LoggedNetworkNumber robotL4Offset = new LoggedNetworkNumber("/Tuning/L4Offset", .21);
+      public static final LoggedNetworkNumber yAdjustDistance =
+          new LoggedNetworkNumber("/Tuning/yAdjustDistance", -.115);
+
+      public static final LoggedNetworkNumber robotL4Offset =
+          new LoggedNetworkNumber("/Tuning/L4Offset", .20);
       public static final LoggedNetworkNumber robotL1To3Offset =
-        new LoggedNetworkNumber("/Tuning/L1To3Offset", .05);
+          new LoggedNetworkNumber("/Tuning/L1To3Offset", .05);
     }
 
     public static double getOffsetL4() {
-      return (-FieldConstants.ReefConstants.robotWidth / 2) - FieldConstants.ReefConstants.robotL4Offset.get();
+      return (-FieldConstants.ReefConstants.robotWidth / 2)
+          - FieldConstants.ReefConstants.robotL4Offset.get();
     }
 
     public static double getOffsetL1To3() {
-      return (-FieldConstants.ReefConstants.robotWidth / 2) - FieldConstants.ReefConstants.robotL1To3Offset.get();
+      return (-FieldConstants.ReefConstants.robotWidth / 2)
+          - FieldConstants.ReefConstants.robotL1To3Offset.get();
     }
 
     public static Pose2d decidePose(Pose2d bluePose, Pose2d redPose) {

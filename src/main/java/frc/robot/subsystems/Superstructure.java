@@ -213,7 +213,7 @@ public class Superstructure extends SubsystemBase {
         Command currentCommand = deployCommand(superState);
         trigger.onTrue(currentCommand);
       }
-      trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
+      trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT.get()));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
     }
   }

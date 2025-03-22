@@ -160,7 +160,7 @@ public class Simpledrive {
               modifiedTargetPose.getTranslation(), new Rotation2d(-Math.PI / 2));
     }
 
-    double yAdjustDistance = -.125;
+    double yAdjustDistance = Constants.FieldConstants.ReefConstants.yAdjustDistance.get();
     modifiedTargetPose =
         new Pose2d(
             modifiedTargetPose.getX()
