@@ -361,9 +361,9 @@ public class Superstructure extends SubsystemBase {
         new SelectCommand<>(levelChoices, this::getTargetLevel).asProxy(),
         new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
         new WaitUntilCommand(elevator::isAtGoal),
-        new WaitUntilCommand(pivot::isAtGoal),
-        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
-        new WaitUntilCommand(wrist::isAtGoal),
+        // new WaitUntilCommand(pivot::isAtGoal),
+        // new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        // new WaitUntilCommand(wrist::isAtGoal),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
@@ -383,9 +383,9 @@ public class Superstructure extends SubsystemBase {
         setSuperStateCommand(SuperState.REEFL4).asProxy(),
         new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
         new WaitUntilCommand(elevator::isAtGoal),
-        new WaitUntilCommand(pivot::isAtGoal),
-        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
-        new WaitUntilCommand(wrist::isAtGoal),
+        // new WaitUntilCommand(pivot::isAtGoal),
+        // new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        // new WaitUntilCommand(wrist::isAtGoal),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
