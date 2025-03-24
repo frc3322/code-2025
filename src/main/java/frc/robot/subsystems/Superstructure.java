@@ -213,7 +213,7 @@ public class Superstructure extends SubsystemBase {
         Command currentCommand = deployCommand(superState);
         trigger.onTrue(currentCommand);
       }
-      trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT.get()));
+      trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
     }
   }
@@ -408,6 +408,10 @@ public class Superstructure extends SubsystemBase {
   public Command goToTargetLevelCommand() {
     return new InstantCommand(() -> this.superState = this.targetLevel);
   }
+
+  // public Command scoreCommand() {
+  //   return new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy();
+  // }
 
   public Trigger getSemiAutoEnabledTrigger() {
     return new Trigger(() -> semiAutoEnabled);

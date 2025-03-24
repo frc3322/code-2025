@@ -26,7 +26,7 @@ public class ElevatorConstants {
     public static final double stowPosition = 0.0;
     public static final double groundPosition = 0.0;
     public static final double aGroundPosition = 0.0;
-    public static final double sourcePosition = 0.2273;
+    public static final double sourcePosition = 0.2403;
     public static final double l1Position = 0.0;
     public static final double l2Position = 0.19;
     public static final double l3Position = 0.57;

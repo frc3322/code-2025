@@ -411,4 +411,13 @@ public class Drive extends SubsystemBase {
         targetPose2d, DriveConstants.pathfindingConstraints, 0.0 // Goal end velocity in meters/sec
         );
   }
+
+  public Command zeroSwervesCommand() {
+    return new InstantCommand(
+        () -> {
+          for (Module module : modules) {
+            module.zeroAbsEncoders();
+          }
+        });
+  }
 }

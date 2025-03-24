@@ -38,6 +38,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.Queue;
 import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Module IO implementation for Spark Flex drive motor controller, Spark Max turn motor controller,
@@ -65,6 +66,8 @@ public class ModuleIOSpark implements ModuleIO {
   // Connection debouncers
   private final Debouncer driveConnectedDebounce = new Debouncer(0.5);
   private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
+
+  private final int moduleID;
 
   public ModuleIOSpark(int module) {
     zeroRotation =
@@ -174,13 +177,16 @@ public class ModuleIOSpark implements ModuleIO {
             turnSpark.configure(
                 turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
-    turnEncoder.setPosition((turnAbsoluteEncoder.getPosition().getValueAsDouble() * 2 * Math.PI));
+    turnEncoder.setPosition(
+        (turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
     // Create odometry queues
     timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     drivePositionQueue =
         SparkOdometryThread.getInstance().registerSignal(driveSpark, driveEncoder::getPosition);
     turnPositionQueue =
         SparkOdometryThread.getInstance().registerSignal(turnSpark, turnEncoder::getPosition);
+
+    this.moduleID = module;
   }
 
   @Override
@@ -222,6 +228,9 @@ public class ModuleIOSpark implements ModuleIO {
     timestampQueue.clear();
     drivePositionQueue.clear();
     turnPositionQueue.clear();
+
+    Logger.recordOutput(
+        "ABS ENCODER" + moduleID, turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble());
   }
 
   @Override
@@ -251,5 +260,11 @@ public class ModuleIOSpark implements ModuleIO {
         MathUtil.inputModulus(
             rotation.plus(zeroRotation).getRadians(), turnPIDMinInput, turnPIDMaxInput);
     turnController.setReference(setpoint, ControlType.kPosition);
+  }
+
+  @Override
+  public void alignToAbsEncoder() {
+    turnEncoder.setPosition(
+        (turnAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
   }
 }

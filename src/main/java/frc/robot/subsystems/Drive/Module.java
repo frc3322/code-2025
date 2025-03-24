@@ -128,4 +128,8 @@ public class Module {
   public double getFFCharacterizationVelocity() {
     return inputs.driveVelocityRadPerSec;
   }
+
+  public void zeroAbsEncoders() {
+    io.alignToAbsEncoder();
+  }
 }

@@ -56,10 +56,10 @@ public class Climber extends SubsystemBase {
     return new RunCommand(
         () -> {
           double setSpeed = 0;
-          if (setpoint > (encoder.getPosition() + 2)) {
+          if (setpoint > (encoder.getPosition() + 3)) {
             setSpeed = 1;
           }
-          if (setpoint < (encoder.getPosition() - 2)) {
+          if (setpoint < (encoder.getPosition() - 3)) {
             setSpeed = -1;
           }
           if (encoder.getPosition() <= 0 && setSpeed < 0) {

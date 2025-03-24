@@ -380,32 +380,34 @@ public class RobotContainer {
 
     driverController.y().whileTrue(superstructure.driveToSourceCommand());
 
-    // Operator Controls
-    operatorController
-        .leftTrigger(0.1)
-        .whileTrue(
-            DriveCommands.joystickDrive(
-                drive,
-                () -> -driverController.getLeftY() / 1.5,
-                () -> -driverController.getLeftX() / 1.5,
-                () -> -driverController.getRightX()));
+    driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
-    operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
-    operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
-    operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
-    operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
+    // Operator Controls
+    // operatorController
+    //     .leftTrigger(0.1)
+    //     .whileTrue(
+    //         DriveCommands.joystickDrive(
+    //             drive,
+    //             () -> -driverController.getLeftY() / 1.5,
+    //             () -> -driverController.getLeftX() / 1.5,
+    //             () -> -driverController.getRightX()));
+
+    // operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
+    // operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
+    // operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
+    // operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
 
     // Reef Selector
-    operatorController
-        .leftBumper()
-        .whileTrue(
-            superstructure.setTargetReefPoseCommand(
-                true, operatorController::getLeftX, operatorController::getLeftY));
-    operatorController
-        .rightBumper()
-        .whileTrue(
-            superstructure.setTargetReefPoseCommand(
-                false, operatorController::getLeftX, operatorController::getLeftY));
+    // operatorController
+    //     .leftBumper()
+    //     .whileTrue(
+    //         superstructure.setTargetReefPoseCommand(
+    //             true, operatorController::getLeftX, operatorController::getLeftY));
+    // operatorController
+    //     .rightBumper()
+    //     .whileTrue(
+    //         superstructure.setTargetReefPoseCommand(
+    //             false, operatorController::getLeftX, operatorController::getLeftY));
 
     operatorController
         .povUp()
@@ -514,6 +516,7 @@ public class RobotContainer {
                 () -> -driverController.getLeftY() / 1.5,
                 () -> -driverController.getLeftX() / 1.5,
                 () -> -driverController.getRightX()));
+    // .onFalse(superstructure.scoreCommand());
 
     apacButtonBox
         .climberUpTrigger()
@@ -560,6 +563,24 @@ public class RobotContainer {
         .onTrue(superstructure.setSuperStateCommand(SuperState.BARGE))
         .onFalse(superstructure.bargeScoreCommand());
 
+    apacButtonBox
+        .manualTrigger()
+        .and(
+            () ->
+                superstructure.getTargetLevel() == SuperState.REEFL3
+                    || superstructure.getTargetLevel() == SuperState.REEFL2)
+        .onFalse(superstructure.l2and3ScoreCommand());
+
+    apacButtonBox
+        .manualTrigger()
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
+        .onFalse(superstructure.l4ScoreCommand());
+
+    apacButtonBox
+        .manualTrigger()
+        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL1)
+        .onFalse(superstructure.l1ScoreCommand());
+
     // // Lock to 0° when A button is held
     // driverController
     // .a()
@@ -587,6 +608,10 @@ public class RobotContainer {
 
   public Command onTeleopInitCommand() {
     return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.STOW));
+  }
+
+  public Command zeroSwervesCommand() {
+    return drive.zeroSwervesCommand();
   }
 
   public Command manualAdjustDrivePoseCommand(Supplier<Pose2d> poseSupplier) {
