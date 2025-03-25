@@ -229,6 +229,11 @@ public final class Constants {
     // station
     // CENTER is the center of the field, OUTER is more towards the driver station
 
+    public static final Pose2d blueBarge = new Pose2d(9.775, 4.600, Rotation2d.fromDegrees(180));
+    public static final Pose2d redBarge = new Pose2d(7.775, 3.225, Rotation2d.fromDegrees(0));
+
+    public static final Supplier<Pose2d> bargePosition = () -> decidePose(blueBarge, redBarge);
+
     public static final class ReefConstants {
       public static enum ReefSides {
         CENTER(coralPosition1, coralPosition12),

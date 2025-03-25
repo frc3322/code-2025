@@ -57,7 +57,7 @@ public class Superstructure extends SubsystemBase {
   private boolean semiAutoEnabled = true;
 
   private Pose2d[] reefPoses;
-  private Pose2d[] offsetReefPoses;
+  private Pose2d[] autoReefPoses;
 
   Map<SuperState, Command> scoringChoices;
   Map<SuperState, Command> levelChoices;
@@ -134,23 +134,6 @@ public class Superstructure extends SubsystemBase {
     reefPoses[11] = ReefSides.CENTERRIGHT.rightPose.get();
 
     Logger.recordOutput("FieldConstants/Reef Poses", reefPoses);
-
-    // make offset reef pose list
-    offsetReefPoses = new Pose2d[12];
-    offsetReefPoses[0] = simpledrive.getTargetReefPose(reefPoses[0], this::getTargetLevel);
-    offsetReefPoses[1] = simpledrive.getTargetReefPose(reefPoses[1], this::getTargetLevel);
-    offsetReefPoses[2] = simpledrive.getTargetReefPose(reefPoses[2], this::getTargetLevel);
-    offsetReefPoses[3] = simpledrive.getTargetReefPose(reefPoses[3], this::getTargetLevel);
-    offsetReefPoses[4] = simpledrive.getTargetReefPose(reefPoses[4], this::getTargetLevel);
-    offsetReefPoses[5] = simpledrive.getTargetReefPose(reefPoses[5], this::getTargetLevel);
-    offsetReefPoses[6] = simpledrive.getTargetReefPose(reefPoses[6], this::getTargetLevel);
-    offsetReefPoses[7] = simpledrive.getTargetReefPose(reefPoses[7], this::getTargetLevel);
-    offsetReefPoses[8] = simpledrive.getTargetReefPose(reefPoses[8], this::getTargetLevel);
-    offsetReefPoses[9] = simpledrive.getTargetReefPose(reefPoses[9], this::getTargetLevel);
-    offsetReefPoses[10] = simpledrive.getTargetReefPose(reefPoses[10], this::getTargetLevel);
-    offsetReefPoses[11] = simpledrive.getTargetReefPose(reefPoses[11], this::getTargetLevel);
-
-    Logger.recordOutput("FieldConstants/Offset Reef Poses", offsetReefPoses);
 
     Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
@@ -241,7 +224,7 @@ public class Superstructure extends SubsystemBase {
     Command command =
         new SequentialCommandGroup(
                 pivot.setStateCommand(PivotStates.L4SCORE).asProxy(),
-                new WaitCommand(0.5),
+                new WaitCommand(1),
                 intake.setIntakeStateCommand(IntakeStates.OUTTAKE))
             .asProxy();
 
@@ -267,10 +250,6 @@ public class Superstructure extends SubsystemBase {
             intake.setIntakeStateCommand(IntakeStates.OUTTAKE).asProxy());
     command.addRequirements(this);
     return command;
-  }
-
-  public Command bargeScoreCommand() {
-    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.OFF));
   }
 
   public Command setTargetReefPoseCommand(
@@ -321,7 +300,7 @@ public class Superstructure extends SubsystemBase {
             .nearest(
                 Arrays.asList(
                     FieldConstants.sideOffsetPose2d(
-                        SourceConstants.leftSource.get(), ReefConstants.robotWidth / 2),
+                        SourceConstants.leftSource.get(), -ReefConstants.robotWidth / 2),
                     FieldConstants.sideOffsetPose2d(
                         SourceConstants.rightSource.get(), ReefConstants.robotWidth / 2)));
     return rotationOptimizedPose(nearest);
@@ -351,6 +330,31 @@ public class Superstructure extends SubsystemBase {
     return unoptimized;
   }
 
+  public Command autoBarge() {
+    return new ParallelCommandGroup(
+        drive.driveToPoseCommand(FieldConstants.bargePosition), autoScoreBarge());
+  }
+
+  public Command autoScoreBarge() {
+    return new SequentialCommandGroup(
+        setSuperStateCommand(SuperState.ALGAESTOW).asProxy(),
+        new WaitUntilCommand(
+            () ->
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drive.getPose(), FieldConstants.bargePosition.get(), 1, 0)),
+        setSuperStateCommand(SuperState.BARGE),
+        new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
+        new WaitUntilCommand(elevator::isAtGoal),
+        new WaitUntilCommand(pivot::isAtGoal),
+        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        new WaitUntilCommand(wrist::isAtGoal),
+        new WaitUntilCommand(
+            () ->
+                Constants.FieldConstants.PoseMethods.atPose(
+                    drive.getPose(), FieldConstants.bargePosition.get(), .1, 5)),
+        intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
+  }
+
   public Command autoScoreSequence() {
     return new SequentialCommandGroup(
         setSuperStateCommand(SuperState.STOW).asProxy(),
@@ -361,9 +365,9 @@ public class Superstructure extends SubsystemBase {
         new SelectCommand<>(levelChoices, this::getTargetLevel).asProxy(),
         new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
         new WaitUntilCommand(elevator::isAtGoal),
-        // new WaitUntilCommand(pivot::isAtGoal),
-        // new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
-        // new WaitUntilCommand(wrist::isAtGoal),
+        new WaitUntilCommand(pivot::isAtGoal),
+        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        new WaitUntilCommand(wrist::isAtGoal),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
@@ -374,8 +378,7 @@ public class Superstructure extends SubsystemBase {
   public Command autonL4Sequence() {
     return new SequentialCommandGroup(
         setSuperStateCommand(SuperState.STOW).asProxy(),
-        drive.setAutonTargetPoseSupplierCommand(
-            this::getTargetReefPose, this::getTargetLevel, simpledrive),
+        drive.setTargetPoseSupplierCommand(this::getTargetReefPose),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
@@ -383,13 +386,13 @@ public class Superstructure extends SubsystemBase {
         setSuperStateCommand(SuperState.REEFL4).asProxy(),
         new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
         new WaitUntilCommand(elevator::isAtGoal),
-        // new WaitUntilCommand(pivot::isAtGoal),
-        // new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
-        // new WaitUntilCommand(wrist::isAtGoal),
+        new WaitUntilCommand(pivot::isAtGoal),
+        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
+        new WaitUntilCommand(wrist::isAtGoal),
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
-                    drive.getPose(), drive.getTargetReefPose(), .1, 7)),
+                    drive.getPose(), drive.getTargetReefPose(), .1, 5)),
         l4ScoreCommand().asProxy());
   } /*
 
@@ -405,13 +408,13 @@ public class Superstructure extends SubsystemBase {
       }
     */
 
+  public Command bargeScoreCommand() {
+    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.OFF));
+  }
+
   public Command goToTargetLevelCommand() {
     return new InstantCommand(() -> this.superState = this.targetLevel);
   }
-
-  // public Command scoreCommand() {
-  //   return new SelectCommand<>(scoringChoices, this::getTargetLevel).asProxy();
-  // }
 
   public Trigger getSemiAutoEnabledTrigger() {
     return new Trigger(() -> semiAutoEnabled);

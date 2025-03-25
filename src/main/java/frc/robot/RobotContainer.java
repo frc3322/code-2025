@@ -377,9 +377,12 @@ public class RobotContainer {
         .leftBumper()
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
+    /*
+        driverController.y().whileTrue(superstructure.driveToSourceCommand());
+    */
 
-    driverController.y().whileTrue(superstructure.driveToSourceCommand());
-
+    driverController.y().whileTrue(superstructure.autoBarge())
+        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
     driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
     // Operator Controls
