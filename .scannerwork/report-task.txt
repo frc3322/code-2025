@@ -1,0 +1,6 @@
+projectKey=frc-robot-2025
+serverUrl=http://localhost:9000
+serverVersion=25.3.0.104237
+dashboardUrl=http://localhost:9000/dashboard?id=frc-robot-2025
+ceTaskId=1790a191-f009-4dc0-966a-c969f8bdaf63
+ceTaskUrl=http://localhost:9000/api/ce/task?id=1790a191-f009-4dc0-966a-c969f8bdaf63
