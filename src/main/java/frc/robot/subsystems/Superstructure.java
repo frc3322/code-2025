@@ -173,6 +173,18 @@ public class Superstructure extends SubsystemBase {
     return command;
   }
 
+  public Command groundCommand(SuperState superState) {
+    Command command =
+        new SequentialCommandGroup(
+            elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy(),
+            pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
+            new WaitCommand(.25),
+            wrist.setStateCommand(superState.WRIST_STATE).asProxy());
+
+    command.addRequirements(this);
+    return command;
+  }
+
   public Command retractCommand(SuperState superState) {
     Command command =
         new SequentialCommandGroup(
@@ -211,6 +223,10 @@ public class Superstructure extends SubsystemBase {
       }
       if (superState.stateMotion == StateMotion.DEPLOY) {
         Command currentCommand = deployCommand(superState);
+        trigger.onTrue(currentCommand);
+      }
+      if (superState.stateMotion == StateMotion.GROUND) {
+        Command currentCommand = groundCommand(superState);
         trigger.onTrue(currentCommand);
       }
       trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));

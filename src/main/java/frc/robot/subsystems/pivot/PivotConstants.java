@@ -38,8 +38,8 @@ public class PivotConstants {
     public static final double groundPosition = 0.28;
     public static final double aGroundPosition = 0.198;
     public static final double sourcePosition = 0.085;
-    public static final double l1Position = -0.11;
-    public static final double l2Position = -0.1;
+    public static final double l1Position = -0.1;
+    public static final double l2Position = -0.07;
     public static final double l3Position = -0.1;
     public static final double l4Position = -0.15;
     public static final double l4AutoPosition = -0.02;

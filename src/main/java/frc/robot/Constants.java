@@ -54,7 +54,7 @@ public final class Constants {
         IntakeStates.INTAKE,
         PivotStates.GROUND,
         WristStates.INTAKE,
-        StateMotion.DEPLOY),
+        StateMotion.GROUND),
     ALGAEGROUNDINTAKE(
         ClimberConstants.stow,
         ElevatorStates.AGROUND,
@@ -110,14 +110,14 @@ public final class Constants {
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.OUTAKE,
-        StateMotion.DEPLOY),
+        StateMotion.RETRACT),
     ALGAEPLUCKHIGH(
         ClimberConstants.stow,
         ElevatorStates.REEFALGAEHIGH,
         IntakeStates.INTAKE,
         PivotStates.REEFALGAE,
         WristStates.OUTAKE,
-        StateMotion.DEPLOY),
+        StateMotion.RETRACT),
     PROCESSOR(
         ClimberConstants.stow,
         ElevatorStates.GROUND,
@@ -149,7 +149,8 @@ public final class Constants {
 
     public static enum StateMotion {
       DEPLOY,
-      RETRACT
+      RETRACT,
+      GROUND
     }
 
     public final double CLIMBER_SETPOINT;
