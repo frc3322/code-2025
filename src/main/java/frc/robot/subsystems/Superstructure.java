@@ -26,6 +26,7 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Simpledrive;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
@@ -258,7 +259,11 @@ public class Superstructure extends SubsystemBase {
         new SequentialCommandGroup(
                 pivot.setStateCommand(PivotStates.L4SCORE).asProxy(),
                 new WaitCommand(0.5),
-                intake.setIntakeStateCommand(IntakeStates.OUTTAKE))
+                intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
+                new WaitCommand(.05),
+                elevator.setStateCommand(ElevatorStates.STOW),
+                new WaitCommand(.05),
+                pivot.setStateCommand(PivotStates.STOW))
             .asProxy();
 
     command.addRequirements(this);
