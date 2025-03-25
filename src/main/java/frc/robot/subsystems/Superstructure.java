@@ -341,17 +341,11 @@ public class Superstructure extends SubsystemBase {
         new WaitUntilCommand(
             () ->
                 Constants.FieldConstants.PoseMethods.atPose(
-                    drive.getPose(), FieldConstants.bargePosition.get(), 1, 0)),
+                    drive.getPose(), FieldConstants.bargePosition.get(), .1, 0)),
         setSuperStateCommand(SuperState.BARGE),
         new WaitUntilCommand(() -> elevator.getElevatorState() == targetLevel.ELEVATOR_STATE),
         new WaitUntilCommand(elevator::isAtGoal),
         new WaitUntilCommand(pivot::isAtGoal),
-        new WaitUntilCommand(() -> wrist.getWristState() == targetLevel.WRIST_STATE),
-        new WaitUntilCommand(wrist::isAtGoal),
-        new WaitUntilCommand(
-            () ->
-                Constants.FieldConstants.PoseMethods.atPose(
-                    drive.getPose(), FieldConstants.bargePosition.get(), .1, 5)),
         intake.setIntakeStateCommand(IntakeStates.OUTTAKE));
   }
 

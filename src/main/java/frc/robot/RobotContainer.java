@@ -381,7 +381,9 @@ public class RobotContainer {
         driverController.y().whileTrue(superstructure.driveToSourceCommand());
     */
 
-    driverController.y().whileTrue(superstructure.autoBarge())
+    driverController
+        .y()
+        .whileTrue(superstructure.autoBarge())
         .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
     driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
