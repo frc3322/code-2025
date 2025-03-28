@@ -33,6 +33,7 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
@@ -177,9 +178,10 @@ public class Superstructure extends SubsystemBase {
   public Command groundCommand(SuperState superState) {
     Command command =
         new SequentialCommandGroup(
+            wrist.setStateCommand(WristStates.STOW),
             elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy(),
             pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
-            new WaitCommand(.25),
+            new WaitUntilCommand(pivot::pastGround),
             wrist.setStateCommand(superState.WRIST_STATE).asProxy());
 
     command.addRequirements(this);
@@ -262,7 +264,7 @@ public class Superstructure extends SubsystemBase {
                 intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
                 new WaitCommand(.05),
                 elevator.setStateCommand(ElevatorStates.STOW),
-                new WaitCommand(.05),
+                new WaitCommand(.5),
                 pivot.setStateCommand(PivotStates.STOW))
             .asProxy();
 
