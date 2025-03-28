@@ -331,8 +331,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command rotateToSourceCommand(DoubleSupplier xInput, DoubleSupplier yInput) {
-      return simpledrive.autoRotateToPose(xInput, yInput, () -> nearestSource());
-    
+    return simpledrive.autoRotateToPose(xInput, yInput, () -> nearestSource());
   }
 
   public Pose2d nearestSource() {

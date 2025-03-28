@@ -378,8 +378,12 @@ public class RobotContainer {
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
 
-    driverController.y().onTrue(superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE))
-        .whileTrue(superstructure.rotateToSourceCommand(() -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
+    driverController
+        .y()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE))
+        .whileTrue(
+            superstructure.rotateToSourceCommand(
+                () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
 
     driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
