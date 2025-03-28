@@ -330,10 +330,9 @@ public class Superstructure extends SubsystemBase {
         autoScoreSequence());
   }
 
-  public Command driveToSourceCommand() {
-    return new ParallelCommandGroup(
-        drive.driveToPoseCommand(() -> nearestSource()),
-        setSuperStateCommand(SuperState.SOURCEINTAKE).asProxy());
+  public Command rotateToSourceCommand(DoubleSupplier xInput, DoubleSupplier yInput) {
+      return simpledrive.autoRotateToPose(xInput, yInput, () -> nearestSource());
+    
   }
 
   public Pose2d nearestSource() {
