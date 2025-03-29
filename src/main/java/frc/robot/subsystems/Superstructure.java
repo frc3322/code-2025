@@ -264,7 +264,7 @@ public class Superstructure extends SubsystemBase {
                 intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
                 new WaitCommand(.05),
                 elevator.setStateCommand(ElevatorStates.STOW),
-                new WaitCommand(.5),
+                new WaitCommand(.4),
                 pivot.setStateCommand(PivotStates.STOW))
             .asProxy();
 
@@ -331,8 +331,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command rotateToSourceCommand(DoubleSupplier xInput, DoubleSupplier yInput) {
-      return simpledrive.autoRotateToPose(xInput, yInput, () -> nearestSource());
-    
+    return simpledrive.autoRotateToPose(xInput, yInput, () -> nearestSource());
   }
 
   public Pose2d nearestSource() {

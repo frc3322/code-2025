@@ -43,7 +43,7 @@ public class PivotConstants {
     public static final double l3Position = -0.1;
     public static final double l4Position = -0.15;
     public static final double l4AutoPosition = -0.02;
-    public static final double l2and3ScorePosition = -0.2;
+    public static final double l2and3ScorePosition = -0.16;
     public static final double l4ScorePosition = -0.25;
     public static final double reefAlgaePosition = -0.25;
     public static final double processerPosition = 0;
