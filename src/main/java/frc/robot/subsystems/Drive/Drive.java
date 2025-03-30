@@ -195,6 +195,8 @@ public class Drive extends SubsystemBase {
 
       addVisionMeasurement("limelight-right");
       addVisionMeasurement("limelight-left");
+      addVisionMeasurement("limelight-front-left");
+      addVisionMeasurement("limelight-front-right");
     }
 
     Logger.recordOutput("Target Drivetrain Pose", targetPose2d);
