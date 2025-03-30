@@ -293,7 +293,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command bargeScoreCommand() {
-    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.OFF));
+    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.REVERSE));
   }
 
   public Command setTargetReefPoseCommand(

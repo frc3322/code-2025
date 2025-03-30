@@ -236,7 +236,8 @@ public class Simpledrive {
               yPID.reset(drivetrain.getPose().getY());
               thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
             }),
-        DriveCommands.translationalJoystickDrive(drivetrain, xInput, yInput, () -> getThetaSpeed()*2));
+        DriveCommands.translationalJoystickDrive(
+            drivetrain, xInput, yInput, () -> getThetaSpeed() * 2));
   }
 
   public Command turnToAngleCommand(

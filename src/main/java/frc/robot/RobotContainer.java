@@ -321,35 +321,12 @@ public class RobotContainer {
     // L1 thru L4 bindings - all same button
     driverController
         .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL1)
         .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL1))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    driverController
-        .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL2)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL2))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    driverController
-        .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL3)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL3))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    driverController
-        .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL4))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    // Auto align
-    driverController
-        .rightBumper()
-        .and(() -> simpledrive.getEnabled())
-        .whileTrue(
-            simpledrive.autoDriveToReef(
-                superstructure::getTargetReefPose, superstructure::getTargetLevel));
+        .onFalse(
+            superstructure
+                .l1ScoreCommand()
+                .andThen(new WaitCommand(.5))
+                .andThen(superstructure.setSuperStateCommand(SuperState.STOW)));
 
     driverController
         .leftBumper()
