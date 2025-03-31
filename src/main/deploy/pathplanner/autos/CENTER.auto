@@ -83,6 +83,12 @@
           "data": {
             "waitTime": 0.25
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GET OFF THE LINE"
+          }
         }
       ]
     }
