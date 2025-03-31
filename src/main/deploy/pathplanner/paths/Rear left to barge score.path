@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.122174657534247,
-        "y": 3.9949486301369865
+        "x": 5.17,
+        "y": 5.33
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.390987345363835,
-        "y": 4.093424997455467
+        "x": 5.574529109589041,
+        "y": 6.053467465753425
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.985,
-        "y": 4.08
+        "x": 7.95,
+        "y": 5.6
       },
       "prevControl": {
-        "x": 6.234568805839858,
-        "y": 4.065323108242299
+        "x": 7.078510273972603,
+        "y": 5.64507705479452
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
+      "minWaypointRelativePos": 0.5,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,13 +47,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "R12",
-      "waypointRelativePos": 0,
+      "name": "ALGAE STOW",
+      "waypointRelativePos": 0.1,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "R12"
+          "name": "ALGAE STOW"
+        }
+      }
+    },
+    {
+      "name": "BARGE",
+      "waypointRelativePos": 0.7,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "BARGE"
         }
       }
     }
@@ -68,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "CENTER",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -29.999999999999996
   },
   "useDefaultConstraints": true
 }

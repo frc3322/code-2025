@@ -213,6 +213,14 @@ public class RobotContainer {
                     Constants.FieldConstants.PoseMethods.atPose(
                         drive.getPose(), drive.getTargetReefPose(), .1, 5))
             .andThen(new WaitCommand(1)));
+    
+    NamedCommands.registerCommand("HIGH ALGAE", superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKHIGH));
+    NamedCommands.registerCommand("LOW ALGAE", superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKLOW));
+
+    NamedCommands.registerCommand("ALGAE STOW", superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
+
+    NamedCommands.registerCommand("BARGE", superstructure.setSuperStateCommand(SuperState.BARGE));
+    NamedCommands.registerCommand("BARGE SCORE", superstructure.bargeScoreCommand());
 
     NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
