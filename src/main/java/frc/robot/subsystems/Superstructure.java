@@ -264,7 +264,7 @@ public class Superstructure extends SubsystemBase {
                 intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
                 new WaitCommand(.05),
                 elevator.setStateCommand(ElevatorStates.STOW),
-                new WaitCommand(.4),
+                new WaitCommand(.15),
                 pivot.setStateCommand(PivotStates.STOW))
             .asProxy();
 

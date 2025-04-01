@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.96,
-        "y": 4.0
+        "x": 5.98,
+        "y": 3.9470799180327862
       },
       "prevControl": {
-        "x": 6.677473404112335,
-        "y": 3.96573423715839
+        "x": 6.697473404112335,
+        "y": 3.9128141551911764
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.5,
+      "minWaypointRelativePos": 0.0,
       "maxWaypointRelativePos": 1.5,
       "constraints": {
         "maxVelocity": 0.5,
@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "LOW ALGAE",
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
