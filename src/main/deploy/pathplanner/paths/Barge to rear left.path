@@ -59,7 +59,7 @@
     },
     {
       "name": "HIGH ALGAE",
-      "waypointRelativePos": 0.7007672634271118,
+      "waypointRelativePos": 0.5,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
