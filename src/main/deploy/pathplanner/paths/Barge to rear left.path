@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "STOW",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.1156295933365968,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

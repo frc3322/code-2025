@@ -156,6 +156,13 @@ public class Superstructure extends SubsystemBase {
 
     Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
+
+    Logger.recordOutput(
+        "FieldConstants/AutonPoseLeft", new Pose2d(7.152, 5.122, new Rotation2d(0)));
+    Logger.recordOutput(
+        "FieldConstants/AutonPoseMiddle", new Pose2d(7.122, 7.122, new Rotation2d(0)));
+    Logger.recordOutput(
+        "FieldConstants/AutonPoseRight", new Pose2d(7.152, 2.930, new Rotation2d(0)));
   }
 
   public Command deployCommand(SuperState superState) {
