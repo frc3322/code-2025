@@ -375,6 +375,10 @@ public class RobotContainer {
 
     driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
+    driverController.povDown()
+    .onTrue(elevator.lowerElevatorCommand())
+    .onFalse(elevator.stopElevatorCommand().andThen(elevator.zeroElevatorCommand()));
+
     // Operator Controls
     // operatorController
     //     .leftTrigger(0.1)

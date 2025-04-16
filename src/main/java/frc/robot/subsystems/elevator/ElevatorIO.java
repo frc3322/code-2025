@@ -29,6 +29,10 @@ public interface ElevatorIO {
 
   public default void presetSetpoint(double setpointMeters) {}
 
+  public default void zeroEncoder() {}
+
+  public default void setMotorSpeeds(double speeds) {}
+
   /**
    * Method to update the elevator's input values for simulation or logging.
    *
