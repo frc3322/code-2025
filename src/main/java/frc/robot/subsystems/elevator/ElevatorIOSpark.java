@@ -116,12 +116,12 @@ public class ElevatorIOSpark implements ElevatorIO {
   }
 
   @Override
-  public void zeroEncoder(){
+  public void zeroEncoder() {
     leftEncoder.setPosition(0);
   }
 
   @Override
-  public void setMotorSpeeds(double speeds){
+  public void setMotorSpeeds(double speeds) {
     leftMotor.set(speeds);
   }
 

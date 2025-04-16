@@ -101,13 +101,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command lowerElevatorCommand() {
-    return new RunCommand(
-      () -> elevatorIO.setMotorSpeeds(-.1), this);
+    return new RunCommand(() -> elevatorIO.setMotorSpeeds(-.1), this);
   }
 
   public Command stopElevatorCommand() {
-    return new InstantCommand(
-      () -> elevatorIO.setMotorSpeeds(0), this);
+    return new InstantCommand(() -> elevatorIO.setMotorSpeeds(0), this);
   }
 
   public Command zeroElevatorCommand() {
