@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.8,
-        "y": 5.0
+        "x": 7.744,
+        "y": 5.386
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.077354452054794,
-        "y": 5.031720890410959
+        "x": 7.021354452054794,
+        "y": 5.417720890410959
       },
       "isLocked": false,
       "linkedName": null
@@ -59,7 +59,7 @@
     },
     {
       "name": "HIGH ALGAE",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.3370896619304237,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
