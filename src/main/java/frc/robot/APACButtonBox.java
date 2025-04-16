@@ -125,4 +125,8 @@ public class APACButtonBox {
   public Trigger bargeTrigger() {
     return triggerArray.get(10);
   }
+
+  public Trigger processorRight() {
+    return triggerArray.get(31);
+  }
 }

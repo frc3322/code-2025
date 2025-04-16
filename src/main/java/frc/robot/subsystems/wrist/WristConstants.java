@@ -63,7 +63,7 @@ public class WristConstants {
 
   public static enum WristStates {
     INTAKE(Setpoints.intakePosition),
-    ALGAEGROUNDINTAKE(-Setpoints.intakePosition),
+    ALGAEGROUNDINTAKE(Setpoints.intakePosition),
     STOW(Setpoints.stowPosition),
     OUTAKE(Setpoints.outakePosition),
     L1OUT(Setpoints.intakePosition);

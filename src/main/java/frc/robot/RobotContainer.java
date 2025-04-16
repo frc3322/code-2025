@@ -366,18 +366,24 @@ public class RobotContainer {
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
 
-    driverController
-        .y()
-        .onTrue(superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE))
-        .whileTrue(
-            superstructure.rotateToSourceCommand(
-                () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
+    // driverController
+    //     .y()
+    //     .onTrue(superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE))
+    //     .whileTrue(
+    //         superstructure.rotateToSourceCommand(
+    //             () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
 
     driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
-    driverController.povDown()
-    .onTrue(elevator.lowerElevatorCommand())
-    .onFalse(elevator.stopElevatorCommand().andThen(elevator.zeroElevatorCommand()));
+    driverController
+        .povDown()
+        .onTrue(elevator.lowerElevatorCommand())
+        .onFalse(elevator.stopElevatorCommand().andThen(elevator.zeroElevatorCommand()));
+
+    apacButtonBox
+        .processorRight()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.PROCESSOR))
+        .onFalse(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
     // Operator Controls
     // operatorController
@@ -406,19 +412,19 @@ public class RobotContainer {
     //         superstructure.setTargetReefPoseCommand(
     //             false, operatorController::getLeftX, operatorController::getLeftY));
 
-    // operatorController
-    //     .povUp()
-    //     .onTrue(
-    //         pivot
-    //             .setFlippedCommand(false)
-    //             .andThen(superstructure.setSuperStateCommand(SuperState.CLIMB)));
+    operatorController
+        .povUp()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.CLIMB)));
 
-    // operatorController
-    //     .povDown()
-    //     .onTrue(
-    //         pivot
-    //             .setFlippedCommand(false)
-    //             .andThen(superstructure.setSuperStateCommand(SuperState.CLIMBED)));
+    operatorController
+        .povDown()
+        .onTrue(
+            pivot
+                .setFlippedCommand(false)
+                .andThen(superstructure.setSuperStateCommand(SuperState.CLIMBED)));
 
     // APAC (Button Box) controls
     apacButtonBox

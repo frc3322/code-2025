@@ -36,7 +36,7 @@ public class PivotConstants {
     // ALL SETPOINTS ARE IN ROTATIONS
     public static final double stowPosition = 0;
     public static final double groundPosition = 0.28;
-    public static final double aGroundPosition = 0.198;
+    public static final double aGroundPosition = 0.22;
     public static final double sourcePosition = 0.085;
     public static final double l1Position = -0.1;
     public static final double l2Position = -0.07;
@@ -46,7 +46,7 @@ public class PivotConstants {
     public static final double l2and3ScorePosition = -0.16;
     public static final double l4ScorePosition = -0.25;
     public static final double reefAlgaePosition = -0.25;
-    public static final double processerPosition = 0;
+    public static final double processerPosition = .12;
     public static final double bargePosition = 0;
     public static final double climbPosition = 0.15;
 

@@ -121,8 +121,8 @@ public final class Constants {
     PROCESSOR(
         ClimberConstants.stow,
         ElevatorStates.GROUND,
-        IntakeStates.REVERSE,
-        PivotStates.GROUND,
+        IntakeStates.SOFTINTAKE,
+        PivotStates.PROCESSER,
         WristStates.INTAKE,
         StateMotion.DEPLOY),
     BARGE(
