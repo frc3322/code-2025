@@ -610,7 +610,7 @@ public class RobotContainer {
   }
 
   public Command onTeleopInitCommand() {
-    return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.STOW));
+    return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
   }
 
   public Command zeroSwervesCommand() {
