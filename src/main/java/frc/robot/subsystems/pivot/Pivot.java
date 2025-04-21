@@ -28,7 +28,8 @@ public class Pivot extends SubsystemBase {
   // -------------------------- State Variables -----------------------------
   private PivotStates pivotState = PivotStates.STOW; // Current state of the pivot (initially STOW)
   private boolean atGoal = false; // Flag indicating whether the pivot has reached the goal
-  private double pivotAngle = 0; // Current angle of the pivot
+  private double visPivotAngle = 0; // Current angle of the pivot
+  private double pivotAngle = 0;
 
   // ----------------------- Hardware/Subsystem Instances ---------------------
   private final PivotIO pivotIO; // Pivot IO interface for communication with the pivot system
@@ -66,7 +67,8 @@ public class Pivot extends SubsystemBase {
 
     Logger.processInputs("Pivot", inputs);
 
-    pivotAngle = inputs.absolutePosition * 2 * Math.PI;
+    visPivotAngle = inputs.absolutePosition * 2 * Math.PI;
+    pivotAngle = inputs.absolutePosition;
   }
 
   @Override
@@ -102,8 +104,12 @@ public class Pivot extends SubsystemBase {
     return Math.abs(pivotAngle) > .15;
   }
 
+  public boolean pastGround() {
+    return Math.abs(pivotAngle) > .1;
+  }
+
   public double getPivotAngleRadians() {
-    return pivotAngle;
+    return visPivotAngle;
   }
 
   public boolean reverseArmDirection() {

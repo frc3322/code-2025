@@ -116,6 +116,16 @@ public class ElevatorIOSpark implements ElevatorIO {
   }
 
   @Override
+  public void zeroEncoder() {
+    leftEncoder.setPosition(0);
+  }
+
+  @Override
+  public void setMotorSpeeds(double speeds) {
+    leftMotor.set(speeds);
+  }
+
+  @Override
   public void updateInputs(ElevatorIOInputsAutoLogged inputs) {
     // Update the inputs for logging
     inputs.position = leftEncoder.getPosition();

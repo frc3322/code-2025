@@ -215,6 +215,17 @@ public class RobotContainer {
             .andThen(new WaitCommand(1)));
 
     NamedCommands.registerCommand(
+        "HIGH ALGAE", superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKHIGH));
+    NamedCommands.registerCommand(
+        "LOW ALGAE", superstructure.setSuperStateCommand(SuperState.ALGAEPLUCKLOW));
+
+    NamedCommands.registerCommand(
+        "ALGAE STOW", superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
+
+    NamedCommands.registerCommand("BARGE", superstructure.setSuperStateCommand(SuperState.BARGE));
+    NamedCommands.registerCommand("BARGE SCORE", superstructure.bargeScoreCommand());
+
+    NamedCommands.registerCommand(
         "R1", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition1));
     NamedCommands.registerCommand(
         "R2", superstructure.setTargetReefPoseCommand(ReefConstants.coralPosition2));
@@ -321,35 +332,12 @@ public class RobotContainer {
     // L1 thru L4 bindings - all same button
     driverController
         .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL1)
         .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL1))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    driverController
-        .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL2)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL2))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    driverController
-        .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL3)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL3))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    driverController
-        .rightBumper()
-        .and(() -> superstructure.getTargetLevel() == SuperState.REEFL4)
-        .onTrue(superstructure.setSuperStateCommand(SuperState.REEFL4))
-        .onFalse(superstructure.setSuperStateCommand(SuperState.STOW));
-
-    // Auto align
-    driverController
-        .rightBumper()
-        .and(() -> simpledrive.getEnabled())
-        .whileTrue(
-            simpledrive.autoDriveToReef(
-                superstructure::getTargetReefPose, superstructure::getTargetLevel));
+        .onFalse(
+            superstructure
+                .l1ScoreCommand()
+                .andThen(new WaitCommand(.5))
+                .andThen(superstructure.setSuperStateCommand(SuperState.STOW)));
 
     driverController
         .leftBumper()
@@ -378,9 +366,24 @@ public class RobotContainer {
         .and(superstructure.getSemiAutoEnabledTrigger())
         .whileTrue(superstructure.semiAutoScoreCommand());
 
-    driverController.y().whileTrue(superstructure.driveToSourceCommand());
+    // driverController
+    //     .y()
+    //     .onTrue(superstructure.setSuperStateCommand(SuperState.SOURCEINTAKE))
+    //     .whileTrue(
+    //         superstructure.rotateToSourceCommand(
+    //             () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
 
     driverController.povUp().onTrue(intake.setIntakeStateCommand(IntakeStates.REVERSE));
+
+    driverController
+        .povDown()
+        .onTrue(elevator.lowerElevatorCommand())
+        .onFalse(elevator.stopElevatorCommand().andThen(elevator.zeroElevatorCommand()));
+
+    apacButtonBox
+        .processorRight()
+        .onTrue(superstructure.setSuperStateCommand(SuperState.PROCESSOR))
+        .onFalse(intake.setIntakeStateCommand(IntakeStates.REVERSE));
 
     // Operator Controls
     // operatorController
@@ -392,22 +395,22 @@ public class RobotContainer {
     //             () -> -driverController.getLeftX() / 1.5,
     //             () -> -driverController.getRightX()));
 
-    operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
-    operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
-    operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
-    operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
+    // operatorController.a().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL1));
+    // operatorController.b().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL2));
+    // operatorController.x().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL3));
+    // operatorController.y().onTrue(superstructure.setTargetLevelCommand(SuperState.REEFL4));
 
-    // Reef Selector
-    operatorController
-        .leftBumper()
-        .whileTrue(
-            superstructure.setTargetReefPoseCommand(
-                true, operatorController::getLeftX, operatorController::getLeftY));
-    operatorController
-        .rightBumper()
-        .whileTrue(
-            superstructure.setTargetReefPoseCommand(
-                false, operatorController::getLeftX, operatorController::getLeftY));
+    // // Reef Selector
+    // operatorController
+    //     .leftBumper()
+    //     .whileTrue(
+    //         superstructure.setTargetReefPoseCommand(
+    //             true, operatorController::getLeftX, operatorController::getLeftY));
+    // operatorController
+    //     .rightBumper()
+    //     .whileTrue(
+    //         superstructure.setTargetReefPoseCommand(
+    //             false, operatorController::getLeftX, operatorController::getLeftY));
 
     operatorController
         .povUp()
@@ -607,7 +610,7 @@ public class RobotContainer {
   }
 
   public Command onTeleopInitCommand() {
-    return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.STOW));
+    return new ParallelCommandGroup(superstructure.setSuperStateCommand(SuperState.ALGAESTOW));
   }
 
   public Command zeroSwervesCommand() {

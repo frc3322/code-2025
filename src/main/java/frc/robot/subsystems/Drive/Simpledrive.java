@@ -224,6 +224,22 @@ public class Simpledrive {
             drivetrain, () -> getXSpeed(), () -> getYSpeed(), () -> getThetaSpeed()));
   }
 
+  public Command autoRotateToPose(
+      DoubleSupplier xInput, DoubleSupplier yInput, Supplier<Pose2d> targetPoseSupplier) {
+    // This is elliot and gray's child
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              setTargetPose(targetPoseSupplier.get());
+              setTargetRotation(targetPose.getRotation());
+              xPID.reset(drivetrain.getPose().getX());
+              yPID.reset(drivetrain.getPose().getY());
+              thetaPID.reset(drivetrain.getPose().getRotation().getRadians());
+            }),
+        DriveCommands.translationalJoystickDrive(
+            drivetrain, xInput, yInput, () -> getThetaSpeed() * 2));
+  }
+
   public Command turnToAngleCommand(
       DoubleSupplier xSpeed, DoubleSupplier ySpeed, Supplier<Rotation2d> targetRotationSupplier) {
     return new SequentialCommandGroup(

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.122,
-        "y": 3.995
+        "x": 7.856,
+        "y": 5.661
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.390812687829588,
-        "y": 4.09347636731848
+        "x": 6.995632615059988,
+        "y": 5.656230326802914
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.985,
-        "y": 4.08
+        "x": 6.305532786885245,
+        "y": 5.661
       },
       "prevControl": {
-        "x": 6.234568805839858,
-        "y": 4.065323108242299
+        "x": 6.605986323726022,
+        "y": 5.66842612953475
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,31 +29,17 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "R12",
-      "waypointRelativePos": 0,
+      "name": "STOW",
+      "waypointRelativePos": 0.1998649561107345,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "R12"
+          "name": "STOW"
         }
       }
     }
@@ -68,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "CENTER",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

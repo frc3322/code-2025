@@ -26,12 +26,14 @@ import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Simpledrive;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.pivot.PivotConstants.StateType;
 import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.DoubleSupplier;
@@ -154,6 +156,13 @@ public class Superstructure extends SubsystemBase {
 
     Logger.recordOutput("FieldConstants/rightSource", SourceConstants.rightSource.get());
     Logger.recordOutput("FieldConstants/leftSource", SourceConstants.leftSource.get());
+
+    Logger.recordOutput(
+        "FieldConstants/AutonPoseLeft", new Pose2d(7.152, 5.122, new Rotation2d(0)));
+    Logger.recordOutput(
+        "FieldConstants/AutonPoseMiddle", new Pose2d(7.122, 7.122, new Rotation2d(0)));
+    Logger.recordOutput(
+        "FieldConstants/AutonPoseRight", new Pose2d(7.152, 2.930, new Rotation2d(0)));
   }
 
   public Command deployCommand(SuperState superState) {
@@ -167,6 +176,19 @@ public class Superstructure extends SubsystemBase {
             new WaitUntilCommand(elevator::isAtGoal),
             pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
             new WaitUntilCommand(pivot::isAtGoal),
+            wrist.setStateCommand(superState.WRIST_STATE).asProxy());
+
+    command.addRequirements(this);
+    return command;
+  }
+
+  public Command groundCommand(SuperState superState) {
+    Command command =
+        new SequentialCommandGroup(
+            wrist.setStateCommand(WristStates.STOW),
+            elevator.setStateCommand(superState.ELEVATOR_STATE).asProxy(),
+            pivot.setStateCommand(superState.PIVOT_STATE).asProxy(),
+            new WaitUntilCommand(pivot::pastGround),
             wrist.setStateCommand(superState.WRIST_STATE).asProxy());
 
     command.addRequirements(this);
@@ -213,6 +235,10 @@ public class Superstructure extends SubsystemBase {
         Command currentCommand = deployCommand(superState);
         trigger.onTrue(currentCommand);
       }
+      if (superState.stateMotion == StateMotion.GROUND) {
+        Command currentCommand = groundCommand(superState);
+        trigger.onTrue(currentCommand);
+      }
       trigger.onTrue(climber.setClimberSetpointCommand(superState.CLIMBER_SETPOINT));
       trigger.onTrue(intake.setIntakeStateCommand(superState.INTAKE_STATE));
     }
@@ -242,7 +268,11 @@ public class Superstructure extends SubsystemBase {
         new SequentialCommandGroup(
                 pivot.setStateCommand(PivotStates.L4SCORE).asProxy(),
                 new WaitCommand(0.5),
-                intake.setIntakeStateCommand(IntakeStates.OUTTAKE))
+                intake.setIntakeStateCommand(IntakeStates.OUTTAKE),
+                new WaitCommand(.05),
+                elevator.setStateCommand(ElevatorStates.STOW),
+                new WaitCommand(.15),
+                pivot.setStateCommand(PivotStates.STOW))
             .asProxy();
 
     command.addRequirements(this);
@@ -270,7 +300,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command bargeScoreCommand() {
-    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.OFF));
+    return new SequentialCommandGroup(intake.setIntakeStateCommand(IntakeStates.REVERSE));
   }
 
   public Command setTargetReefPoseCommand(
@@ -307,10 +337,8 @@ public class Superstructure extends SubsystemBase {
         autoScoreSequence());
   }
 
-  public Command driveToSourceCommand() {
-    return new ParallelCommandGroup(
-        drive.driveToPoseCommand(() -> nearestSource()),
-        setSuperStateCommand(SuperState.SOURCEINTAKE).asProxy());
+  public Command rotateToSourceCommand(DoubleSupplier xInput, DoubleSupplier yInput) {
+    return simpledrive.autoRotateToPose(xInput, yInput, () -> nearestSource());
   }
 
   public Pose2d nearestSource() {
