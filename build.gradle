@@ -3,6 +3,15 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2025.3.1"
     id "com.peterabeles.gversion" version "1.10"
     id "com.diffplug.spotless" version "6.12.0"
+    id "org.sonarqube" version "6.0.1.5171"
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "frc3322_code-2025"
+    property "sonar.organization", "frc3322"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
 }
 
 java {
